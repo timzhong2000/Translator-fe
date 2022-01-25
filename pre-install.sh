@@ -9,12 +9,12 @@ cd ./public/vendor
 rm -rf tesseract/tessdata_fast
 mkdir tesseract
 mkdir tesseract/tessdata_fast
-git clone ${Tessdata_GIT} tesseract/tmp
+git clone $Tessdata_GIT tesseract/tmp
 mv tesseract/tmp/*.traineddata tesseract/tessdata_fast
 # rm -rf tesseract/tmp
-curl https://unpkg.com/tesseract.js@v${Tesseract_JS_Version}/dist/worker.min.js >> tesseract/worker.min.js
-curl https://unpkg.com/tesseract.js-core@v${Tesseract_WASM_Version}/tesseract-core.wasm.js >> tesseract/core.wasm.js
+curl https://unpkg.com/tesseract.js@v$Tesseract_JS_Version/dist/worker.min.js >> tesseract/worker.min.js
+curl https://unpkg.com/tesseract.js-core@v$Tesseract_WASM_Version/tesseract-core.wasm.js >> tesseract/core.wasm.js
 
 rm -rf opencv
 mkdir opencv
-curl https://docs.opencv.org/${OpenCV_Version}/opencv.js >> opencv/opencv.js
+curl https://docs.opencv.org/$OpenCV_Version/opencv.js >> opencv/opencv.js
