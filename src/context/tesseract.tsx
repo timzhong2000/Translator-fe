@@ -9,7 +9,7 @@ import React, {
 import { createWorker, ImageLike, WorkerOptions } from "tesseract.js";
 
 const defaultConfig: Partial<WorkerOptions> = {
-  corePath: "/vendor/tesseract/core.wasm.js",
+  corePath: "/vendor/tesseract/tesseract-core.wasm.js",
   langPath: "/vendor/tesseract/tessdata_fast",
   workerPath: "/vendor/tesseract/worker.min.js",
   errorHandler: (err) => console.error(err),
