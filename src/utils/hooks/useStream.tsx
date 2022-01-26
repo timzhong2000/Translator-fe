@@ -17,6 +17,7 @@ const useStream = (mediaDevicesConfig: MediaDevicesConfig) => {
     (async function () {
       try {
         const stream = await getStream(mediaDevicesConfig);
+        (window as any).stream = stream
         setStream(stream);
         setReady(true);
         setError(null);

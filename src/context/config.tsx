@@ -30,7 +30,9 @@ const defaultMediaDevicesConfig: MediaDevicesConfig = {
     height: 1080,
     frameRate: 30,
   },
+  videoDeviceId: undefined,
   audio: true,
+  audioDeviceId: undefined
 };
 
 const defaultReplayConfig: ReplayConfig = {

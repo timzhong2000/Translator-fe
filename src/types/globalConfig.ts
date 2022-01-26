@@ -17,8 +17,10 @@ export interface TranslatorConfig {
 
 export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   enabled: boolean;
-  video: { height: number; width: number; frameRate: number } & MediaTrackConstraints;
-  audio: boolean
+  videoDeviceId?: string
+  video: { height: number; width: number; frameRate: number;} & MediaTrackConstraints;
+  audio: boolean;
+  audioDeviceId?: string
 }
 
 export interface ReplayConfig {

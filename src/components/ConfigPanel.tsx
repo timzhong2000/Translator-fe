@@ -16,6 +16,7 @@ import { transContext } from "@/context/videoProcessor";
 import { translatorContext } from "@/context/translator";
 import { ISO963_1 } from "@/types/ISO963";
 import { tesseractContext } from "@/context/tesseract";
+import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
 
 export const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);
@@ -272,6 +273,25 @@ const MediaDevicesSetting = () => {
   const [localConfig, setLocalConfig] = useState(mediaDevicesConfig);
   const { stream } = useContext(transContext);
   const resolutionList = ["1080P", "720P"];
+
+  const mediaDeviceList = useMediaDeviceList();
+  const videoDeviceList = mediaDeviceList.filter(
+    (dev) => dev.kind === "videoinput" && dev.deviceId.length > 20
+  );
+  const audioDeviceList = mediaDeviceList.filter(
+    (dev) => dev.kind === "audioinput" && dev.deviceId.length > 20
+  );
+  const selectedVideoDeviceLabel =
+    videoDeviceList.find((dev) => dev.deviceId === localConfig.videoDeviceId)
+      ?.label ||
+    videoDeviceList[0]?.label ||
+    "";
+  const selectedAudioDeviceLabel =
+    audioDeviceList.find((dev) => dev.deviceId === localConfig.audioDeviceId)
+      ?.label ||
+    audioDeviceList[0]?.label ||
+    "";
+
   return (
     <div>
       <Grid container spacing={3} my={3}>
@@ -313,14 +333,69 @@ const MediaDevicesSetting = () => {
             }
           ></FormControlLabel>
         </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={3}>
+          <TextField
+            select
+            label="视频源"
+            required
+            value={selectedVideoDeviceLabel}
+            sx={{ width: "100%" }}
+            onChange={(e) =>
+              setLocalConfig({
+                ...localConfig,
+                videoDeviceId: mediaDeviceList.find(
+                  (dev) => dev.label === e.target.value
+                )!.deviceId,
+              })
+            }
+          >
+            {mediaDeviceList
+              .filter((dev) => dev.kind === "videoinput")
+              .map((dev) => (
+                <MenuItem key={dev.label} value={dev.label}>
+                  {dev.label}
+                </MenuItem>
+              ))}
+          </TextField>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={6} lg={3}>
+          <TextField
+            select
+            label="音频源"
+            required
+            value={selectedAudioDeviceLabel}
+            sx={{ width: "100%" }}
+            onChange={(e) =>
+              setLocalConfig({
+                ...localConfig,
+                audioDeviceId: audioDeviceList.find(
+                  (dev) => dev.label === e.target.value
+                )!.deviceId,
+              })
+            }
+          >
+            {mediaDeviceList
+              .filter(
+                (dev) => dev.kind === "audioinput" && dev.deviceId.length > 20
+              )
+              .map((dev) => (
+                <MenuItem key={dev.label} value={dev.label}>
+                  {dev.label}
+                </MenuItem>
+              ))}
+          </TextField>
+        </Grid>
       </Grid>
+
       <Button
         variant="outlined"
         disabled={getStreamStatus(stream, localConfig) === "正在打开摄像头模块"}
         onClick={() => {
           setLocalConfig((prev) => {
-            setMediaDevicesConfig({ ...prev, enabled: !prev.enabled });
-            return { ...prev, enabled: !prev.enabled };
+            const newConfig = { ...prev, enabled: !prev.enabled };
+            setMediaDevicesConfig(newConfig);
+            return newConfig;
           });
         }}
       >
