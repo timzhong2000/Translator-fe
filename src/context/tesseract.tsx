@@ -66,6 +66,11 @@ export namespace TesseractHook {
     return worker;
   };
 
+  const removeStopWords = (text: string)=>{
+    text = text.replaceAll(/\s|\d/g, "")
+    return text;
+  }
+
   export const TesseractContextProvider: React.FC<{
     poolSize: number;
     lang: "jpn" | "eng";
@@ -105,7 +110,7 @@ export namespace TesseractHook {
             data: { text: text },
           } = await pool.current[id].recognize(pic);
           console.timeEnd(`[Tesseract Hook] (worker ${id}) recognize`);
-          setResult(text);
+          setResult(removeStopWords(text));
           statusList.current[id] = "idle";
         })();
       } else {
