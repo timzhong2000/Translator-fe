@@ -114,7 +114,7 @@ const TranslateConfig = () => {
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
   const [localConfig, setLocalConfig] = useState(translatorConfig);
   const langList: ISO963_1[] = ["zh_CN", "zh_TW", "ja", "en"];
-  const providerList: string[] = ["baidu", "google", "caiyun"];
+  const providerList: string[] = ["baidu", "google", "caiyunapi", "niutransapi"];
   return (
     <div>
       <Grid container spacing={3} my={3}>
