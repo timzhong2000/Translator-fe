@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import { transContext } from "@/context/videoProcessor";
 import { translatorContext } from "@/context/translator";
@@ -200,6 +200,7 @@ const TranslateConfig = () => {
     </div>
   );
 };
+
 const TranslateServerConfig = () => {
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
   const [localConfig, setLocalConfig] = useState(translatorConfig);
@@ -295,97 +296,136 @@ const MediaDevicesSetting = () => {
   return (
     <div>
       <Grid container spacing={3} my={3}>
-        <Grid item sm={12} md={6} xl={2} mt={0.75}>
-          <TextField
-            select
-            label="录屏分辨率"
-            required
-            value={resolution2text(localConfig.video)}
-            sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                video: text2resolution(e.target.value),
-              })
-            }
-          >
-            {resolutionList.map((resolution) => (
-              <MenuItem key={resolution} value={resolution}>
-                {resolution}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-
-        <Grid item sm={12} md={6} xl={2} mt={1}>
+        <Grid item xs={12}>
           <FormControlLabel
-            label="启用音频回放"
+            label={`当前视频源: ${localConfig.fromScreen ? "本机" : "采集卡"}`}
             control={
               <Checkbox
-                checked={localConfig.audio}
+                checked={localConfig.fromScreen}
+                disabled={getStreamStatus(stream, localConfig) !== "使用以上参数开始录制"}
                 onClick={() =>
                   setLocalConfig({
                     ...localConfig,
-                    audio: !localConfig.audio,
+                    fromScreen: !localConfig.fromScreen,
                   })
                 }
               />
             }
           ></FormControlLabel>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3}>
-          <TextField
-            select
-            label="视频源"
-            required
-            value={selectedVideoDeviceLabel}
-            sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                videoDeviceId: mediaDeviceList.find(
-                  (dev) => dev.label === e.target.value
-                )!.deviceId,
-              })
-            }
-          >
-            {mediaDeviceList
-              .filter((dev) => dev.kind === "videoinput")
-              .map((dev) => (
-                <MenuItem key={dev.label} value={dev.label}>
-                  {dev.label}
-                </MenuItem>
-              ))}
-          </TextField>
-        </Grid>
+        {localConfig.fromScreen ? null : (
+          <Fragment>
+            <Grid item sm={12} md={6} xl={2} mt={0.75}>
+              <TextField
+                select
+                disabled={
+                  getStreamStatus(stream, localConfig) !==
+                  "使用以上参数开始录制"
+                }
+                label="录屏分辨率"
+                required
+                value={resolution2text(localConfig.video)}
+                sx={{ width: "100%" }}
+                onChange={(e) =>
+                  setLocalConfig({
+                    ...localConfig,
+                    video: text2resolution(e.target.value),
+                  })
+                }
+              >
+                {resolutionList.map((resolution) => (
+                  <MenuItem key={resolution} value={resolution}>
+                    {resolution}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
-        <Grid item xs={12} sm={6} md={6} lg={3}>
-          <TextField
-            select
-            label="音频源"
-            required
-            value={selectedAudioDeviceLabel}
-            sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                audioDeviceId: audioDeviceList.find(
-                  (dev) => dev.label === e.target.value
-                )!.deviceId,
-              })
-            }
-          >
-            {mediaDeviceList
-              .filter(
-                (dev) => dev.kind === "audioinput" && dev.deviceId.length > 20
-              )
-              .map((dev) => (
-                <MenuItem key={dev.label} value={dev.label}>
-                  {dev.label}
-                </MenuItem>
-              ))}
-          </TextField>
-        </Grid>
+            <Grid item sm={12} md={6} xl={2} mt={1}>
+              <FormControlLabel
+                label="启用音频回放"
+                control={
+                  <Checkbox
+                    checked={localConfig.audio}
+                    disabled={
+                      getStreamStatus(stream, localConfig) !==
+                      "使用以上参数开始录制"
+                    }
+                    onClick={() =>
+                      setLocalConfig({
+                        ...localConfig,
+                        audio: !localConfig.audio,
+                      })
+                    }
+                  />
+                }
+              ></FormControlLabel>
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={6} lg={3}>
+              <TextField
+                select
+                label="视频源"
+                disabled={
+                  getStreamStatus(stream, localConfig) !==
+                  "使用以上参数开始录制"
+                }
+                required
+                value={selectedVideoDeviceLabel}
+                sx={{ width: "100%" }}
+                onChange={(e) =>
+                  setLocalConfig({
+                    ...localConfig,
+                    videoDeviceId: mediaDeviceList.find(
+                      (dev) => dev.label === e.target.value
+                    )!.deviceId,
+                  })
+                }
+              >
+                {mediaDeviceList
+                  .filter((dev) => dev.kind === "videoinput")
+                  .map((dev) => (
+                    <MenuItem key={dev.label} value={dev.label}>
+                      {dev.label}
+                    </MenuItem>
+                  ))}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={6} lg={3}>
+              <TextField
+                select
+                label="音频源"
+                disabled={
+                  getStreamStatus(stream, localConfig) !==
+                  "使用以上参数开始录制"
+                }
+                required
+                value={selectedAudioDeviceLabel}
+                sx={{ width: "100%" }}
+                onChange={(e) =>
+                  setLocalConfig({
+                    ...localConfig,
+                    audioDeviceId: audioDeviceList.find(
+                      (dev) => dev.label === e.target.value
+                    )!.deviceId,
+                  })
+                }
+              >
+                {mediaDeviceList
+                  .filter(
+                    (dev) =>
+                      dev.kind === "audioinput" && dev.deviceId.length > 20
+                  )
+                  .map((dev) => (
+                    <MenuItem key={dev.label} value={dev.label}>
+                      {dev.label}
+                    </MenuItem>
+                  ))}
+              </TextField>
+            </Grid>
+          </Fragment>
+        )}
       </Grid>
 
       <Button

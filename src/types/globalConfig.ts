@@ -17,6 +17,7 @@ export interface TranslatorConfig {
 
 export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   enabled: boolean;
+  fromScreen: boolean;
   videoDeviceId?: string
   video: { height: number; width: number; frameRate: number;} & MediaTrackConstraints;
   audio: boolean;

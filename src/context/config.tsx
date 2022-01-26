@@ -25,6 +25,7 @@ const defaultTranslatorConfig: TranslatorConfig = {
 
 const defaultMediaDevicesConfig: MediaDevicesConfig = {
   enabled: true,
+  fromScreen: false,
   video: {
     width: 1920,
     height: 1080,
