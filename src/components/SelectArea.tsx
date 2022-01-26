@@ -3,12 +3,7 @@ import { transContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
 import { Box } from "@mui/material";
 import React from "react";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { TransResult } from "./TransResult";
 
 export const SelectArea: React.FC<{}> = () => {
@@ -124,6 +119,7 @@ export const SelectArea: React.FC<{}> = () => {
           height: mediaDevicesConfig.video.height,
         }}
         onMouseMove={onResize}
+        onDoubleClick={onResizeEnd}
       >
         <video
           autoPlay
@@ -134,10 +130,7 @@ export const SelectArea: React.FC<{}> = () => {
             width: mediaDevicesConfig.video.width,
             height: mediaDevicesConfig.video.height,
           }}
-          onTouchStart={onResizeStart}
-          onTouchEnd={onResizeEnd}
-          onMouseDown={onResizeStart}
-          onMouseUp={onResizeEnd}
+          onClick={onResizeStart}
         ></video>
         <div
           ref={cutAreaEl}
@@ -152,7 +145,7 @@ export const SelectArea: React.FC<{}> = () => {
             left: areaConfig.startX,
             overflow: "visible",
           }}
-          onMouseUp={onResizeEnd}
+          onDoubleClick={onResizeEnd}
         ></div>
         <TransResult />
       </div>
