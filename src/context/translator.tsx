@@ -13,7 +13,7 @@ export const translatorContext = createContext({} as translatorContext);
 export const TranslatorProvider: React.FC = (props) => {
   const { translatorConfig } = useContext(configContext);
   const { result: srcText } = useContext(tesseractContext);
-  const result = useTranslate(translatorConfig, srcText);
+  const result = useTranslate(translatorConfig, srcText.replaceAll('?','？'));
   return (
     <translatorContext.Provider value={{ result }}>
       {props.children}

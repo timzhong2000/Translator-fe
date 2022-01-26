@@ -31,6 +31,7 @@ const PreProcessCanvas = () => {
         iterations: filterConfig.erodeIterations,
       });
       cv.imshow(canvasEl.current, mat);
+      mat.delete();
       console.timeEnd(`[PreProcess Component] runfilter `);
       recognize(canvasEl.current.toDataURL());
     }, cutArea.interval / 5);
