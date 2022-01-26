@@ -19,7 +19,7 @@ import { tesseractContext } from "@/context/tesseract";
 
 export const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);
-  const {reset} = useContext(configContext)
+  const { reset } = useContext(configContext);
   return (
     <div>
       <Box mt={2} mx={1}>
@@ -50,9 +50,8 @@ export const ConfigPanel = () => {
         </Box>
       ) : null}
       <Box my={5} mx={1}>
-        <Button onClick={()=>reset()}>重置设置</Button>
+        <Button onClick={() => reset()}>重置设置</Button>
       </Box>
-
     </div>
   );
 };
@@ -114,11 +113,16 @@ const TranslateConfig = () => {
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
   const [localConfig, setLocalConfig] = useState(translatorConfig);
   const langList: ISO963_1[] = ["zh_CN", "zh_TW", "ja", "en"];
-  const providerList: string[] = ["baidu", "google", "caiyunapi", "niutransapi"];
+  const providerList: string[] = [
+    "baidu",
+    "google",
+    "caiyunapi",
+    "niutransapi",
+  ];
   return (
     <div>
       <Grid container spacing={3} my={3}>
-        <Grid item  xs={12} sm={12} md={3} lg={2}>
+        <Grid item xs={12} sm={12} md={3} lg={2}>
           <TextField
             select
             label="翻译引擎"
@@ -140,7 +144,7 @@ const TranslateConfig = () => {
           </TextField>
         </Grid>
 
-        <Grid item  xs={12} sm={6} md={3} lg={2}>
+        <Grid item xs={12} sm={6} md={3} lg={2}>
           <TextField
             select
             label="源语言"
@@ -299,11 +303,11 @@ const MediaDevicesSetting = () => {
             control={
               <Checkbox
                 checked={localConfig.audio}
-                onClick={(e) =>
-                  setLocalConfig((prev) => ({
-                    ...prev,
-                    audioSetting: !localConfig.audio,
-                  }))
+                onClick={() =>
+                  setLocalConfig({
+                    ...localConfig,
+                    audio: !localConfig.audio,
+                  })
                 }
               />
             }
