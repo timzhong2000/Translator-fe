@@ -2,7 +2,13 @@ import { configContext } from "@/context/config";
 import { transContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
 import { Box } from "@mui/material";
-import { useCallback, useContext, useEffect, useRef } from "react";
+import React from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { TransResult } from "./TransResult";
 
 export const SelectArea: React.FC<{}> = () => {
@@ -22,31 +28,62 @@ export const SelectArea: React.FC<{}> = () => {
     }
   }, [stream]);
 
-  const onResizeStart = useCallback((e: React.MouseEvent) => {
-    if (e.nativeEvent.target == cutAreaEl.current) return;
-    isResizing.current = true;
-    startAbsolutePos.current = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY,
-    };
-    setCutArea({
-      ...cutArea,
-      x1: e.nativeEvent.offsetX,
-      y1: e.nativeEvent.offsetY,
-      x2: e.nativeEvent.offsetX,
-      y2: e.nativeEvent.offsetY,
-    });
-  }, []);
+  const onResizeStart = useCallback(
+    (e: React.TouchEvent | React.MouseEvent) => {
+      if (e.nativeEvent.target == cutAreaEl.current) return;
+      let clientX = 0,
+        clientY = 0,
+        offsetX = 0,
+        offsetY = 0;
+      if (e.nativeEvent instanceof MouseEvent) {
+        console.log(e);
+
+        clientX = e.nativeEvent.clientX;
+        clientY = e.nativeEvent.clientY;
+        offsetX = e.nativeEvent.offsetX;
+        offsetY = e.nativeEvent.offsetY;
+      } else if (e instanceof TouchEvent) {
+        if (e.nativeEvent.touches.length !== 2) return;
+        clientX = e.nativeEvent.touches[0].clientX;
+        clientY = e.nativeEvent.touches[0].clientY;
+        // offsetX = e.nativeEvent.targetTouches[0].pageX - e.nativeEvent.targetTouches[0].getBoundingClientRect().left;
+        // offsetX = e.nativeEvent.targetTouches[0].pageY - e.nativeEvent.targetTouches[0].getBoundingClientRect().top;
+      }
+      isResizing.current = true;
+      startAbsolutePos.current = {
+        x: clientX,
+        y: clientY,
+      };
+      setCutArea({
+        ...cutArea,
+        x1: offsetX,
+        y1: offsetY,
+        x2: offsetX,
+        y2: offsetY,
+      });
+    },
+    []
+  );
 
   const onResize = useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.TouchEvent | React.MouseEvent) => {
       if (isResizing.current) {
+        let clientX = 0,
+          clientY = 0;
+        if (e.nativeEvent instanceof MouseEvent) {
+          clientX = e.nativeEvent.clientX;
+          clientY = e.nativeEvent.clientY;
+        } else if (e instanceof TouchEvent) {
+          if (e.nativeEvent.touches.length !== 2) return;
+          clientX = e.nativeEvent.touches[0].clientX;
+          clientY = e.nativeEvent.touches[0].clientY;
+        }
         requestAnimationFrame(() => {
           setTimeout(() => {
             setCutArea({
               ...cutArea,
-              x2: cutArea.x1 + (e.clientX - startAbsolutePos.current.x),
-              y2: cutArea.y1 + (e.clientY - startAbsolutePos.current.y),
+              x2: cutArea.x1 + (clientX - startAbsolutePos.current.x),
+              y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
             });
           }, 0);
         });
@@ -56,13 +93,23 @@ export const SelectArea: React.FC<{}> = () => {
   );
 
   const onResizeEnd = useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.TouchEvent | React.MouseEvent) => {
       if (isResizing.current == false) return;
       isResizing.current = false;
+      let clientX = 0,
+        clientY = 0;
+      if (e.nativeEvent instanceof MouseEvent) {
+        clientX = e.nativeEvent.clientX;
+        clientY = e.nativeEvent.clientY;
+      } else if (e.nativeEvent instanceof TouchEvent) {
+        if (e.nativeEvent.touches.length !== 2) return;
+        clientX = e.nativeEvent.touches[0].clientX;
+        clientY = e.nativeEvent.touches[0].clientY;
+      }
       setCutArea({
         ...cutArea,
-        x2: cutArea.x1 + (e.clientX - startAbsolutePos.current.x),
-        y2: cutArea.y1 + (e.clientY - startAbsolutePos.current.y),
+        x2: cutArea.x1 + (clientX - startAbsolutePos.current.x),
+        y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
       });
     },
     [cutArea]
@@ -76,9 +123,7 @@ export const SelectArea: React.FC<{}> = () => {
           width: mediaDevicesConfig.video.width,
           height: mediaDevicesConfig.video.height,
         }}
-        onMouseDown={onResizeStart}
         onMouseMove={onResize}
-        onMouseUp={onResizeEnd}
       >
         <video
           autoPlay
@@ -89,6 +134,10 @@ export const SelectArea: React.FC<{}> = () => {
             width: mediaDevicesConfig.video.width,
             height: mediaDevicesConfig.video.height,
           }}
+          onTouchStart={onResizeStart}
+          onTouchEnd={onResizeEnd}
+          onMouseDown={onResizeStart}
+          onMouseUp={onResizeEnd}
         ></video>
         <div
           ref={cutAreaEl}
@@ -101,10 +150,11 @@ export const SelectArea: React.FC<{}> = () => {
             borderWidth: "2px",
             top: areaConfig.startY,
             left: areaConfig.startX,
+            overflow: "visible",
           }}
-        >
-          <TransResult />
-        </div>
+          onMouseUp={onResizeEnd}
+        ></div>
+        <TransResult />
       </div>
     );
   } else {
