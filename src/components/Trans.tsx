@@ -1,6 +1,6 @@
 import { configContext } from "@/context/config";
 import { transContext } from "@/context/videoProcessor";
-import { getImageData, putImageData } from "@/utils/2dFilter";
+import { putImageData } from "@/utils/2dFilter";
 import { openCvContext } from "@/context/opencv";
 import { opencvFilter } from "@/utils/opencvFilter";
 import { Box, Link } from "@mui/material";

@@ -13,6 +13,7 @@
     "@mui/icons-material": "^5.3.0",
     "@mui/material": "^5.3.0",
     "axios": "^0.25.0",
+    "clipboard-polyfill": "^3.0.3",
     "lodash": "^4.17.21",
     "opencv-ts": "^1.2.26",
     "react": "^17.0.2",

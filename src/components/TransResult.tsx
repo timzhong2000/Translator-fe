@@ -1,25 +1,40 @@
 import { tesseractContext } from "@/context/tesseract";
 import { translatorContext } from "@/context/translator";
-import { transContext } from "@/context/videoProcessor";
+import { DragableElement } from "@/utils/dragableElement";
 import { Box } from "@mui/material";
 import { useContext } from "react";
+import { ClipboardButton } from "./ClipboardButton";
 
 export const TransResult = () => {
-  const { result: translateResult } = useContext(translatorContext);
+  const { result: translateResult} = useContext(translatorContext);
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
 
   return (
-    <Box px={2} sx={{ background: "white", opacity: 0.9 }} height="100%">
+    <DragableElement
+      style={{
+        padding: "0 2",
+        background: "white",
+        opacity: 0.9,
+        height: "300px",
+        width:"1000px"
+      }}
+    >
       <Box
-        fontSize={30}
+        fontSize={24}
         fontWeight={600}
         py={0.5}
       >{`状态：${tesseractStatus.current}`}</Box>
-      <Box fontSize={30} fontWeight={600} py={0.5}>{`原文：${srcText}`}</Box>
-      <Box fontSize={30} fontWeight={600} py={0.5}>{`译文：${
-        translateResult?.dest || ""
-      }`}</Box>
-    </Box>
+      <Box fontSize={24} fontWeight={600} py={0.5}>
+        {`原文：${srcText}`}
+        {true ? <ClipboardButton text={srcText} /> : null}
+      </Box>
+      <Box fontSize={24} fontWeight={600} py={0.5}>
+        {`译文：${translateResult?.dest || ""}`}
+        {translateResult?.dest ? (
+          <ClipboardButton text={translateResult.dest} />
+        ) : null}
+      </Box>
+    </DragableElement>
   );
 };

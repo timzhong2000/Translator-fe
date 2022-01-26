@@ -12,6 +12,7 @@ specifiers:
   '@types/react-dom': ^17.0.10
   '@vitejs/plugin-react': ^1.1.4
   axios: ^0.25.0
+  clipboard-polyfill: ^3.0.3
   lodash: ^4.17.21
   opencv-ts: ^1.2.26
   react: ^17.0.2
@@ -30,6 +31,7 @@ dependencies:
   '@mui/icons-material': 5.3.0_f7153a14dc0eae8cfac34c81a09a926d
   '@mui/material': 5.3.0_f5341c4d41f1e34c3a73251df9f98a19
   axios: 0.25.0
+  clipboard-polyfill: 3.0.3
   lodash: 4.17.21
   opencv-ts: 1.2.26
   react: 17.0.2
@@ -738,6 +740,10 @@ packages:
       ansi-styles: 3.2.1
       escape-string-regexp: 1.0.5
       supports-color: 5.5.0
+
+  /clipboard-polyfill/3.0.3:
+    resolution: {integrity: sha512-hts0o01ZkwjA1qHA5gFePzAj/780W7v+eyN3GdaCRyDnapzcPsKRV5aodv77gcr40NDIcyNjNmc+HvfKV+jD0g==}
+    dev: false
 
   /clsx/1.1.1:
     resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
