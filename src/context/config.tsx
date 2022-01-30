@@ -13,11 +13,12 @@ const defaultFilterConfig: FilterConfig = {
   erodeIterations: 0,
   dilateKernelSize: 3,
   dilateIterations: 0,
-  inverse: false
+  inverse: false,
+  zoom: 1
 };
 
 const defaultTranslatorConfig: TranslatorConfig = {
-  url: "http://localhost:3002",
+  url: "https://transapi.timzhong.top",
   key: "",
   provider: "baidu",
   srcLang: "ja",

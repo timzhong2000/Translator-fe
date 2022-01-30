@@ -108,6 +108,24 @@ export const FilterSetting = () => {
             }
           ></TextField>
         </Grid>
+        <Grid item xs={6} md={6} xl={2}>
+          <Typography id="zoomNormalization-slider" gutterBottom>
+            文字大小标准化
+          </Typography>
+          <Slider
+            value={localConfig.zoom}
+            aria-labelledby="zoomNormalization-slider"
+            valueLabelDisplay="auto"
+            min={1}
+            max={5}
+            onChange={(e) =>
+              setLocalConfig({
+                ...localConfig,
+                zoom: Number((e.target as unknown as any).value),
+              })
+            }
+          />
+        </Grid>
       </Grid>
       <Button variant="outlined" onClick={() => setFilterConfig(localConfig)}>
         保存

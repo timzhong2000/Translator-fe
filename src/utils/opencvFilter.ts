@@ -8,7 +8,7 @@ export const opencvFilter = (
   inverse = false,
   erode = { kernelSize: 3, iterations: 0 },
   dilate = { kernelSize: 3, iterations: 0 },
-  zoomNormalization?: number
+  zoomNormalization = 2
 ) => {
   console.time("[opencv] run filter");
   const zoomFactor = Math.min(
@@ -46,7 +46,7 @@ export const opencvFilter = (
     new cv.Scalar()
   );
   dilateKernel.delete()
-  cv.resize(src, src, new cv.Size(0, 0), 1 / zoomFactor, 1 / zoomFactor);
-
+  cv.resize(src, src, new cv.Size(0, 0), zoomNormalization / zoomFactor, zoomNormalization / zoomFactor);
+    console.log(src.size())
   console.timeEnd("[opencv] run filter");
 };

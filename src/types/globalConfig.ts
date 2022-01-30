@@ -6,7 +6,8 @@ export interface FilterConfig {
   erodeIterations: number,
   dilateKernelSize: number,
   dilateIterations: number,
-  inverse: boolean
+  inverse: boolean,
+  zoom: number
 }
 
 export interface TranslatorConfig {
