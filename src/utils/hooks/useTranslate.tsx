@@ -8,7 +8,7 @@ export const useTranslate = (config: TranslatorConfig, srcText: string) => {
   useEffect(() => {
     if (!srcText) return;
     (async function () {
-      const url = `${config.url}/api/${config.provider}/${config.srcLang}/${config.destLang}/${srcText}`;
+      const url = `${config.url}/api/${config.provider}/${config.srcLang}/${config.destLang}/${srcText}?key=${config.key}`;
       console.log(`[translate hook] translate start ${url}`);
       const key = JSON.stringify({
         provider: config.provider,
