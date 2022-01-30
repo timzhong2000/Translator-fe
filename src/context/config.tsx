@@ -10,7 +10,10 @@ import {
 const defaultFilterConfig: FilterConfig = {
   binaryThreshold: 50,
   erodeKernelSize: 3,
-  erodeIterations: 2,
+  erodeIterations: 0,
+  dilateKernelSize: 3,
+  dilateIterations: 0,
+  inverse: false
 };
 
 const defaultTranslatorConfig: TranslatorConfig = {
