@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import ClipboardButton from "./ClipboardButton";
 
@@ -8,7 +8,11 @@ import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
 
 export const TransResult = () => {
-  const { result: translateResult} = useContext(translatorContext);
+  const {
+    result: translateResult,
+    enabled,
+    setEnabled,
+  } = useContext(translatorContext);
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
 
@@ -18,12 +22,12 @@ export const TransResult = () => {
         padding: "0 2",
         background: "white",
         opacity: 0.9,
-        height: "300px",
-        width:"1000px"
+        height: "200px",
+        width: "1000px",
       }}
     >
       <Box
-        fontSize={24}
+        fontSize={16}
         fontWeight={600}
         py={0.5}
       >{`状态：${tesseractStatus.current}`}</Box>
@@ -37,6 +41,9 @@ export const TransResult = () => {
           <ClipboardButton text={translateResult.dest} />
         ) : null}
       </Box>
+      <Button onClick={() => setEnabled(!enabled)}>
+        {enabled ? "暂停翻译" : "开始翻译"}
+      </Button>
     </DragableElement>
   );
 };
