@@ -1,12 +1,13 @@
+import React, { useCallback, useContext, useEffect, useRef } from "react";
+import { Box } from "@mui/material";
+
+import { TransResult } from "./TransResult";
+
 import { configContext } from "@/context/config";
 import { transContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
-import { Box } from "@mui/material";
-import React from "react";
-import { useCallback, useContext, useEffect, useRef } from "react";
-import { TransResult } from "./TransResult";
 
-export const SelectArea: React.FC<{}> = () => {
+const SelectArea: React.FC<{}> = () => {
   const { mediaDevicesConfig, cutArea, setCutArea } = useContext(configContext);
   const { stream, setVideoRef } = useContext(transContext);
   const cutAreaEl = useRef<HTMLDivElement>(null);
@@ -154,3 +155,5 @@ export const SelectArea: React.FC<{}> = () => {
     return <Box>正在初始化摄像头模块，请稍等</Box>;
   }
 };
+
+export default SelectArea;

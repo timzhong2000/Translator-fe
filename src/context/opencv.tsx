@@ -1,5 +1,5 @@
-import opencv_ts from "opencv-ts";
 import React, { createContext, useEffect, useState } from "react";
+import opencv_ts from "opencv-ts";
 
 interface OpenCvContext {
   ready: boolean;

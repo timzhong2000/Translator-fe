@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { useState } from "react";
 
-export const ClipboardButton: React.FC<{ text: string }> = (props) => {
+const ClipboardButton: React.FC<{ text: string }> = (props) => {
   const [displaySuccess, setDisplaySuccess] = useState(false);
   const copy = () => {
     writeText(props.text)
@@ -23,7 +23,7 @@ export const ClipboardButton: React.FC<{ text: string }> = (props) => {
     <div onClick={copy} style={{ display: "inline-block" }}>
       {displaySuccess ? (
         <Tooltip title="成功">
-          <DoneIcon fontSize="medium"/>
+          <DoneIcon fontSize="medium" />
         </Tooltip>
       ) : (
         <Tooltip title="复制文本">
@@ -33,3 +33,5 @@ export const ClipboardButton: React.FC<{ text: string }> = (props) => {
     </div>
   );
 };
+
+export default ClipboardButton;

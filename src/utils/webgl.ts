@@ -1,4 +1,4 @@
-import { Filter } from "@/types/Filter";
+import { Filter } from "@/utils/types/Filter";
 
 function createShader(
   gl: WebGLRenderingContext,

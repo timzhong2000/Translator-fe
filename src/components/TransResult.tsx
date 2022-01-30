@@ -1,9 +1,11 @@
+import { useContext } from "react";
+import { Box } from "@mui/material";
+
+import ClipboardButton from "./ClipboardButton";
+
 import { tesseractContext } from "@/context/tesseract";
 import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
-import { Box } from "@mui/material";
-import { useContext } from "react";
-import { ClipboardButton } from "./ClipboardButton";
 
 export const TransResult = () => {
   const { result: translateResult} = useContext(translatorContext);

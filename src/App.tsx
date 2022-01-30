@@ -1,15 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import { Link } from "@mui/material";
-import Navbar from "./components/Navbar";
-import { ConfigPanel } from "./components/ConfigPanel";
-import { ConfigContextProvider } from "@/context/config";
-import { Trans } from "./components/Trans";
-import { TransContextProvider } from "./context/videoProcessor";
 
-import { OpencvTest } from "./components/Opencv";
-import { OpenCvContextProvider } from "./context/opencv";
-import { TesseractHook } from "./context/tesseract";
-import { TranslatorProvider } from "./context/translator";
+import Navbar from "@/components/Navbar";
+import ConfigPanel from "@/components/config/ConfigPanel";
+import OcrPage from "@/components/OcrPage";
+import { OpencvTest } from "@/components/ImageOcrTest";
+
+import { TransContextProvider } from "@/context/videoProcessor";
+import { ConfigContextProvider } from "@/context/config";
+import { OpenCvContextProvider } from "@/context/opencv";
+import { TesseractHook } from "@/context/tesseract";
+import { TranslatorProvider } from "@/context/translator";
+
 function Home() {
   return (
     <div>
@@ -34,7 +36,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="about" element={<About />} />
-                  <Route path="trans" element={<Trans />} />
+                  <Route path="trans" element={<OcrPage />} />
                   <Route path="setting" element={<ConfigPanel />} />
                   <Route path="cvtest" element={<OpencvTest />} />
                 </Routes>

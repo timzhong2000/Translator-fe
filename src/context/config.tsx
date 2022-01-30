@@ -7,7 +7,6 @@ import {
   FilterConfig,
 } from "../types/globalConfig";
 
-
 const defaultFilterConfig: FilterConfig = {
   binaryThreshold: 50,
   erodeKernelSize: 3,
