@@ -22,10 +22,20 @@ const PreProcessCanvas = () => {
       console.time(`[PreProcess Component] runfilter `);
       putImageData(canvasEl.current, selectedImageData);
       const mat = cv.imread(canvasEl.current);
-      opencvFilter(cv, mat, filterConfig.binaryThreshold, {
-        kernelSize: filterConfig.erodeKernelSize,
-        iterations: filterConfig.erodeIterations,
-      });
+      opencvFilter(
+        cv,
+        mat,
+        filterConfig.binaryThreshold,
+        filterConfig.inverse,
+        {
+          kernelSize: filterConfig.erodeKernelSize,
+          iterations: filterConfig.erodeIterations,
+        },
+        {
+          kernelSize: filterConfig.dilateKernelSize,
+          iterations: filterConfig.dilateIterations,
+        }
+      );
       cv.imshow(canvasEl.current, mat);
       mat.delete();
       console.timeEnd(`[PreProcess Component] runfilter `);
@@ -52,4 +62,4 @@ const PreProcessCanvas = () => {
   }
 };
 
-export default PreProcessCanvas
+export default PreProcessCanvas;

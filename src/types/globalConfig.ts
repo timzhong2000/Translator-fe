@@ -4,6 +4,9 @@ export interface FilterConfig {
   binaryThreshold: number,
   erodeKernelSize: number,
   erodeIterations: number,
+  dilateKernelSize: number,
+  dilateIterations: number,
+  inverse: boolean
 }
 
 export interface TranslatorConfig {
@@ -19,7 +22,7 @@ export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   enabled: boolean;
   fromScreen: boolean;
   videoDeviceId?: string
-  video: { height: number; width: number; frameRate: number;} & MediaTrackConstraints;
+  video: { height: number; width: number; frameRate: number; } & MediaTrackConstraints;
   audio: boolean;
   audioDeviceId?: string
 }

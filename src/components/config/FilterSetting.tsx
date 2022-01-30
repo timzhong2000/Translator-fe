@@ -1,5 +1,13 @@
 import { useContext, useState } from "react";
-import { Grid, Typography, Slider, TextField, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Slider,
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 
 import { configContext } from "@/context/config";
 
@@ -9,6 +17,22 @@ export const FilterSetting = () => {
   return (
     <div>
       <Grid container spacing={3} my={3}>
+        <Grid item xs={3} md={1} xl={1}>
+          <FormControlLabel
+            label="反色"
+            control={
+              <Checkbox
+                checked={localConfig.inverse}
+                onClick={() =>
+                  setLocalConfig({
+                    ...localConfig,
+                    inverse: !localConfig.inverse,
+                  })
+                }
+              />
+            }
+          ></FormControlLabel>
+        </Grid>
         <Grid item xs={6} md={6} xl={2}>
           <Typography id="binaryThreshold-slider" gutterBottom>
             二值化阈值
@@ -51,6 +75,34 @@ export const FilterSetting = () => {
               setLocalConfig({
                 ...localConfig,
                 erodeIterations: Number(e.target.value),
+              })
+            }
+          ></TextField>
+        </Grid>
+        <Grid item xs={3} md={2} xl={1}>
+          <TextField
+            label="Dilate卷积核大小"
+            required
+            value={localConfig.dilateKernelSize}
+            sx={{ width: "100%" }}
+            onChange={(e) =>
+              setLocalConfig({
+                ...localConfig,
+                dilateKernelSize: Number(e.target.value),
+              })
+            }
+          ></TextField>
+        </Grid>
+        <Grid item xs={3} md={2} xl={1}>
+          <TextField
+            label="Dilate迭代次数"
+            required
+            value={localConfig.dilateIterations}
+            sx={{ width: "100%" }}
+            onChange={(e) =>
+              setLocalConfig({
+                ...localConfig,
+                dilateIterations: Number(e.target.value),
               })
             }
           ></TextField>
