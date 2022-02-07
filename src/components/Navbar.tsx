@@ -13,6 +13,7 @@ const Navbar: React.FC = (props) => {
       path: "/#/",
     },
     { title: "翻译器", path: "/#/trans" },
+    { title: "虚拟屏幕", path: "/#/vscreen" },
     { title: "设置", path: "/#/setting" },
     { title: "关于", path: "/#/about" },
   ];

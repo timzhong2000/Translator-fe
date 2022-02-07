@@ -11,6 +11,7 @@ import { ConfigContextProvider } from "@/context/config";
 import { OpenCvContextProvider } from "@/context/opencv";
 import { TesseractHook } from "@/context/tesseract";
 import { TranslatorProvider } from "@/context/translator";
+import VirtualScreenPage from "./components/VirtualScreenPage";
 
 function Home() {
   return (
@@ -39,6 +40,7 @@ function App() {
                   <Route path="trans" element={<OcrPage />} />
                   <Route path="setting" element={<ConfigPanel />} />
                   <Route path="cvtest" element={<OpencvTest />} />
+                  <Route path="vscreen" element={<VirtualScreenPage />} />
                 </Routes>
               </TransContextProvider>
             </TranslatorProvider>

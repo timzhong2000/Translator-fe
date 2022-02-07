@@ -6,23 +6,16 @@ import { TransResult } from "./TransResult";
 import { configContext } from "@/context/config";
 import { transContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
+import VirtualScreen from "./VirtualScreen";
 
 const SelectArea: React.FC<{}> = () => {
   const { mediaDevicesConfig, cutArea, setCutArea } = useContext(configContext);
-  const { stream, setVideoRef } = useContext(transContext);
+  const { stream } = useContext(transContext);
   const cutAreaEl = useRef<HTMLDivElement>(null);
   const areaConfig = cutAreaParser(cutArea);
   const isResizing = useRef(false);
   const startAbsolutePos = useRef({ x: 0, y: 0 });
-  const videoEl = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => void setVideoRef(videoEl), []); // 转发到context中
-
-  useEffect(() => {
-    if (stream) {
-      videoEl.current!.srcObject = stream;
-    }
-  }, [stream]);
 
   const onResizeStart = useCallback(
     (e: React.TouchEvent | React.MouseEvent) => {
@@ -122,17 +115,10 @@ const SelectArea: React.FC<{}> = () => {
         onMouseMove={onResize}
         onDoubleClick={onResizeEnd}
       >
-        <video
-          autoPlay
-          muted={!mediaDevicesConfig.audio}
-          ref={videoEl}
-          style={{
-            position: "absolute",
-            width: mediaDevicesConfig.video.width,
-            height: mediaDevicesConfig.video.height,
-          }}
+        <VirtualScreen
           onClick={onResizeStart}
-        ></video>
+          onDoubleClick={onResizeEnd}
+        />
         <div
           ref={cutAreaEl}
           style={{
