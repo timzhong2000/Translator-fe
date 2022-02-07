@@ -13,17 +13,19 @@ import { transContext } from "@/context/videoProcessor";
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
 import { resolution2text, text2resolution } from "@/utils/resolution";
-
+import { useTranslation } from "react-i18next";
 
 const getStreamStatus = (
   stream: MediaStream | undefined,
   mediaDevicesConfig: MediaDevicesConfig
 ) => {
+  const { t } = useTranslation();
+
   return mediaDevicesConfig.enabled
     ? stream && stream.getTracks().length > 0
-      ? "停止录制"
-      : "正在打开摄像头模块"
-    : "使用以上参数开始录制";
+      ? t("setting.media.stopRecord")
+      : t("setting.media.startingRecord")
+    : t("setting.media.startRecord");
 };
 
 const MediaDevicesSetting = () => {
@@ -31,8 +33,8 @@ const MediaDevicesSetting = () => {
     useContext(configContext);
   const [localConfig, setLocalConfig] = useState(mediaDevicesConfig);
   const { stream } = useContext(transContext);
+  const { t } = useTranslation();
   const resolutionList = ["1080P", "720P"];
-
   const mediaDeviceList = useMediaDeviceList();
   const videoDeviceList = mediaDeviceList.filter(
     (dev) => dev.kind === "videoinput" && dev.deviceId.length > 20
@@ -50,20 +52,23 @@ const MediaDevicesSetting = () => {
       ?.label ||
     audioDeviceList[0]?.label ||
     "";
+  const editAble =
+    getStreamStatus(stream, localConfig) === t("setting.media.startRecord");
 
   return (
     <div>
       <Grid container spacing={3} my={3}>
         <Grid item xs={12}>
           <FormControlLabel
-            label={`当前视频源: ${localConfig.fromScreen ? "本机" : "采集卡"}`}
+            label={`${t("setting.media.currentSource")}: ${
+              localConfig.fromScreen
+                ? t("setting.media.screen")
+                : t("setting.media.captureCard")
+            }`}
             control={
               <Checkbox
                 checked={localConfig.fromScreen}
-                disabled={
-                  getStreamStatus(stream, localConfig) !==
-                  "使用以上参数开始录制"
-                }
+                disabled={!editAble}
                 onClick={() =>
                   setLocalConfig({
                     ...localConfig,
@@ -79,11 +84,8 @@ const MediaDevicesSetting = () => {
             <Grid item sm={12} md={6} xl={2} mt={0.75}>
               <TextField
                 select
-                disabled={
-                  getStreamStatus(stream, localConfig) !==
-                  "使用以上参数开始录制"
-                }
-                label="录屏分辨率"
+                disabled={!editAble}
+                label={t("setting.media.resolution")}
                 required
                 value={resolution2text(localConfig.video)}
                 sx={{ width: "100%" }}
@@ -104,14 +106,11 @@ const MediaDevicesSetting = () => {
 
             <Grid item sm={12} md={6} xl={2} mt={1}>
               <FormControlLabel
-                label="启用音频回放"
+                label={t("setting.media.enableAudio") as string}
                 control={
                   <Checkbox
                     checked={localConfig.audio}
-                    disabled={
-                      getStreamStatus(stream, localConfig) !==
-                      "使用以上参数开始录制"
-                    }
+                    disabled={!editAble}
                     onClick={() =>
                       setLocalConfig({
                         ...localConfig,
@@ -126,11 +125,8 @@ const MediaDevicesSetting = () => {
             <Grid item xs={12} sm={12} md={6} lg={3}>
               <TextField
                 select
-                label="视频源"
-                disabled={
-                  getStreamStatus(stream, localConfig) !==
-                  "使用以上参数开始录制"
-                }
+                label={t("setting.media.videoDevice") as string}
+                disabled={!editAble}
                 required
                 value={selectedVideoDeviceLabel}
                 sx={{ width: "100%" }}
@@ -156,11 +152,8 @@ const MediaDevicesSetting = () => {
             <Grid item xs={12} sm={6} md={6} lg={3}>
               <TextField
                 select
-                label="音频源"
-                disabled={
-                  getStreamStatus(stream, localConfig) !==
-                  "使用以上参数开始录制"
-                }
+                label={t("setting.media.audioDevice") as string}
+                disabled={!editAble}
                 required
                 value={selectedAudioDeviceLabel}
                 sx={{ width: "100%" }}
@@ -191,7 +184,10 @@ const MediaDevicesSetting = () => {
 
       <Button
         variant="outlined"
-        disabled={getStreamStatus(stream, localConfig) === "正在打开摄像头模块"}
+        disabled={
+          getStreamStatus(stream, localConfig) ===
+          t("setting.media.startingRecord")
+        }
         onClick={() => {
           setLocalConfig((prev) => {
             const newConfig = { ...prev, enabled: !prev.enabled };

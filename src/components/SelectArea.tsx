@@ -7,6 +7,7 @@ import { configContext } from "@/context/config";
 import { transContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
 import VirtualScreen from "./VirtualScreen";
+import { useTranslation } from "react-i18next";
 
 const SelectArea: React.FC<{}> = () => {
   const { mediaDevicesConfig, cutArea, setCutArea } = useContext(configContext);
@@ -15,7 +16,7 @@ const SelectArea: React.FC<{}> = () => {
   const areaConfig = cutAreaParser(cutArea);
   const isResizing = useRef(false);
   const startAbsolutePos = useRef({ x: 0, y: 0 });
-
+  const {t} = useTranslation();
 
   const onResizeStart = useCallback(
     (e: React.TouchEvent | React.MouseEvent) => {
@@ -25,8 +26,6 @@ const SelectArea: React.FC<{}> = () => {
         offsetX = 0,
         offsetY = 0;
       if (e.nativeEvent instanceof MouseEvent) {
-        console.log(e);
-
         clientX = e.nativeEvent.clientX;
         clientY = e.nativeEvent.clientY;
         offsetX = e.nativeEvent.offsetX;
@@ -138,7 +137,7 @@ const SelectArea: React.FC<{}> = () => {
       </div>
     );
   } else {
-    return <Box>正在初始化摄像头模块，请稍等</Box>;
+    return <Box>{t("selectArea.waitingStream")}</Box>;
   }
 };
 

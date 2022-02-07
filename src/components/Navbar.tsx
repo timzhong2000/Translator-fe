@@ -5,17 +5,20 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Navbar: React.FC = (props) => {
+  const {t, i18n} = useTranslation();
+
   const items: { title: string; path: string }[] = [
     {
-      title: "主页",
+      title: t("navbar.home"),
       path: "/#/",
     },
-    { title: "翻译器", path: "/#/trans" },
-    { title: "虚拟屏幕", path: "/#/vscreen" },
-    { title: "设置", path: "/#/setting" },
-    { title: "关于", path: "/#/about" },
+    { title: t("navbar.translator"), path: "/#/trans" },
+    { title: t("navbar.virtualScreen"), path: "/#/vscreen" },
+    { title: t("navbar.setting"), path: "/#/setting" },
+    { title: t("navbar.about"), path: "/#/about" },
   ];
   return (
     <div>

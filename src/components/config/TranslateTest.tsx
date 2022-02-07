@@ -4,19 +4,22 @@ import { Grid, TextField, Button } from "@mui/material";
 import { translatorContext } from "@/context/translator";
 import { tesseractContext } from "@/context/tesseract";
 import { configContext } from "@/context/config";
+import { useTranslation } from "react-i18next";
 
 const testSrcText = "こんにちは";
 const TranslateTest = () => {
   const { result: translateResult } = useContext(translatorContext);
   const { setResult: setSrcText } = useContext(tesseractContext);
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
+  const {t} = useTranslation()
+
   const [input, setInput] = useState(testSrcText);
   return (
     <div>
       <Grid container spacing={3} my={3}>
         <Grid item xs={12} sm={6} xl={3}>
           <TextField
-            label="翻译测试"
+            label={t("setting.translator.testText")}
             value={input}
             sx={{ width: "100%" }}
             onChange={(e) => setInput(e.target.value)}
@@ -26,7 +29,7 @@ const TranslateTest = () => {
         <Grid item xs={12} sm={3} xl={2}>
           <TextField
             disabled
-            label="翻译结果"
+            label={t("setting.translator.testResult")}
             value={translateResult?.dest || ""}
             sx={{ width: "100%" }}
           />
@@ -52,7 +55,7 @@ const TranslateTest = () => {
           }, 1000);
         }}
       >
-        测试翻译
+        {t("setting.translator.testTranslator")}
       </Button>
     </div>
   );

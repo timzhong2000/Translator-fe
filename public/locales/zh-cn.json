@@ -1,0 +1,72 @@
+{
+  "navbar": {
+    "home": "主页",
+    "translator": "翻译器",
+    "virtualScreen": "虚拟屏幕",
+    "setting": "设置",
+    "about": "关于"
+  },
+  "setting": {
+    "translator": {
+      "server": "翻译服务器",
+      "pleaseFillTranslatorServerUrl": "请输入翻译服务器",
+      "key": "密钥(可选)",
+      "provider": "翻译引擎",
+      "srcLang": "源语言",
+      "destLang": "目标语言",
+      "testText": "翻译文本",
+      "testResult": "测试结果",
+      "testTranslator": "测试器翻译",
+      "applyCustomServer": "应用自定义服务器",
+      "applyTranslatorConfig" :"应用翻译设置"
+    },
+    "media": {
+      "currentSource": "当前视频源",
+      "screen": "本机屏幕",
+      "captureCard": "采集卡",
+      "resolution": "录制分辨率",
+      "enableAudio": "启用音频回放",
+      "videoDevice": "视频输入设备选择",
+      "audioDevice": "音频输入设备选择",
+      "startRecord": "开始录制",
+      "stopRecord": "停止录制",
+      "startingRecord": "正在启动录制..."
+    },
+    "filter": {
+      "revert": "反色",
+      "binaryThreshold": "二值化阈值",
+      "erodeKernalSize": "Erode卷积核大小",
+      "erodeIterations": "Erode迭代次数",
+      "dilateKernalSize": "Dilate卷积核大小",
+      "dilateIterations": "Dilate迭代次数",
+      "dpiNormalization": "文字大小标准化",
+      "apply": "应用滤镜设置"
+    },
+    "quit": "退出",
+    "enter": "进入",
+    "advance": "高级模式",
+    "reset": "重置所有设置"
+  },
+  "translator": {
+    "pauseTranslating": "暂停翻译",
+    "startTranslating": "开始翻译",
+    "sourceText": "原文",
+    "destText": "译文"
+  },
+  "selectArea": {
+    "waitingStream": "正在初始化视频流，请稍等",
+    "missingSelection": "未选区，请单击视频开始选区，选区结束后双击保存选区"
+  },
+  "virtualScreen":{
+    "audioPlayback": "声音回放",
+    "resolution": "分辨率"
+  },
+  "ocr":{
+    "opencvLoading": "OpenCV正在加载中...",
+    "RecordStatusIsDisable": "录制未启动，前往"
+  },
+  "clipboard":{
+    "success":"复制成功",
+    "copyText": "复制文本"
+  }
+}

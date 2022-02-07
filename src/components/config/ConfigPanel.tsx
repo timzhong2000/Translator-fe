@@ -11,15 +11,18 @@ import MediaDevicesSetting from "./MediaDevicesSetting";
 import TranslateServerConfig from "./TranslateServerConfig";
 
 import { configContext } from "@/context/config";
+import { useTranslation } from "react-i18next";
 
 const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);
   const { reset } = useContext(configContext);
+  const {t} = useTranslation()
+
   return (
     <div>
       <Box mt={2} mx={1}>
         <Button variant="outlined" onClick={() => setAdvanceMode(!advanceMode)}>
-          {advanceMode ? "退出" : "进入"}高级模式
+          {advanceMode ? t("setting.quit") : t("setting.enter")} {t("setting.advance")}
         </Button>
         {advanceMode ? (
           <Box my={5} mx={1}>
@@ -45,7 +48,7 @@ const ConfigPanel = () => {
         </Box>
       ) : null}
       <Box my={5} mx={1}>
-        <Button onClick={() => reset()}>重置设置</Button>
+        <Button onClick={() => reset()}>{t("setting.reset")}</Button>
       </Box>
     </div>
   );

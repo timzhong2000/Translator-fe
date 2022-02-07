@@ -10,17 +10,19 @@ import {
 } from "@mui/material";
 
 import { configContext } from "@/context/config";
-import stream from "stream";
+import { useTranslation } from "react-i18next";
 
 export const FilterSetting = () => {
   const { filterConfig, setFilterConfig } = useContext(configContext);
   const [localConfig, setLocalConfig] = useState(filterConfig);
+  const { t } = useTranslation()
+
   return (
     <div>
       <Grid container spacing={3} my={3}>
         <Grid item xs={3} md={1} xl={1}>
           <FormControlLabel
-            label="反色"
+            label={t("setting.filter.revert") as string}
             control={
               <Checkbox
                 checked={localConfig.inverse}
@@ -36,7 +38,7 @@ export const FilterSetting = () => {
         </Grid>
         <Grid item xs={6} md={6} xl={2}>
           <Typography id="binaryThreshold-slider" gutterBottom>
-            二值化阈值
+            {t("setting.filter.binaryThreshold")}
           </Typography>
           <Slider
             value={localConfig.binaryThreshold}
@@ -54,7 +56,7 @@ export const FilterSetting = () => {
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
-            label="Erode卷积核大小"
+            label={t("setting.filter.erodeKernalSize")}
             required
             value={localConfig.erodeKernelSize}
             sx={{ width: "100%" }}
@@ -68,7 +70,7 @@ export const FilterSetting = () => {
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
-            label="Erode迭代次数"
+            label={t("setting.filter.erodeIterations")}
             required
             value={localConfig.erodeIterations}
             sx={{ width: "100%" }}
@@ -82,7 +84,7 @@ export const FilterSetting = () => {
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
-            label="Dilate卷积核大小"
+            label={t("setting.filter.dilateKernalSize")}
             required
             value={localConfig.dilateKernelSize}
             sx={{ width: "100%" }}
@@ -96,7 +98,7 @@ export const FilterSetting = () => {
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
-            label="Dilate迭代次数"
+            label={t("setting.filter.dilateIterations")}
             required
             value={localConfig.dilateIterations}
             sx={{ width: "100%" }}
@@ -110,7 +112,7 @@ export const FilterSetting = () => {
         </Grid>
         <Grid item xs={6} md={6} xl={2}>
           <Typography id="zoomNormalization-slider" gutterBottom>
-            文字大小标准化
+            {t("setting.filter.dpiNormalization")}
           </Typography>
           <Slider
             value={localConfig.zoom}
@@ -128,7 +130,7 @@ export const FilterSetting = () => {
         </Grid>
       </Grid>
       <Button variant="outlined" onClick={() => setFilterConfig(localConfig)}>
-        保存
+        {t("setting.filter.apply")}
       </Button>
     </div>
   );

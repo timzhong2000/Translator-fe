@@ -4,9 +4,12 @@ import DoneIcon from "@mui/icons-material/Done";
 import Tooltip from "@mui/material/Tooltip";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ClipboardButton: React.FC<{ text: string }> = (props) => {
   const [displaySuccess, setDisplaySuccess] = useState(false);
+  const {t} = useTranslation();
+
   const copy = () => {
     writeText(props.text)
       .then(() => {
@@ -19,14 +22,15 @@ const ClipboardButton: React.FC<{ text: string }> = (props) => {
         console.log(err);
       });
   };
+
   return (
     <div onClick={copy} style={{ display: "inline-block" }}>
       {displaySuccess ? (
-        <Tooltip title="成功">
+        <Tooltip title={t("clipboard.success") as string}>
           <DoneIcon fontSize="medium" />
         </Tooltip>
       ) : (
-        <Tooltip title="复制文本">
+        <Tooltip title={t("clipboard.copyText") as string}>
           <ContentPasteIcon fontSize="medium" />
         </Tooltip>
       )}

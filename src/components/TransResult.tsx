@@ -6,6 +6,7 @@ import ClipboardButton from "./ClipboardButton";
 import { tesseractContext } from "@/context/tesseract";
 import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
+import { useTranslation } from "react-i18next";
 
 export const TransResult = () => {
   const {
@@ -15,6 +16,7 @@ export const TransResult = () => {
   } = useContext(translatorContext);
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
+  const { t } = useTranslation();
 
   return (
     <DragableElement
@@ -30,19 +32,21 @@ export const TransResult = () => {
         fontSize={16}
         fontWeight={600}
         py={0.5}
-      >{`状态：${tesseractStatus.current}`}</Box>
+      >{`(debug)状态: ${tesseractStatus.current}`}</Box>
       <Box fontSize={24} fontWeight={600} py={0.5}>
-        {`原文：${srcText}`}
-        {true ? <ClipboardButton text={srcText} /> : null}
+        {`${t("translator.sourceText")}: ${srcText}`}
+        {translateResult?.src ? <ClipboardButton text={srcText} /> : null}
       </Box>
       <Box fontSize={24} fontWeight={600} py={0.5}>
-        {`译文：${translateResult?.dest || ""}`}
+        {`${t("translator.destText")}: ${translateResult?.dest || ""}`}
         {translateResult?.dest ? (
           <ClipboardButton text={translateResult.dest} />
         ) : null}
       </Box>
       <Button onClick={() => setEnabled(!enabled)}>
-        {enabled ? "暂停翻译" : "开始翻译"}
+        {enabled
+          ? t("translator.pauseTranslating")
+          : t("translator.startTranslating")}
       </Button>
     </DragableElement>
   );

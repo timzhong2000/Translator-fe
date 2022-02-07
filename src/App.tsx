@@ -5,13 +5,15 @@ import Navbar from "@/components/Navbar";
 import ConfigPanel from "@/components/config/ConfigPanel";
 import OcrPage from "@/components/OcrPage";
 import { OpencvTest } from "@/components/ImageOcrTest";
+import VirtualScreenPage from "@/components/VirtualScreenPage";
 
 import { TransContextProvider } from "@/context/videoProcessor";
 import { ConfigContextProvider } from "@/context/config";
 import { OpenCvContextProvider } from "@/context/opencv";
 import { TesseractHook } from "@/context/tesseract";
 import { TranslatorProvider } from "@/context/translator";
-import VirtualScreenPage from "./components/VirtualScreenPage";
+
+import "@/utils/i18n";
 
 function Home() {
   return (

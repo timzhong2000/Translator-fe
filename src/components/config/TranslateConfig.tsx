@@ -3,11 +3,14 @@ import { Grid, TextField, MenuItem, Button } from "@mui/material";
 
 import { configContext } from "@/context/config";
 import ISO963_1 from "@/types/ISO963";
+import { useTranslation } from "react-i18next";
 
 
 const TranslateConfig = () => {
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
   const [localConfig, setLocalConfig] = useState(translatorConfig);
+  const { t } = useTranslation()
+
   const langList: ISO963_1[] = ["zh_CN", "zh_TW", "ja", "en"];
   const providerList: string[] = [
     "baidu",
@@ -21,7 +24,7 @@ const TranslateConfig = () => {
         <Grid item xs={12} sm={12} md={3} lg={2}>
           <TextField
             select
-            label="翻译引擎"
+            label={t("setting.translator.provider")}
             required
             value={localConfig.provider}
             sx={{ width: "100%" }}
@@ -43,7 +46,7 @@ const TranslateConfig = () => {
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <TextField
             select
-            label="源语言"
+            label={t("setting.translator.srcLang")}
             required
             value={localConfig.srcLang}
             sx={{ width: "100%" }}
@@ -65,7 +68,7 @@ const TranslateConfig = () => {
         <Grid item xs={12} sm={6} md={3} lg={2}>
           <TextField
             select
-            label="目标语言"
+            label={t("setting.translator.destLang")}
             required
             value={localConfig.destLang}
             sx={{ width: "100%" }}
@@ -90,7 +93,7 @@ const TranslateConfig = () => {
           setTranslatorConfig(localConfig);
         }}
       >
-        保存翻译设置
+        {t("setting.translator.applyTranslatorConfig")}
       </Button>
     </div>
   );

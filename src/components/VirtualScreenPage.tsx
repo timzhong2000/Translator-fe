@@ -1,12 +1,15 @@
 import { configContext } from "@/context/config"
 import { useContext } from "react"
+import { useTranslation } from "react-i18next"
 import VirtualScreen from "./VirtualScreen"
 
 const VirtualScreenPage = () => {
   const { mediaDevicesConfig } = useContext(configContext)
+  const { t } = useTranslation();
+  
   return (<div>
-    <div><span>声音回放：{mediaDevicesConfig.audio ? "on" : "off"}</span></div>
-    <div><span>分辨率：{mediaDevicesConfig.video.width}*{mediaDevicesConfig.video.height}</span></div>
+    <div><span>{t("virtualScreen.audioPlayback")}: {mediaDevicesConfig.audio ? "on" : "off"}</span></div>
+    <div><span>{t("virtualScreen.resolution")}: {mediaDevicesConfig.video.width}*{mediaDevicesConfig.video.height}</span></div>
     <div style={{
       position: "relative"
     }}>

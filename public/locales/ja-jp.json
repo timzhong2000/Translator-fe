@@ -1,0 +1,72 @@
+{
+  "navbar": {
+    "home": "ホームページ",
+    "translator": "翻訳機",
+    "virtualScreen": "仮想スクリーン",
+    "setting": "設定",
+    "about": "について"
+  },
+  "setting": {
+    "translator": {
+      "server": "翻訳サーバ",
+      "pleaseFillTranslatorServerUrl": "翻訳サーバーを入力してください",
+      "key": "キー(オプション)",
+      "provider": "翻訳エンジン",
+      "srcLang": "ソース言語",
+      "destLang": "ターゲット言語",
+      "testText": "テストテキスト",
+      "testResult": "テスト結果",
+      "testTranslator": "テスタ翻訳",
+      "applyCustomServer": "カスタムサーバーの適用",
+      "applyTranslatorConfig" :"翻訳設定の適用"
+    },
+    "media": {
+      "currentSource": "現在のビデオソース",
+      "screen": "ネイティブ画面",
+      "captureCard": "採集カード",
+      "resolution": "録画解像度",
+      "enableAudio": "オーディオ再生をオンにする",
+      "videoDevice": "ビデオ入力デバイス選択",
+      "audioDevice": "オーディオ入力デバイス選択",
+      "startRecord": "録画開始",
+      "stopRecord": "録画を停止",
+      "startingRecord": "録画を開始中..."
+    },
+    "filter": {
+      "revert": "revert",
+      "binaryThreshold": "Binary Threshold",
+      "erodeKernalSize": "Erode Kernal Size",
+      "erodeIterations": "Erode Iterations",
+      "dilateKernalSize": "Dilate Kernal Size",
+      "dilateIterations": "Dilate Iterations",
+      "dpiNormalization": "DPI Normalization",
+      "apply": "適用"
+    },
+    "quit": "Quit ",
+    "enter": "Enter ",
+    "advance": "Advance Mode",
+    "reset": "すべての設定をリセット"
+  },
+  "translator": {
+    "pauseTranslating": "翻訳を一時停止",
+    "startTranslating": "翻訳を開始",
+    "sourceText": "元のテキスト",
+    "destText": "翻訳されたテキスト"
+  },
+  "selectArea": {
+    "waitingStream": "ビデオストリームを初期化していますので、少々お待ちください",
+    "missingSelection": "選択範囲がありません。ビデオをクリックして選択範囲を開始し、選択範囲が終了したらダブルクリックして選択範囲を保存します。"
+  },
+  "virtualScreen":{
+    "audioPlayback": "サウンド再生",
+    "resolution": "解像度"
+  },
+  "ocr":{
+    "opencvLoading": "OpenCVはロード中です...",
+    "RecordStatusIsDisable": "録画が開始されていません"
+  },
+  "clipboard":{
+    "success":"コピー成功",
+    "copyText": "コピーテキスト"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "navbar": {
+    "home": "Home",
+    "translator": "Translator",
+    "virtualScreen": "Virtual Screen",
+    "setting": "Setting",
+    "about": "About"
+  },
+  "setting": {
+    "translator": {
+      "server": "Server",
+      "key": "Key (Optional)",
+      "pleaseFillTranslatorServerUrl": "Please Fill Translator Url",
+      "provider": "Provider",
+      "srcLang": "Source Lang",
+      "destLang": "Dest Lang",
+      "testText": "Test Text",
+      "testResult": "Test Result",
+      "testTranslator": "Test Translator!",
+      "applyCustomServer": "Apply Custom Server Setting",
+      "applyTranslatorConfig": "Apply Translator Config"
+    },
+    "media": {
+      "currentSource": "Current video source",
+      "screen": "Screen Record",
+      "captureCard": "Capture Card",
+      "resolution": "resolution",
+      "enableAudio": "Enable Audio Playback",
+      "videoDevice": "VideoDevice",
+      "audioDevice": "AudioDevice",
+      "startRecord": "Start Record",
+      "stopRecord": "Stop Record",
+      "startingRecord": "Starting Record..."
+    },
+    "filter": {
+      "revert": "revert",
+      "binaryThreshold": "Binary Threshold",
+      "erodeKernalSize": "Erode Kernal Size",
+      "erodeIterations": "Erode Iterations",
+      "dilateKernalSize": "Dilate Kernal Size",
+      "dilateIterations": "Dilate Iterations",
+      "dpiNormalization": "DPI Normalization",
+      "apply": "Apply"
+    },
+    "quit": "Quit ",
+    "enter": "Enter ",
+    "advance": "Advance Mode",
+    "reset": "Reset All Settings"
+  },
+  "translator": {
+    "pauseTranslating": "Pause Translating",
+    "startTranslating": "Start Translating",
+    "sourceText": "Source",
+    "destText": "Dest"
+  },
+  "selectArea": {
+    "waitingStream": "waiting for stream to be captured",
+    "missingSelection": "select area is empty, please click videobox to start selecting and double click to save area"
+  },
+  "virtualScreen": {
+    "audioPlayback": "Audio Playback Mode",
+    "resolution": "Resolution"
+  },
+  "ocr": {
+    "opencvLoading": "Loading OpenCV...",
+    "RecordStatusIsDisable": "Record is disabled, please turn it on in "
+  },
+  "clipboard": {
+    "success": "success",
+    "copyText": "copy text"
+  }
+}

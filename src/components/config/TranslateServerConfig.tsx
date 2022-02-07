@@ -2,19 +2,22 @@ import { useContext, useState } from "react";
 import { Grid, TextField, Button } from "@mui/material";
 
 import { configContext } from "@/context/config";
+import { useTranslation } from "react-i18next";
 
 const TranslateServerConfig = () => {
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
   const [localConfig, setLocalConfig] = useState(translatorConfig);
+  const {t} = useTranslation()
+
   return (
     <div>
       <Grid container spacing={3} my={3}>
         <Grid item sm={12} md={6} xl={3}>
           <TextField
-            label="翻译服务器"
+            label={t("setting.translator.server")}
             required
             error={localConfig.url == ""}
-            helperText={localConfig.url == "" ? "请输入翻译服务器" : ""}
+            helperText={localConfig.url == "" ? t("setting.translator.pleaseFillTranslatorServerUrl") : ""}
             value={localConfig.url}
             sx={{ width: "100%" }}
             onChange={(e) =>
@@ -24,7 +27,7 @@ const TranslateServerConfig = () => {
         </Grid>
         <Grid item sm={12} md={6} xl={2}>
           <TextField
-            label="密钥"
+            label={t("setting.translator.key")}
             value={localConfig.key}
             sx={{ width: "100%" }}
             onChange={(e) =>
@@ -39,7 +42,7 @@ const TranslateServerConfig = () => {
           setTranslatorConfig(localConfig);
         }}
       >
-        保存自定义服务器
+        {t("setting.translator.applyCustomServer")}
       </Button>
     </div>
   );
