@@ -4,14 +4,14 @@ import Box from "@mui/material/Box";
 import { TransResult } from "./TransResult";
 
 import { configContext } from "@/context/config";
-import { transContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
 import VirtualScreen from "./VirtualScreen";
 import { useTranslation } from "react-i18next";
 
 const SelectArea: React.FC<{}> = () => {
   const { mediaDevicesConfig, cutArea, setCutArea } = useContext(configContext);
-  const { stream } = useContext(transContext);
+  const { stream } = useContext(videoContext);
   const cutAreaEl = useRef<HTMLDivElement>(null);
   const areaConfig = cutAreaParser(cutArea);
   const isResizing = useRef(false);

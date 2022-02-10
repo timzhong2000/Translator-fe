@@ -6,12 +6,12 @@ import FilterSetting from "./config/FilterSetting";
 import PreProcessCanvas from "./PreProcessCanvas";
 
 import { configContext } from "@/context/config";
-import { transContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/videoProcessor";
 import { openCvContext } from "@/context/opencv";
 import { useTranslation } from "react-i18next";
 
 export const OcrPage = () => {
-  const { selectedImageData } = useContext(transContext);
+  const { selectedImageData } = useContext(videoContext);
   const { mediaDevicesConfig } = useContext(configContext);
   const { ready: cvReady } = useContext(openCvContext);
   const {t} = useTranslation()

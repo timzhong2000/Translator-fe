@@ -1,41 +1,28 @@
 import { Route, Routes } from "react-router-dom";
-import Link from "@mui/material/Link";
+import "@/utils/i18n";
 
+import Home from "@/components/Home";
+import About from "@/components/About";
 import Navbar from "@/components/Navbar";
 import ConfigPanel from "@/components/config/ConfigPanel";
 import OcrPage from "@/components/OcrPage";
 import { OpencvTest } from "@/components/ImageOcrTest";
 import VirtualScreenPage from "@/components/VirtualScreenPage";
 
-import { TransContextProvider } from "@/context/videoProcessor";
+import { VideoContextProvider } from "@/context/videoProcessor";
 import { ConfigContextProvider } from "@/context/config";
 import { OpenCvContextProvider } from "@/context/opencv";
 import { TesseractHook } from "@/context/tesseract";
-import { TranslatorProvider } from "@/context/translator";
-
-import "@/utils/i18n";
-
-function Home() {
-  return (
-    <div>
-      <h1>Home</h1>
-      <Link href="/#/about">About</Link>
-    </div>
-  );
-}
-
-function About() {
-  return <div>about</div>;
-}
+import { TranslatorProviderWithConfig } from "@/context/translator";
 
 function App() {
   return (
     <Navbar>
       <ConfigContextProvider>
         <OpenCvContextProvider>
-          <TesseractHook.TesseractContextProvider poolSize={4} lang="jpn">
-            <TranslatorProvider>
-              <TransContextProvider>
+          <TesseractHook.TesseractContextProviderWithConfig>
+            <TranslatorProviderWithConfig>
+              <VideoContextProvider>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="about" element={<About />} />
@@ -44,9 +31,9 @@ function App() {
                   <Route path="cvtest" element={<OpencvTest />} />
                   <Route path="vscreen" element={<VirtualScreenPage />} />
                 </Routes>
-              </TransContextProvider>
-            </TranslatorProvider>
-          </TesseractHook.TesseractContextProvider>
+              </VideoContextProvider>
+            </TranslatorProviderWithConfig>
+          </TesseractHook.TesseractContextProviderWithConfig>
         </OpenCvContextProvider>
       </ConfigContextProvider>
     </Navbar>

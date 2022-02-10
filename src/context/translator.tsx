@@ -1,3 +1,4 @@
+import { TranslatorConfig } from "@/types/globalConfig";
 import { TranslateResult } from "@/types/Payload";
 import { useTranslate } from "@/utils/hooks/useTranslate";
 import { createContext, useContext, useState } from "react";
@@ -12,18 +13,29 @@ interface translatorContext {
 
 export const translatorContext = createContext({} as translatorContext);
 
-export const TranslatorProvider: React.FC = (props) => {
+export const TranslatorProvider: React.FC<{
+  translatorConfig: TranslatorConfig;
+  srcText: string;
+}> = (props) => {
   const [enabled, setEnabled] = useState(true);
-  const { translatorConfig } = useContext(configContext);
-  const { result: srcText } = useContext(tesseractContext);
   const result = useTranslate(
-    translatorConfig,
-    enabled ? encodeURIComponent(srcText) : ""
+    props.translatorConfig,
+    enabled ? encodeURIComponent(props.srcText) : ""
   );
 
   return (
     <translatorContext.Provider value={{ enabled, setEnabled, result }}>
       {props.children}
     </translatorContext.Provider>
+  );
+};
+
+export const TranslatorProviderWithConfig: React.FC = (props) => {
+  const { result: srcText } = useContext(tesseractContext);
+  const { translatorConfig } = useContext(configContext);
+  return (
+    <TranslatorProvider translatorConfig={translatorConfig} srcText={srcText}>
+      {props.children}
+    </TranslatorProvider>
   );
 };

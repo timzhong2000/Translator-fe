@@ -1,13 +1,13 @@
 import { ISO963_1 } from "./ISO963";
 
 export interface FilterConfig {
-  binaryThreshold: number,
-  erodeKernelSize: number,
-  erodeIterations: number,
-  dilateKernelSize: number,
-  dilateIterations: number,
-  inverse: boolean,
-  zoom: number
+  binaryThreshold: number;
+  erodeKernelSize: number;
+  erodeIterations: number;
+  dilateKernelSize: number;
+  dilateIterations: number;
+  inverse: boolean;
+  zoom: number;
 }
 
 export interface TranslatorConfig {
@@ -22,10 +22,14 @@ export interface TranslatorConfig {
 export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   enabled: boolean;
   fromScreen: boolean;
-  videoDeviceId?: string
-  video: { height: number; width: number; frameRate: number; } & MediaTrackConstraints;
+  videoDeviceId?: string;
+  video: {
+    height: number;
+    width: number;
+    frameRate: number;
+  } & MediaTrackConstraints;
   audio: boolean;
-  audioDeviceId?: string
+  audioDeviceId?: string;
 }
 
 export interface ReplayConfig {
@@ -39,4 +43,10 @@ export interface CutArea {
   y1: number;
   y2: number;
   interval: number;
+}
+
+export type OcrLangType = "jpn" | "eng" | "chi_sim" | "chi_tra"
+export interface OcrConfig {
+  lang: OcrLangType;
+  poolSize: number;
 }

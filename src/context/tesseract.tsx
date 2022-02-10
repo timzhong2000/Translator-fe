@@ -1,12 +1,16 @@
+import { OcrLangType } from "@/types/globalConfig";
 import React, {
   createContext,
   MutableRefObject,
   useCallback,
+  useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { createWorker, ImageLike, WorkerOptions } from "tesseract.js";
+import { configContext } from "./config";
 
 const defaultConfig: Partial<WorkerOptions> = {
   corePath: "/vendor/tesseract/tesseract-core.wasm.js",
@@ -53,7 +57,7 @@ export namespace TesseractHook {
 
   const createServer = (
     config: Partial<WorkerOptions>,
-    language: "jpn" | "eng",
+    language: OcrLangType,
     onReady: () => void
   ) => {
     const worker = createWorker(config);
@@ -66,14 +70,14 @@ export namespace TesseractHook {
     return worker;
   };
 
-  const removeStopWords = (text: string)=>{
-    text = text.replaceAll(/\s|\d/g, "")
+  const removeStopWords = (text: string) => {
+    text = text.replaceAll(/\s|\d/g, "");
     return text;
-  }
+  };
 
   export const TesseractContextProvider: React.FC<{
     poolSize: number;
-    lang: "jpn" | "eng";
+    lang: OcrLangType;
   }> = (props) => {
     const pool = useRef<Tesseract.Worker[]>([]);
     const statusList = useRef<Status[]>([]);
@@ -97,26 +101,32 @@ export namespace TesseractHook {
           )
         );
       }
-      return () => pool.current.forEach((server) => server.terminate());
-    }, [props]);
+      return () => {
+        pool.current.forEach((server) => server.terminate());
+        pool.current = [];
+      };
+    }, [props.lang, props.poolSize]);
 
-    const recognize = useCallback(async (pic: ImageLike) => {
-      const id = statusList.current.findIndex((v) => v === "idle");
-      if (id >= 0) {
-        statusList.current[id] = "recognizing text";
-        (async () => {
-          console.time(`[Tesseract Hook] (worker ${id}) recognize`);
-          const {
-            data: { text: text },
-          } = await pool.current[id].recognize(pic);
-          console.timeEnd(`[Tesseract Hook] (worker ${id}) recognize`);
-          setResult(removeStopWords(text));
-          statusList.current[id] = "idle";
-        })();
-      } else {
-        console.error("all busy");
-      }
-    }, []);
+    const recognize = useCallback(
+      async (pic: ImageLike) => {
+        const id = statusList.current.findIndex((v) => v === "idle");
+        if (id >= 0) {
+          statusList.current[id] = "recognizing text";
+          (async () => {
+            console.time(`[Tesseract Hook] (worker ${id}) recognize`);
+            const {
+              data: { text: text },
+            } = await pool.current[id].recognize(pic);
+            console.timeEnd(`[Tesseract Hook] (worker ${id}) recognize`);
+            setResult(removeStopWords(text));
+            statusList.current[id] = "idle";
+          })();
+        } else {
+          console.error("all busy");
+        }
+      },
+      [statusList]
+    );
 
     return (
       <tesseractContext.Provider
@@ -124,6 +134,15 @@ export namespace TesseractHook {
       >
         {props.children}
       </tesseractContext.Provider>
+    );
+  };
+
+  export const TesseractContextProviderWithConfig: React.FC = (props) => {
+    const { ocrConfig } = useContext(configContext);
+    return (
+      <TesseractContextProvider lang={ocrConfig.lang} poolSize={ocrConfig.poolSize}>
+        {props.children}
+      </TesseractContextProvider>
     );
   };
 }

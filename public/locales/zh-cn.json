@@ -18,7 +18,7 @@
       "testResult": "测试结果",
       "testTranslator": "测试器翻译",
       "applyCustomServer": "应用自定义服务器",
-      "applyTranslatorConfig" :"应用翻译设置"
+      "applyTranslatorConfig": "应用翻译设置"
     },
     "media": {
       "currentSource": "当前视频源",
@@ -42,6 +42,10 @@
       "dpiNormalization": "文字大小标准化",
       "apply": "应用滤镜设置"
     },
+    "ocr": {
+      "apply": "应用",
+      "lang": "Ocr 语言"
+    },
     "quit": "退出",
     "enter": "进入",
     "advance": "高级模式",
@@ -57,16 +61,16 @@
     "waitingStream": "正在初始化视频流，请稍等",
     "missingSelection": "未选区，请单击视频开始选区，选区结束后双击保存选区"
   },
-  "virtualScreen":{
+  "virtualScreen": {
     "audioPlayback": "声音回放",
     "resolution": "分辨率"
   },
-  "ocr":{
+  "ocr": {
     "opencvLoading": "OpenCV正在加载中...",
     "RecordStatusIsDisable": "录制未启动，前往"
   },
-  "clipboard":{
-    "success":"复制成功",
+  "clipboard": {
+    "success": "复制成功",
     "copyText": "复制文本"
   }
 }

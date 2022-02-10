@@ -42,6 +42,10 @@
       "dpiNormalization": "DPI Normalization",
       "apply": "Apply"
     },
+    "ocr": {
+      "apply": "Apply",
+      "lang": "Ocr Language"
+    },
     "quit": "Quit ",
     "enter": "Enter ",
     "advance": "Advance Mode",

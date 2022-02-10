@@ -10,6 +10,7 @@ import TranslateServerConfig from "./TranslateServerConfig";
 
 import { configContext } from "@/context/config";
 import { useTranslation } from "react-i18next";
+import OcrSetting from "./OcrSetting";
 
 const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);
@@ -38,6 +39,9 @@ const ConfigPanel = () => {
           <TranslateTest />
         </Box>
       ) : null}
+      <Box mb={5} mx={1}>
+        <OcrSetting />
+      </Box>
       <Box my={5} mx={1}>
         <MediaDevicesSetting />
       </Box>

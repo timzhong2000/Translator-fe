@@ -1,9 +1,5 @@
 import { useVideoFream } from "@/utils/hooks/useVideoFream";
-import {
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from "react";
 import { configContext } from "./config";
 import useStream from "@/utils/hooks/useStream";
 
@@ -17,9 +13,9 @@ interface TransContext {
   >;
 }
 
-export const transContext = createContext({} as TransContext);
+export const videoContext = createContext({} as TransContext);
 
-export const TransContextProvider: React.FC = (props) => {
+export const VideoContextProvider: React.FC = (props) => {
   const [videoRef, setVideoRef] = useState<React.RefObject<HTMLVideoElement>>(); // 因为离屏video无法截图，所以需要将组件内的video转发到context中进行截图。
 
   const { mediaDevicesConfig, cutArea } = useContext(configContext);
@@ -32,7 +28,7 @@ export const TransContextProvider: React.FC = (props) => {
   );
 
   return (
-    <transContext.Provider
+    <videoContext.Provider
       value={{
         stream,
         streamReady,
@@ -42,6 +38,6 @@ export const TransContextProvider: React.FC = (props) => {
       }}
     >
       {props.children}
-    </transContext.Provider>
+    </videoContext.Provider>
   );
 };

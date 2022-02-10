@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { useTranslation } from "react-i18next";
 import { configContext } from "@/context/config";
-import { transContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/videoProcessor";
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
 import { resolution2text, text2resolution } from "@/utils/resolution";
@@ -30,7 +30,7 @@ const MediaDevicesSetting = () => {
   const { mediaDevicesConfig, setMediaDevicesConfig } =
     useContext(configContext);
   const [localConfig, setLocalConfig] = useState(mediaDevicesConfig);
-  const { stream } = useContext(transContext);
+  const { stream } = useContext(videoContext);
   const { t } = useTranslation();
   const resolutionList = ["1080P", "720P"];
   const mediaDeviceList = useMediaDeviceList();

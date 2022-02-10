@@ -5,6 +5,7 @@ import {
   ReplayConfig,
   CutArea,
   FilterConfig,
+  OcrConfig,
 } from "../types/globalConfig";
 
 const defaultFilterConfig: FilterConfig = {
@@ -14,7 +15,7 @@ const defaultFilterConfig: FilterConfig = {
   dilateKernelSize: 3,
   dilateIterations: 0,
   inverse: false,
-  zoom: 1
+  zoom: 1,
 };
 
 const defaultTranslatorConfig: TranslatorConfig = {
@@ -36,20 +37,12 @@ const defaultMediaDevicesConfig: MediaDevicesConfig = {
   },
   videoDeviceId: undefined,
   audio: true,
-  audioDeviceId: undefined
+  audioDeviceId: undefined,
 };
 
 const defaultReplayConfig: ReplayConfig = {
   mute: false,
 };
-
-function getConfig<T>(tag: string, defaultValue: T, loadCache = true) {
-  const local = loadCache ? JSON.parse(localStorage.getItem(tag) || "{}") as Partial<T> : {};
-  return {
-    ...defaultValue,
-    ...local,
-  };
-}
 
 const defaultCutAreaConfig: CutArea = {
   enabled: true,
@@ -59,6 +52,21 @@ const defaultCutAreaConfig: CutArea = {
   y2: 0,
   interval: 1000,
 };
+
+const defaultOcrConfig: OcrConfig = {
+  lang: "jpn",
+  poolSize: 4
+};
+
+function getConfig<T>(tag: string, defaultValue: T, loadCache = true) {
+  const local = loadCache
+    ? (JSON.parse(localStorage.getItem(tag) || "{}") as Partial<T>)
+    : {};
+  return {
+    ...defaultValue,
+    ...local,
+  };
+}
 
 export interface ConfigContext {
   filterConfig: FilterConfig;
@@ -73,6 +81,8 @@ export interface ConfigContext {
   >;
   replayConfig: ReplayConfig;
   setReplayConfig: React.Dispatch<React.SetStateAction<ReplayConfig>>;
+  ocrConfig: OcrConfig;
+  setOcrConfig: React.Dispatch<React.SetStateAction<OcrConfig>>;
   reset: () => void;
 }
 
@@ -95,6 +105,9 @@ export const ConfigContextProvider: React.FC = (props) => {
   const [replayConfig, setReplayConfig] = useState<ReplayConfig>(
     getConfig("ReplayConfig", defaultReplayConfig)
   );
+  const [ocrConfig, setOcrConfig] = useState<OcrConfig>(
+    getConfig("OcrConfig", defaultOcrConfig)
+  );
 
   useEffect(() => {
     console.log("[Config-Context] start");
@@ -112,12 +125,14 @@ export const ConfigContextProvider: React.FC = (props) => {
       JSON.stringify(mediaDevicesConfig)
     );
     localStorage.setItem("ReplayConfig", JSON.stringify(replayConfig));
+    localStorage.setItem("OcrConfig", JSON.stringify(ocrConfig));
   }, [
     filterConfig,
     cutArea,
     translatorConfig,
     mediaDevicesConfig,
     replayConfig,
+    ocrConfig,
   ]);
 
   const reset = () => {
@@ -130,6 +145,7 @@ export const ConfigContextProvider: React.FC = (props) => {
       getConfig("MediaDevicesConfig", defaultMediaDevicesConfig, false)
     );
     setReplayConfig(getConfig("ReplayConfig", defaultReplayConfig, false));
+    setOcrConfig(getConfig("OcrConfig", defaultOcrConfig, false));
   };
 
   return (
@@ -145,6 +161,8 @@ export const ConfigContextProvider: React.FC = (props) => {
         setMediaDevicesConfig,
         replayConfig,
         setReplayConfig,
+        ocrConfig,
+        setOcrConfig,
         reset,
       }}
     >

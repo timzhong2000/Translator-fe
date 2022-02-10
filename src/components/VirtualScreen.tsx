@@ -1,10 +1,10 @@
 import { configContext } from "@/context/config";
-import { transContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/videoProcessor";
 import { useContext, useRef, useEffect, MouseEventHandler } from "react";
 
 const VirtualScreen:React.FC<{onClick?:MouseEventHandler,onDoubleClick?:MouseEventHandler }> = (props) => {
   const { mediaDevicesConfig } = useContext(configContext);
-  const { stream, setVideoRef } = useContext(transContext);
+  const { stream, setVideoRef } = useContext(videoContext);
   const videoEl = useRef<HTMLVideoElement>(null);
 
   useEffect(() => void setVideoRef(videoEl), []); // 转发到context中
