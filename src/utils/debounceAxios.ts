@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
-import { debounce } from "lodash"
+import debounce from "lodash/debounce"
 
 const _debounceGet = debounce(axios.get, 200)
 const _debouncePost = debounce(axios.post, 200)

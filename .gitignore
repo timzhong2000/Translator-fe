@@ -5,3 +5,4 @@ dist-ssr
 *.local
 .vscode
 public/vendor
+stats.html

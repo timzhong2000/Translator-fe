@@ -1,5 +1,5 @@
 import { Mat } from "opencv-ts";
-import { Opencv } from "../context/opencv";
+import { Opencv } from "@/context/opencv";
 
 export const opencvFilter = (
   cv: Opencv,

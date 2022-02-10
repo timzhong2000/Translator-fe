@@ -1,5 +1,8 @@
 import { useContext, useState } from "react";
-import { Grid, TextField, MenuItem, Button } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 
 import { configContext } from "@/context/config";
 import ISO963_1 from "@/types/ISO963";

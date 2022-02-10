@@ -1,19 +1,17 @@
 import { useContext, useState, Fragment } from "react";
-import {
-  Grid,
-  FormControlLabel,
-  Checkbox,
-  TextField,
-  MenuItem,
-  Button,
-} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 
+import { useTranslation } from "react-i18next";
 import { configContext } from "@/context/config";
 import { transContext } from "@/context/videoProcessor";
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
 import { resolution2text, text2resolution } from "@/utils/resolution";
-import { useTranslation } from "react-i18next";
 
 const getStreamStatus = (
   stream: MediaStream | undefined,

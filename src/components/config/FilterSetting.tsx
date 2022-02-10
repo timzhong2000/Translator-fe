@@ -1,13 +1,11 @@
 import { useContext, useState } from "react";
-import {
-  Grid,
-  Typography,
-  Slider,
-  TextField,
-  Button,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import { configContext } from "@/context/config";
 import { useTranslation } from "react-i18next";

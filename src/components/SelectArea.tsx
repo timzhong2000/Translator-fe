@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useRef } from "react";
-import { Box } from "@mui/material";
+import React, { useCallback, useContext, useRef } from "react";
+import Box from "@mui/material/Box";
 
 import { TransResult } from "./TransResult";
 

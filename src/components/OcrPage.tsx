@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "@mui/material";
+import Link from "@mui/material/Link";
 
 import SelectArea from "./SelectArea";
 import FilterSetting from "./config/FilterSetting";

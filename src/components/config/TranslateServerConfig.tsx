@@ -1,5 +1,7 @@
 import { useContext, useState } from "react";
-import { Grid, TextField, Button } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import { configContext } from "@/context/config";
 import { useTranslation } from "react-i18next";

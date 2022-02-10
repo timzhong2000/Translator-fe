@@ -1,8 +1,6 @@
 import { useContext, useState } from "react";
-import {
-  Box,
-  Button,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 import TranslateConfig from "./TranslateConfig";
 import TranslateTest from "./TranslateTest";
@@ -16,13 +14,14 @@ import { useTranslation } from "react-i18next";
 const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);
   const { reset } = useContext(configContext);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div>
       <Box mt={2} mx={1}>
         <Button variant="outlined" onClick={() => setAdvanceMode(!advanceMode)}>
-          {advanceMode ? t("setting.quit") : t("setting.enter")} {t("setting.advance")}
+          {advanceMode ? t("setting.quit") : t("setting.enter")}{" "}
+          {t("setting.advance")}
         </Button>
         {advanceMode ? (
           <Box my={5} mx={1}>
@@ -54,4 +53,4 @@ const ConfigPanel = () => {
   );
 };
 
-export default ConfigPanel
+export default ConfigPanel;

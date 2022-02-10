@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Link } from "@mui/material";
+import Link from "@mui/material/Link";
 
 import Navbar from "@/components/Navbar";
 import ConfigPanel from "@/components/config/ConfigPanel";

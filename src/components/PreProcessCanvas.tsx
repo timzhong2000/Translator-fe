@@ -1,6 +1,6 @@
 import { useContext, useRef, useMemo, useEffect } from "react";
-import { Box } from "@mui/material";
-import { debounce } from "lodash";
+import Box from "@mui/material/Box";
+import debounce from "lodash/debounce";
 
 import { configContext } from "@/context/config";
 import { openCvContext } from "@/context/opencv";
@@ -16,8 +16,7 @@ const PreProcessCanvas = () => {
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const { ready: cvReady, cv } = useContext(openCvContext);
   const { recognize } = useContext(tesseractContext);
-  const {t} = useTranslation()
-
+  const { t } = useTranslation();
 
   const applyFilter = useMemo(() => {
     return debounce((selectedImageData?: ImageData) => {
