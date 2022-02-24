@@ -28,7 +28,7 @@ const defaultTranslatorConfig: TranslatorConfig = {
 };
 
 const defaultMediaDevicesConfig: MediaDevicesConfig = {
-  enabled: true,
+  enabled: false,
   fromScreen: false,
   video: {
     width: 1920,
@@ -100,7 +100,7 @@ export const ConfigContextProvider: React.FC = (props) => {
   );
   const [mediaDevicesConfig, setMediaDevicesConfig] =
     useState<MediaDevicesConfig>(
-      getConfig("MediaDevicesConfig", defaultMediaDevicesConfig)
+      getConfig("MediaDevicesConfig", defaultMediaDevicesConfig, false)
     );
   const [replayConfig, setReplayConfig] = useState<ReplayConfig>(
     getConfig("ReplayConfig", defaultReplayConfig)
