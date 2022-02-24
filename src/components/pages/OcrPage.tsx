@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import Link from "@mui/material/Link";
 
-import SelectArea from "./SelectArea";
-import FilterSetting from "./config/FilterSetting";
-import PreProcessCanvas from "./PreProcessCanvas";
+import SelectArea from "../shared/SelectArea";
+import FilterSetting from "../config/FilterSetting";
+import PreProcessCanvas from "../shared/PreProcessCanvas";
 
 import { configContext } from "@/context/config";
 import { videoContext } from "@/context/videoProcessor";

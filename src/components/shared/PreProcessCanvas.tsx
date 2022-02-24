@@ -6,7 +6,7 @@ import { configContext } from "@/context/config";
 import { openCvContext } from "@/context/opencv";
 import { tesseractContext } from "@/context/tesseract";
 import { videoContext } from "@/context/videoProcessor";
-import { putImageData } from "@/utils/2dFilter";
+import { putImageData } from "@/utils/filter/2dFilter";
 import { opencvFilter } from "@/utils/opencvFilter";
 import { useTranslation } from "react-i18next";
 

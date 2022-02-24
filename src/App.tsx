@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import "@/utils/i18n";
 
-import Home from "@/components/Home";
-import About from "@/components/About";
-import Navbar from "@/components/Navbar";
+import Home from "@/components/pages/Home";
+import About from "@/components/pages/About";
+import Navbar from "@/components/pages/Navbar";
 import ConfigPanel from "@/components/config/ConfigPanel";
-import OcrPage from "@/components/OcrPage";
-import { OpencvTest } from "@/components/ImageOcrTest";
-import VirtualScreenPage from "@/components/VirtualScreenPage";
+import OcrPage from "@/components/pages/OcrPage";
+import { OpencvTest } from "@/components/pages/ImageOcrTest";
+import VirtualScreenPage from "@/components/pages/VirtualScreenPage";
 
 import { VideoContextProvider } from "@/context/videoProcessor";
 import { ConfigContextProvider } from "@/context/config";

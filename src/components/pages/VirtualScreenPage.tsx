@@ -1,7 +1,7 @@
 import { configContext } from "@/context/config"
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
-import VirtualScreen from "./VirtualScreen"
+import VirtualScreen from "../shared/VirtualScreen"
 
 const VirtualScreenPage = () => {
   const { mediaDevicesConfig } = useContext(configContext)
