@@ -20,7 +20,7 @@ const defaultFilterConfig: FilterConfig = {
 
 const defaultTranslatorConfig: TranslatorConfig = {
   url: "https://transapi.timzhong.top",
-  key: "",
+  key: "(Free-Translate)",
   provider: "baidu",
   srcLang: "ja",
   destLang: "zh_CN",
