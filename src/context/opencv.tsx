@@ -24,11 +24,10 @@ export const OpenCvContextProvider: React.FC = (props) => {
     scriptEl.id = scriptId;
     scriptEl.src = openCvPath;
     scriptEl.defer = true;
-    scriptEl.async = true;
     scriptEl.onload = () =>
       setTimeout(() => {
         setReady(true);
-      }, 5000);
+      }, 0);
     document.body.appendChild(scriptEl);
   }, []);
 
