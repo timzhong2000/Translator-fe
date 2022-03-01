@@ -11,7 +11,6 @@ import { configContext } from "@/context/config";
 import { videoContext } from "@/context/videoProcessor";
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
-import { resolution2text, text2resolution } from "@/utils/resolution";
 
 const getStreamStatus = (
   stream: MediaStream | undefined,
@@ -32,7 +31,6 @@ const MediaDevicesSetting = () => {
   const [localConfig, setLocalConfig] = useState(mediaDevicesConfig);
   const { stream } = useContext(videoContext);
   const { t } = useTranslation();
-  const resolutionList = ["1080P", "720P"];
   const mediaDeviceList = useMediaDeviceList();
   const videoDeviceList = mediaDeviceList.filter(
     (dev) => dev.kind === "videoinput" && dev.deviceId.length > 20
@@ -50,19 +48,28 @@ const MediaDevicesSetting = () => {
       ?.label ||
     audioDeviceList[0]?.label ||
     "";
-  const editAble =
-    getStreamStatus(stream, localConfig) === t("setting.media.startRecord");
-
+  const streamStatus = getStreamStatus(stream, localConfig);
+  const editAble = streamStatus === t("setting.media.startRecord");
+  const currentSourceLabel =
+    streamStatus === t("setting.media.stopRecord")
+      ? `${t("setting.media.currentSource")}: ${
+          localConfig.fromScreen
+            ? t("setting.media.screen")
+            : t("setting.media.captureCard")
+        } ${t("setting.media.resolution")}: ${
+          mediaDevicesConfig.video.width
+        } * ${mediaDevicesConfig.video.height}`
+      : `${t("setting.media.currentSource")}: ${
+          localConfig.fromScreen
+            ? t("setting.media.screen")
+            : t("setting.media.captureCard")
+        }`;
   return (
     <div>
       <Grid container spacing={3} my={3}>
         <Grid item xs={12}>
           <FormControlLabel
-            label={`${t("setting.media.currentSource")}: ${
-              localConfig.fromScreen
-                ? t("setting.media.screen")
-                : t("setting.media.captureCard")
-            }`}
+            label={currentSourceLabel}
             control={
               <Checkbox
                 checked={localConfig.fromScreen}
@@ -79,29 +86,6 @@ const MediaDevicesSetting = () => {
         </Grid>
         {localConfig.fromScreen ? null : (
           <Fragment>
-            <Grid item sm={12} md={6} xl={2} mt={0.75}>
-              <TextField
-                select
-                disabled={!editAble}
-                label={t("setting.media.resolution")}
-                required
-                value={resolution2text(localConfig.video)}
-                sx={{ width: "100%" }}
-                onChange={(e) =>
-                  setLocalConfig({
-                    ...localConfig,
-                    video: text2resolution(e.target.value),
-                  })
-                }
-              >
-                {resolutionList.map((resolution) => (
-                  <MenuItem key={resolution} value={resolution}>
-                    {resolution}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
             <Grid item sm={12} md={6} xl={2} mt={1}>
               <FormControlLabel
                 label={t("setting.media.enableAudio") as string}

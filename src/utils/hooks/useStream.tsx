@@ -1,6 +1,6 @@
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import { getStream } from "@/utils/getStream";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 
 const useStream = (mediaDevicesConfig: MediaDevicesConfig) => {
   const [stream, setStream] = useState<MediaStream>();
@@ -17,7 +17,7 @@ const useStream = (mediaDevicesConfig: MediaDevicesConfig) => {
     (async function () {
       try {
         const stream = await getStream(mediaDevicesConfig);
-        (window as any).stream = stream
+        (window as any).stream = stream;
         setStream(stream);
         setReady(true);
         setError(null);
@@ -27,9 +27,15 @@ const useStream = (mediaDevicesConfig: MediaDevicesConfig) => {
         setError(err);
       }
     })();
-  }, [mediaDevicesConfig]);
+  }, [
+    mediaDevicesConfig.enabled,
+    mediaDevicesConfig.audio,
+    mediaDevicesConfig.fromScreen,
+    mediaDevicesConfig.videoDeviceId,
+    mediaDevicesConfig.audioDeviceId,
+  ]);
 
-  return {stream, ready, error};
+  return { stream, ready, error };
 };
 
 export default useStream;
