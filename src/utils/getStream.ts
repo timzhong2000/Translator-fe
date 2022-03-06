@@ -25,21 +25,21 @@ const errorHandler = (err: Error) => {
 
 export const getStream = async (config: MediaDevicesConfig) => {
   try {
-    if(config.fromScreen)
-    return await navigator.mediaDevices.getDisplayMedia({video: true, audio: false})
+    if (config.fromScreen)
+      return await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
     else
-    return await navigator.mediaDevices.getUserMedia({
-      video: { ...config.video, deviceId: config.videoDeviceId },
-      audio: config.audio
-        ? {
+      return await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: config.videoDeviceId },
+        audio: config.audio
+          ? {
             deviceId: config.audioDeviceId,
             autoGainControl: false,
             noiseSuppression: false,
             echoCancellation: false,
             suppressLocalAudioPlayback: false,
           }
-        : false,
-    });
+          : false,
+      });
   } catch (error) {
     throw new Error(errorHandler(error as Error));
   }
