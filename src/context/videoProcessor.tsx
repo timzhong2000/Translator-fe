@@ -30,10 +30,11 @@ export const VideoContextProvider: React.FC = (props) => {
 
   /**
    * 如果设备分辨率与设定期望分辨率不符合，浏览器会自动回退分辨率，需要用实际视频元信息进行配置矫正
+   * TODO: chrome录屏某个窗口时，track.getSettings返回的分辨率为全屏分辨率而不是窗口分辨率
    */
   useEffect(() => {
     if (stream) {
-      const actualVideoSetting = stream!.getVideoTracks()[0].getSettings();
+      const actualVideoSetting = stream.getVideoTracks()[0].getSettings();
       setMediaDevicesConfig({
         ...mediaDevicesConfig,
         video: {

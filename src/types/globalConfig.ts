@@ -24,9 +24,9 @@ export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   fromScreen: boolean;
   videoDeviceId?: string;
   video: {
-    height: number;
-    width: number;
-    frameRate: number;
+    height: number; // 不控制实际录制的分辨率，只用来保存当前视频流的属性
+    width: number; // 不控制实际录制的分辨率，只用来保存当前视频流的属性
+    frameRate: number; // 不控制实际录制的分辨率，只用来保存当前视频流的属性
   } & MediaTrackConstraints;
   audio: boolean;
   audioDeviceId?: string;
