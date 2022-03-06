@@ -9,7 +9,9 @@ import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
 import { useTranslation } from "react-i18next";
 
-export const TransResult = () => {
+export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
+  props
+) => {
   const {
     result: translateResult,
     enabled,
@@ -41,6 +43,7 @@ export const TransResult = () => {
     <DragableElement
       ref={dragableElementEl}
       style={{
+        ...props.style,
         padding: "0 2",
         background: "white",
         opacity: 0.9,

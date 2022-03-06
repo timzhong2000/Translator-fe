@@ -129,7 +129,6 @@ const SelectArea: React.FC = (props) => {
           }}
           onDoubleClick={onResizeEnd}
         ></div>
-
       </div>
     );
   } else {

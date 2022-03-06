@@ -32,7 +32,11 @@ export const OcrPage = () => {
       <PreProcessCanvas />
       <SelectArea>
         <VirtualScreen />
-        <TransResult />
+        <TransResult
+          style={{
+            zIndex: 1,
+          }}
+        />
       </SelectArea>
     </div>
   );
