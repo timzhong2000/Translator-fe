@@ -29,7 +29,7 @@ export const getStream = async (config: MediaDevicesConfig) => {
       return await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
     else
       return await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: config.videoDeviceId },
+        video: { width: 3000, height: 3000, deviceId: config.videoDeviceId },
         audio: config.audio
           ? {
             deviceId: config.audioDeviceId,
