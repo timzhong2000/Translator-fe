@@ -1,4 +1,3 @@
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 
 const Navbar: React.FC = (props) => {
-  const {t, i18n} = useTranslation();
+  const { t } = useTranslation();
 
   const items: { title: string; path: string }[] = [
     {

@@ -19,6 +19,13 @@ export interface TranslatorConfig {
   cache: boolean;
 }
 
+export interface StreamMeta {
+  video: {
+    height: number,
+    width: number
+  }
+}
+
 export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   enabled: boolean;
   fromScreen: boolean;
@@ -26,7 +33,6 @@ export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
   video: {
     height: number; // 不控制实际录制的分辨率，只用来保存当前视频流的属性
     width: number; // 不控制实际录制的分辨率，只用来保存当前视频流的属性
-    frameRate: number; // 不控制实际录制的分辨率，只用来保存当前视频流的属性
   } & MediaTrackConstraints;
   audio: boolean;
   audioDeviceId?: string;
