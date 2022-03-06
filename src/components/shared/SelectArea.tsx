@@ -1,26 +1,24 @@
 import React, { useCallback, useContext, useRef } from "react";
 import Box from "@mui/material/Box";
 
-import { TransResult } from "./TransResult";
-
 import { configContext } from "@/context/config";
 import { videoContext } from "@/context/videoProcessor";
 import { cutAreaParser } from "@/utils/cutAreaParser";
-import VirtualScreen from "./VirtualScreen";
 import { useTranslation } from "react-i18next";
 
-const SelectArea: React.FC<{}> = () => {
+const SelectArea: React.FC = (props) => {
   const { mediaDevicesConfig, cutArea, setCutArea } = useContext(configContext);
   const { stream } = useContext(videoContext);
   const cutAreaEl = useRef<HTMLDivElement>(null);
   const areaConfig = cutAreaParser(cutArea);
   const isResizing = useRef(false);
   const startAbsolutePos = useRef({ x: 0, y: 0 });
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const onResizeStart = useCallback(
     (e: React.TouchEvent | React.MouseEvent) => {
-      if (e.nativeEvent.target == cutAreaEl.current) return;
+      if (isResizing.current === true) return;
+      if (e.nativeEvent.target === cutAreaEl.current) return;
       let clientX = 0,
         clientY = 0,
         offsetX = 0,
@@ -113,11 +111,9 @@ const SelectArea: React.FC<{}> = () => {
         }}
         onMouseMove={onResize}
         onDoubleClick={onResizeEnd}
+        onClick={onResizeStart}
       >
-        <VirtualScreen
-          onClick={onResizeStart}
-          onDoubleClick={onResizeEnd}
-        />
+        {props.children}
         <div
           ref={cutAreaEl}
           style={{
@@ -133,7 +129,7 @@ const SelectArea: React.FC<{}> = () => {
           }}
           onDoubleClick={onResizeEnd}
         ></div>
-        <TransResult />
+
       </div>
     );
   } else {

@@ -9,17 +9,20 @@ import { configContext } from "@/context/config";
 import { videoContext } from "@/context/videoProcessor";
 import { openCvContext } from "@/context/opencv";
 import { useTranslation } from "react-i18next";
+import VirtualScreen from "../shared/VirtualScreen";
+import { TransResult } from "../shared/TransResult";
 
 export const OcrPage = () => {
   const { selectedImageData } = useContext(videoContext);
   const { mediaDevicesConfig } = useContext(configContext);
   const { ready: cvReady } = useContext(openCvContext);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
   if (!mediaDevicesConfig.enabled)
     return (
       <div>
-        {t("ocr.RecordStatusIsDisable")}<Link href="/#/setting">{t("navbar.setting")}</Link>
+        {t("ocr.RecordStatusIsDisable")}
+        <Link href="/#/setting">{t("navbar.setting")}</Link>
       </div>
     );
   if (!cvReady) return <div>{t("ocr.opencvLoading")}</div>;
@@ -27,9 +30,12 @@ export const OcrPage = () => {
     <div>
       {selectedImageData ? <FilterSetting /> : null}
       <PreProcessCanvas />
-      <SelectArea />
+      <SelectArea>
+        <VirtualScreen />
+        <TransResult />
+      </SelectArea>
     </div>
   );
 };
 
-export default OcrPage
+export default OcrPage;
