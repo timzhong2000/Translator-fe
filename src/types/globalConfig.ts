@@ -21,9 +21,9 @@ export interface TranslatorConfig {
 
 export interface StreamMeta {
   video: {
-    height: number,
-    width: number
-  }
+    height: number;
+    width: number;
+  };
 }
 
 export interface MediaDevicesConfig extends Partial<MediaStreamConstraints> {
@@ -51,7 +51,7 @@ export interface CutArea {
   interval: number;
 }
 
-export type OcrLangType = "jpn" | "eng" | "chi_sim" | "chi_tra"
+export type OcrLangType = "jpn" | "eng" | "chi_sim" | "chi_tra";
 export interface OcrConfig {
   lang: OcrLangType;
   poolSize: number;

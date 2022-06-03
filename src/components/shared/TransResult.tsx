@@ -1,3 +1,5 @@
+// wip: 使用解耦合的TranslateBlock代替这个组件
+
 import { useContext, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -8,6 +10,7 @@ import { tesseractContext } from "@/context/tesseract";
 import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
 import { useTranslation } from "react-i18next";
+import TranslateBlock from "./TranslateBlock";
 
 export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   props
@@ -21,8 +24,6 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
     useContext(tesseractContext);
   const dragableElementEl = useRef<HTMLDivElement>(null);
   const translatorSwitchEl = useRef<HTMLButtonElement>(null);
-  const srcTextCilpButton = useRef<HTMLButtonElement>(null);
-  const destTextCilpButton = useRef<HTMLButtonElement>(null);
 
   const { t } = useTranslation();
 
@@ -56,21 +57,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
         fontWeight={600}
         py={0.5}
       >{`(debug)状态: ${tesseractStatus.current}`}</Box>
-      <Box fontSize={24} fontWeight={600} py={0.5}>
-        {`${t("translator.sourceText")}: ${srcText}`}
-        {translateResult?.src ? (
-          <ClipboardButton text={srcText} ref={srcTextCilpButton} />
-        ) : null}
-      </Box>
-      <Box fontSize={24} fontWeight={600} py={0.5}>
-        {`${t("translator.destText")}: ${translateResult?.dest || ""}`}
-        {translateResult?.dest ? (
-          <ClipboardButton
-            text={translateResult.dest}
-            ref={destTextCilpButton}
-          />
-        ) : null}
-      </Box>
+      <TranslateBlock src={translateResult!.src} dest={translateResult!.dest}></TranslateBlock>
       <Button onClick={() => setEnabled(!enabled)} ref={translatorSwitchEl}>
         {enabled
           ? t("translator.pauseTranslating")

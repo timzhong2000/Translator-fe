@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 import { configContext } from "@/context/config";
@@ -11,7 +10,6 @@ import { useTranslation } from "react-i18next";
 
 const TranslateConfig = () => {
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
-  const [localConfig, setLocalConfig] = useState(translatorConfig);
   const { t } = useTranslation()
 
   const langList: ISO963_1[] = ["zh_CN", "zh_TW", "ja", "en"];
@@ -29,10 +27,10 @@ const TranslateConfig = () => {
             select
             label={t("setting.translator.provider")}
             required
-            value={localConfig.provider}
+            value={translatorConfig.provider}
             sx={{ width: "100%" }}
             onChange={(e) =>
-              setLocalConfig((prev) => ({
+              setTranslatorConfig((prev) => ({
                 ...prev,
                 provider: e.target.value,
               }))
@@ -51,10 +49,10 @@ const TranslateConfig = () => {
             select
             label={t("setting.translator.srcLang")}
             required
-            value={localConfig.srcLang}
+            value={translatorConfig.srcLang}
             sx={{ width: "100%" }}
             onChange={(e) =>
-              setLocalConfig((prev) => ({
+              setTranslatorConfig((prev) => ({
                 ...prev,
                 srcLang: e.target.value as ISO963_1,
               }))
@@ -73,10 +71,10 @@ const TranslateConfig = () => {
             select
             label={t("setting.translator.destLang")}
             required
-            value={localConfig.destLang}
+            value={translatorConfig.destLang}
             sx={{ width: "100%" }}
             onChange={(e) =>
-              setLocalConfig((prev) => ({
+              setTranslatorConfig((prev) => ({
                 ...prev,
                 destLang: e.target.value as ISO963_1,
               }))
@@ -90,14 +88,6 @@ const TranslateConfig = () => {
           </TextField>
         </Grid>
       </Grid>
-      <Button
-        variant="outlined"
-        onClick={() => {
-          setTranslatorConfig(localConfig);
-        }}
-      >
-        {t("setting.translator.applyTranslatorConfig")}
-      </Button>
     </div>
   );
 };

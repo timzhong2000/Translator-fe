@@ -20,7 +20,7 @@ export const VideoContextProvider: React.FC = (props) => {
 
   const { mediaDevicesConfig, cutArea, setMediaDevicesConfig } =
     useContext(configContext);
-  const { stream, ready: streamReady } = useStream(mediaDevicesConfig);
+  const { stream, ready: streamReady } = useStream();
   const { imageData: selectedImageData } = useVideoFream(
     stream,
     videoRef,
@@ -32,25 +32,17 @@ export const VideoContextProvider: React.FC = (props) => {
    * 如果设备分辨率与设定期望分辨率不符合，浏览器会自动回退分辨率，需要用实际视频元信息进行配置矫正
    */
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (stream) {
-        const actualVideoSetting = stream.getVideoTracks()[0].getSettings();
-        if (
-          mediaDevicesConfig.video.height !== actualVideoSetting.height ||
-          mediaDevicesConfig.video.width !== actualVideoSetting.width
-        ) {
-          setMediaDevicesConfig({
-            ...mediaDevicesConfig,
-            video: {
-              height:
-                actualVideoSetting.height || mediaDevicesConfig.video.height,
-              width: actualVideoSetting.width || mediaDevicesConfig.video.width,
-            },
-          });
-        }
-      }
-    }, 2000);
-    return () => clearInterval(interval);
+    if (stream) {
+      const actualVideoSetting = stream.getVideoTracks()[0].getSettings();
+      setMediaDevicesConfig(prev => ({
+        ...prev,
+        video: {
+          height:
+            actualVideoSetting.height || mediaDevicesConfig.video.height,
+          width: actualVideoSetting.width || mediaDevicesConfig.video.width,
+        },
+      }))
+    }
   }, [stream]);
 
   return (
