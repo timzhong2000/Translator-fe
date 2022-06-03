@@ -8,6 +8,7 @@ import ConfigPanel from "@/components/config/ConfigPanel";
 import OcrPage from "@/components/pages/OcrPage";
 import { OpencvTest } from "@/components/pages/ImageOcrTest";
 import VirtualScreenPage from "@/components/pages/VirtualScreenPage";
+import TextractorPage from "./components/pages/Textractor";
 
 import { VideoContextProvider } from "@/context/videoProcessor";
 import { ConfigContextProvider } from "@/context/config";
@@ -30,6 +31,7 @@ function App() {
                   <Route path="setting" element={<ConfigPanel />} />
                   <Route path="cvtest" element={<OpencvTest />} />
                   <Route path="vscreen" element={<VirtualScreenPage />} />
+                  <Route path="textractor" element={<TextractorPage />} />
                 </Routes>
               </VideoContextProvider>
             </TranslatorProviderWithConfig>

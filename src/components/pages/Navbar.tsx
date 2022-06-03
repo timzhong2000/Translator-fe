@@ -14,6 +14,7 @@ const Navbar: React.FC = (props) => {
       path: "/#/",
     },
     { title: t("navbar.translator"), path: "/#/trans" },
+    { title: t("navbar.textractor"), path: "/#/textractor" },
     { title: t("navbar.virtualScreen"), path: "/#/vscreen" },
     { title: t("navbar.setting"), path: "/#/setting" },
     { title: t("navbar.about"), path: "/#/about" },
