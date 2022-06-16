@@ -1,6 +1,15 @@
 import { Mat } from "opencv-ts";
 import { Opencv } from "@/context/opencv";
 
+export const opencvBackgroundColor = (cv: Opencv, src: Mat) => {
+  const mean = cv.mean(src) as unknown as Array<number>; // todo
+  return {
+    r: mean[0],
+    g: mean[1],
+    b: mean[2]
+  }
+};
+
 export const opencvFilter = (
   cv: Opencv,
   src: Mat,
@@ -23,7 +32,10 @@ export const opencvFilter = (
   cv.resize(src, src, new cv.Size(0, 0), zoomFactor, zoomFactor);
   cv.threshold(src, src, threshold, 255, cv.THRESH_BINARY);
 
-  const erodeKernel = new cv.Mat.ones(new cv.Size(erode.kernelSize, erode.kernelSize), cv.CV_8U)
+  const erodeKernel = new cv.Mat.ones(
+    new cv.Size(erode.kernelSize, erode.kernelSize),
+    cv.CV_8U
+  );
   cv.erode(
     src,
     src,
@@ -33,9 +45,12 @@ export const opencvFilter = (
     cv.BORDER_DEFAULT,
     new cv.Scalar()
   );
-  erodeKernel.delete()
+  erodeKernel.delete();
 
-  const dilateKernel = new cv.Mat.ones(new cv.Size(dilate.kernelSize, dilate.kernelSize), cv.CV_8U)
+  const dilateKernel = new cv.Mat.ones(
+    new cv.Size(dilate.kernelSize, dilate.kernelSize),
+    cv.CV_8U
+  );
   cv.dilate(
     src,
     src,
@@ -45,8 +60,14 @@ export const opencvFilter = (
     cv.BORDER_DEFAULT,
     new cv.Scalar()
   );
-  dilateKernel.delete()
-  cv.resize(src, src, new cv.Size(0, 0), zoomNormalization / zoomFactor, zoomNormalization / zoomFactor);
-    console.log(src.size())
+  dilateKernel.delete();
+  cv.resize(
+    src,
+    src,
+    new cv.Size(0, 0),
+    zoomNormalization / zoomFactor,
+    zoomNormalization / zoomFactor
+  );
+  console.log(src.size());
   console.timeEnd("[opencv] run filter");
 };

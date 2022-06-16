@@ -11,6 +11,7 @@ import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
 import { useTranslation } from "react-i18next";
 import TranslateBlock from "./TranslateBlock";
+import { videoContext } from "@/context/videoProcessor";
 
 export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   props
@@ -23,7 +24,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
   const dragableElementEl = useRef<HTMLDivElement>(null);
-
+  const { backGroundColor } = useContext(videoContext);
   const { t } = useTranslation();
 
   // 避免异常触发click事件
@@ -48,7 +49,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
       style={{
         ...props.style,
         padding: "0 0.5em",
-        background: "white",
+        background: `rgb(${backGroundColor.r},${backGroundColor.g},${backGroundColor.b})`,
         opacity: 0.95,
         height: "200px",
         width: "1000px",
