@@ -23,14 +23,16 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
   const dragableElementEl = useRef<HTMLDivElement>(null);
-  const translatorSwitchEl = useRef<HTMLButtonElement>(null);
 
   const { t } = useTranslation();
 
   // 避免异常触发click事件
   useEffect(() => {
     const stopPropagation = (e: MouseEvent) => {
-      e.stopPropagation();
+      const tagName = (e.target as HTMLElement).tagName.toLowerCase();
+      // 子组件存在多个按钮，需要继续传递事件
+      if (["button", "path", "svg"].findIndex((e) => e === tagName) === -1)
+        e.stopPropagation();
     };
     dragableElementEl.current?.addEventListener("click", stopPropagation);
     return () =>
@@ -45,7 +47,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
       ref={dragableElementEl}
       style={{
         ...props.style,
-        padding: "0 2",
+        padding: "0 0.5em",
         background: "white",
         opacity: 0.95,
         height: "200px",
@@ -61,7 +63,12 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
         src={srcText}
         dest={translateResult?.dest || ""}
       ></TranslateBlock>
-      <Button onClick={() => setEnabled(!enabled)} ref={translatorSwitchEl}>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          setEnabled(!enabled);
+        }}
+      >
         {enabled
           ? t("translator.pauseTranslating")
           : t("translator.startTranslating")}

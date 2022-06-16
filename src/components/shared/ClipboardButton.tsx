@@ -11,7 +11,8 @@ const ClipboardButton = forwardRef<HTMLButtonElement, { text: string }>(
     const [displaySuccess, setDisplaySuccess] = useState(false);
     const { t } = useTranslation();
 
-    const copy = () => {
+    const copy = (e:React.MouseEvent) => {
+      e.stopPropagation();
       writeText(props.text)
         .then(() => {
           setDisplaySuccess(true);
