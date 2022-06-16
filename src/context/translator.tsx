@@ -20,7 +20,7 @@ export const TranslatorProvider: React.FC<{
   const [enabled, setEnabled] = useState(true);
   const result = useTranslate(
     props.translatorConfig,
-    enabled ? encodeURIComponent(props.srcText) : ""
+    enabled ? props.srcText : ""
   );
 
   return (

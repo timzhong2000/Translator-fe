@@ -47,7 +47,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
         ...props.style,
         padding: "0 2",
         background: "white",
-        opacity: 0.9,
+        opacity: 0.95,
         height: "200px",
         width: "1000px",
       }}
@@ -57,7 +57,10 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
         fontWeight={600}
         py={0.5}
       >{`(debug)状态: ${tesseractStatus.current}`}</Box>
-      <TranslateBlock src={translateResult!.src} dest={translateResult!.dest}></TranslateBlock>
+      <TranslateBlock
+        src={srcText}
+        dest={translateResult?.dest || ""}
+      ></TranslateBlock>
       <Button onClick={() => setEnabled(!enabled)} ref={translatorSwitchEl}>
         {enabled
           ? t("translator.pauseTranslating")

@@ -21,7 +21,7 @@ export class TranslatorClientBase implements TranslatorClient {
     console.log("[Translate Hook] cache miss");
     try {
       const res = await axios.get<{ payload: TranslateResult }>(
-        this.getUrl(srcText)
+        this.getUrl(encodeURIComponent(srcText))
       );
       const payload = res.data.payload;
       if (payload.success) {
