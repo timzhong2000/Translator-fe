@@ -1,5 +1,5 @@
 import { MediaDevicesConfig } from "@/types/globalConfig";
-import { Subscriber, SubscriberBase, SubscriberFn } from "./Subscriber";
+import { SubscriberBase } from "./Subscriber";
 
 export class MediaStreamSubscriber extends SubscriberBase<MediaStream> {
   // 停止当前的流

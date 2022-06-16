@@ -29,7 +29,6 @@ const LazyInput: React.FC<{
         <Button
           variant="outlined"
           onClick={() => {
-            setLastSave(input);
             onSave(input);
           }}
         >
