@@ -12,36 +12,40 @@ export const DragableElement = forwardRef<
 >((props, ref) => {
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
-  const lastOffset = useRef({ x: 0, y: 0 });
-  const isDraging = useRef(false);
+  const [scale, setScale] = useState(1);
+  const lastOffset = useRef({ x: 0, y: 0 }); // 上一次拖动结束时的坐标
+  const [isDraging, setIsDraging] = useState(false);
   const temp = useRef({ x: 0, y: 0 });
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
+  const onDragStart = useCallback((e: React.DragEvent) => {
+    e.dataTransfer.effectAllowed = "all";
     temp.current = { x: e.clientX, y: e.clientY };
-    isDraging.current = true;
+    setIsDraging(true) ;
   }, []);
 
-  const onMouseMove = useCallback((e: React.MouseEvent) => {
-    if (isDraging.current) {
+  const onDrag = useCallback((e: React.DragEvent) => {
+    if (isDraging) {
       const newOffset = getOffset(e);
       requestAnimationFrame(() => {
         setOffsetX(newOffset.x);
         setOffsetY(newOffset.y);
       });
     }
-  }, []);
+  }, [isDraging]);
 
-  const onMouseUp = useCallback((e: React.MouseEvent) => {
-    if (isDraging.current) {
+  const onDragEnd = useCallback((e: React.DragEvent) => {
+    e.dataTransfer.dropEffect = "copy";
+
+    if (isDraging) {
       const newOffset = getOffset(e);
       requestAnimationFrame(() => {
         setOffsetX(newOffset.x);
         setOffsetY(newOffset.y);
       });
-      isDraging.current = false;
+      setIsDraging(false) ;
       lastOffset.current = newOffset;
     }
-  }, []);
+  }, [isDraging]);
 
   const getOffset = (e: React.MouseEvent) => {
     const newOffset = {
@@ -58,11 +62,15 @@ export const DragableElement = forwardRef<
         position: "absolute",
         top: offsetY,
         left: offsetX,
+        transform: `scale(${scale})`,
+        cursor: isDraging ? "grabbing" : "grab"
       }}
       ref={ref}
-      onDragStart={onMouseDown}
-      onDrag={onMouseMove}
-      onDragEnd={onMouseUp}
+      onDragStart={onDragStart}
+      onDrag={onDrag}
+      onDragEnd={onDragEnd}
+      onClick={(e)=>{e.stopPropagation()}}
+      draggable={true}
     >
       {props.children}
     </div>

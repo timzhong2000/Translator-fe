@@ -21,7 +21,7 @@ export const opencvFilter = (
 ) => {
   console.time("[opencv] run filter");
   const zoomFactor = Math.min(
-    10,
+    3,
     Math.ceil(1 / ((src.rows * src.cols) / 1000000))
   );
   cv.cvtColor(src, src, cv.COLOR_RGB2GRAY);
@@ -67,7 +67,6 @@ export const opencvFilter = (
     new cv.Size(0, 0),
     zoomNormalization / zoomFactor,
     zoomNormalization / zoomFactor
-  );
-  console.log(src.size());
+  ); // 缩放到原始大小 * zoomNormalization的尺寸
   console.timeEnd("[opencv] run filter");
 };
