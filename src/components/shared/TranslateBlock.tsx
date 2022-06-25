@@ -10,11 +10,35 @@ const TranslateBlock = forwardRef<
   const { t } = useTranslation();
   return (
     <div ref={ref}>
-      <Box fontSize={24} fontWeight={600} py={0.5}>
+      <Box
+        fontSize={32}
+        fontWeight={600}
+        py={0.5}
+        textAlign="center"
+        sx={{
+          textShadow:
+            "-2px -2px 3px white, \
+            -2px 2px 3px white, \
+            2px -2px 3px white, \
+            2px 2px 3px white",
+        }}
+      >
         {`${t("translator.sourceText")}: ${src}`}
         {src ? <ClipboardButton text={src} /> : null}
       </Box>
-      <Box fontSize={24} fontWeight={600} py={0.5}>
+      <Box
+        fontSize={32}
+        fontWeight={600}
+        py={0.5}
+        textAlign="center"
+        sx={{
+          textShadow:
+            "-2px -2px 3px white, \
+            -2px 2px 3px white, \
+            2px -2px 3px white, \
+            2px 2px 3px white",
+        }}
+      >
         {`${t("translator.destText")}: ${dest || ""}`}
         {dest ? <ClipboardButton text={dest} /> : null}
       </Box>

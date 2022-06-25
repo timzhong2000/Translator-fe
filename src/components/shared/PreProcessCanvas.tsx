@@ -7,12 +7,12 @@ import { openCvContext } from "@/context/opencv";
 import { tesseractContext } from "@/context/tesseract";
 import { videoContext } from "@/context/videoProcessor";
 import { putImageData } from "@/utils/filter/2dFilter";
-import { opencvBackgroundColor, opencvFilter } from "@/utils/opencvFilter";
+import { opencvFilter } from "@/utils/opencvFilter";
 import { useTranslation } from "react-i18next";
 
 const PreProcessCanvas = () => {
   const { cutArea, filterConfig } = useContext(configContext);
-  const { selectedImageData, setBackGroundColor } = useContext(videoContext);
+  const { selectedImageData } = useContext(videoContext);
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const { ready: cvReady, cv } = useContext(openCvContext);
   const { recognize } = useContext(tesseractContext);
@@ -24,7 +24,6 @@ const PreProcessCanvas = () => {
       console.time(`[PreProcess Component] runfilter `);
       putImageData(canvasEl.current, selectedImageData);
       const mat = cv.imread(canvasEl.current);
-      const backgroundColor = opencvBackgroundColor(cv, mat);
       opencvFilter(
         cv,
         mat,
@@ -44,7 +43,6 @@ const PreProcessCanvas = () => {
       console.timeEnd(`[PreProcess Component] runfilter `);
       requestAnimationFrame(() => {
         if (canvasEl.current) recognize(canvasEl.current.toDataURL());
-        setBackGroundColor(backgroundColor);
       });
     }, cutArea.interval / 5);
   }, [filterConfig]);

@@ -11,7 +11,6 @@ import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
 import { useTranslation } from "react-i18next";
 import TranslateBlock from "./TranslateBlock";
-import { videoContext } from "@/context/videoProcessor";
 
 export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   props
@@ -24,7 +23,6 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
   const dragableElementEl = useRef<HTMLDivElement>(null);
-  const { backGroundColor } = useContext(videoContext);
   const { t } = useTranslation();
 
   // 避免异常触发click事件
@@ -49,10 +47,8 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
       style={{
         ...props.style,
         padding: "0 0.5em",
-        background: `rgb(${backGroundColor.r},${backGroundColor.g},${backGroundColor.b})`,
-        opacity: 0.95,
-        height: "200px",
         width: "1000px",
+        backdropFilter: "blur(6px) brightness(110%)",
       }}
     >
       <Box
@@ -62,7 +58,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
       >{`(debug)状态: ${tesseractStatus.current}`}</Box>
       <TranslateBlock
         src={srcText}
-        dest={translateResult?.dest || ""}
+        dest={enabled ? translateResult?.dest || "正在加载..." : "翻译已暂停"}
       ></TranslateBlock>
       <Button
         onClick={(e) => {
