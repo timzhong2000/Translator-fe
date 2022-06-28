@@ -13,7 +13,7 @@ const VirtualScreen: React.FC<{
   useEffect(() => void setVideoRef(videoEl), []); // 转发到context中
 
   useEffect(() => {
-    if (stream && videoEl.current && videoEl.current.srcObject)
+    if (stream && videoEl.current)
       videoEl.current.srcObject = stream;
   }, [stream]);
 
