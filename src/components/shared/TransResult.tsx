@@ -1,27 +1,29 @@
 // wip: 使用解耦合的TranslateBlock代替这个组件
 
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-import ClipboardButton from "./ClipboardButton";
-
 import { tesseractContext } from "@/context/tesseract";
-import { translatorContext } from "@/context/translator";
 import { DragableElement } from "@/utils/dragableElement";
 import { useTranslation } from "react-i18next";
 import TranslateBlock from "./TranslateBlock";
+import { useTranslate } from "@/utils/hooks/useTranslate";
+import { configContext } from "@/context/config";
 
 export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   props
 ) => {
-  const {
-    result: translateResult,
-    enabled,
-    setEnabled,
-  } = useContext(translatorContext);
   const { result: srcText, statusList: tesseractStatus } =
     useContext(tesseractContext);
+  const { translatorConfig } = useContext(configContext);
+  const [enabled, setEnabled] = useState(true);
+
+  const translateResult = useTranslate(
+    translatorConfig,
+    enabled ? srcText : ""
+  );
+
   const dragableElementEl = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
@@ -63,7 +65,7 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
       <Button
         onClick={(e) => {
           e.stopPropagation();
-          setEnabled(!enabled);
+          setEnabled((e) => !e);
         }}
       >
         {enabled

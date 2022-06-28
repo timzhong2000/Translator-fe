@@ -5,14 +5,14 @@ import debounce from "lodash/debounce";
 import { configContext } from "@/context/config";
 import { openCvContext } from "@/context/opencv";
 import { tesseractContext } from "@/context/tesseract";
-import { videoContext } from "@/context/videoProcessor";
+import { selectedImageContext } from "@/context/videoProcessor";
 import { putImageData } from "@/utils/filter/2dFilter";
 import { opencvFilter } from "@/utils/opencvFilter";
 import { useTranslation } from "react-i18next";
 
 const PreProcessCanvas = () => {
   const { cutArea, filterConfig } = useContext(configContext);
-  const { selectedImageData } = useContext(videoContext);
+  const selectedImageData = useContext(selectedImageContext);
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const { ready: cvReady, cv } = useContext(openCvContext);
   const { recognize } = useContext(tesseractContext);

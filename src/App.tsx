@@ -10,11 +10,10 @@ import { OpencvTest } from "@/components/pages/ImageOcrTest";
 import VirtualScreenPage from "@/components/pages/VirtualScreenPage";
 import TextractorPage from "./components/pages/Textractor";
 
-import { VideoContextProvider } from "@/context/videoProcessor";
+import { SelectedImageContextProvider, VideoContextProvider } from "@/context/videoProcessor";
 import { ConfigContextProvider } from "@/context/config";
 import { OpenCvContextProvider } from "@/context/opencv";
 import { TesseractHook } from "@/context/tesseract";
-import { TranslatorProviderWithConfig } from "@/context/translator";
 
 function App() {
   return (
@@ -22,8 +21,8 @@ function App() {
       <ConfigContextProvider>
         <OpenCvContextProvider>
           <TesseractHook.TesseractContextProviderWithConfig>
-            <TranslatorProviderWithConfig>
-              <VideoContextProvider>
+            <VideoContextProvider>
+              <SelectedImageContextProvider>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="about" element={<About />} />
@@ -33,8 +32,8 @@ function App() {
                   <Route path="vscreen" element={<VirtualScreenPage />} />
                   <Route path="textractor" element={<TextractorPage />} />
                 </Routes>
-              </VideoContextProvider>
-            </TranslatorProviderWithConfig>
+              </SelectedImageContextProvider>
+            </VideoContextProvider>
           </TesseractHook.TesseractContextProviderWithConfig>
         </OpenCvContextProvider>
       </ConfigContextProvider>

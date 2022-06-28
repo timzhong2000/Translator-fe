@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import Link from "@mui/material/Link";
 
 import SelectArea from "../shared/SelectArea";
@@ -6,14 +6,14 @@ import FilterSetting from "../config/FilterSetting";
 import PreProcessCanvas from "../shared/PreProcessCanvas";
 
 import { configContext } from "@/context/config";
-import { videoContext } from "@/context/videoProcessor";
+import { selectedImageContext } from "@/context/videoProcessor";
 import { openCvContext } from "@/context/opencv";
 import { useTranslation } from "react-i18next";
 import VirtualScreen from "../shared/VirtualScreen";
 import { TransResult } from "../shared/TransResult";
 
 export const OcrPage = () => {
-  const { selectedImageData } = useContext(videoContext);
+  const selectedImageData = useContext(selectedImageContext);
   const { mediaDevicesConfig } = useContext(configContext);
   const { ready: cvReady } = useContext(openCvContext);
   const { t } = useTranslation();
@@ -30,16 +30,22 @@ export const OcrPage = () => {
     <div>
       {selectedImageData ? <FilterSetting /> : null}
       <PreProcessCanvas />
-      <SelectArea>
-        <VirtualScreen />
-        <TransResult
-          style={{
-            zIndex: 1,
-          }}
-        />
-      </SelectArea>
+      <PlayElement />
     </div>
   );
 };
+
+const PlayElement = memo(() => {
+  return (
+    <SelectArea>
+      <VirtualScreen />
+      <TransResult
+        style={{
+          zIndex: 1,
+        }}
+      />
+    </SelectArea>
+  );
+});
 
 export default OcrPage;

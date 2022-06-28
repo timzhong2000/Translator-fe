@@ -5,7 +5,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -87,6 +86,7 @@ export namespace TesseractHook {
     // initial tesseract
     useEffect(() => {
       for (let i = 0; i < props.poolSize; i++) {
+        console.log("[tesseract] create server")
         pool.current.push(
           createServer(
             {

@@ -3,16 +3,16 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-import { translatorContext } from "@/context/translator";
 import { tesseractContext } from "@/context/tesseract";
 import { configContext } from "@/context/config";
 import { useTranslation } from "react-i18next";
+import { useTranslate } from "@/utils/hooks/useTranslate";
 
 const testSrcText = "こんにちは";
 const TranslateTest = () => {
-  const { result: translateResult } = useContext(translatorContext);
-  const { setResult: setSrcText } = useContext(tesseractContext);
+  const { setResult: setSrcText,result:srcText  } = useContext(tesseractContext);
   const { translatorConfig, setTranslatorConfig } = useContext(configContext);
+  const translateResult = useTranslate(translatorConfig, srcText)
   const {t} = useTranslation()
 
   const [input, setInput] = useState(testSrcText);

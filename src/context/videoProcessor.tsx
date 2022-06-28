@@ -12,7 +12,6 @@ type RGB = {
 interface TransContext {
   stream?: MediaStream;
   streamReady: boolean;
-  selectedImageData?: ImageData;
   videoRef?: React.RefObject<HTMLVideoElement>;
   backGroundColor: RGB;
   setBackGroundColor: React.Dispatch<React.SetStateAction<RGB>>;
@@ -33,12 +32,6 @@ export const VideoContextProvider: React.FC = (props) => {
   const { mediaDevicesConfig, cutArea, setMediaDevicesConfig } =
     useContext(configContext);
   const { stream, ready: streamReady } = useStream();
-  const { imageData: selectedImageData } = useVideoFream(
-    stream,
-    videoRef,
-    cutArea,
-    cutArea.interval
-  );
 
   /**
    * 如果设备分辨率与设定期望分辨率不符合，浏览器会自动回退分辨率，需要用实际视频元信息进行配置矫正
@@ -61,7 +54,6 @@ export const VideoContextProvider: React.FC = (props) => {
       value={{
         stream,
         streamReady,
-        selectedImageData,
         videoRef,
         backGroundColor,
         setBackGroundColor,
@@ -70,5 +62,26 @@ export const VideoContextProvider: React.FC = (props) => {
     >
       {props.children}
     </videoContext.Provider>
+  );
+};
+
+// 按照config中的配置从视频截取帧
+export const selectedImageContext = createContext(
+  undefined as ImageData | undefined
+);
+
+export const SelectedImageContextProvider: React.FC = (props) => {
+  const { cutArea } = useContext(configContext);
+  const { stream, videoRef } = useContext(videoContext);
+  const { imageData: selectedImageData } = useVideoFream(
+    stream,
+    videoRef,
+    cutArea,
+    cutArea.interval
+  );
+  return (
+    <selectedImageContext.Provider value={selectedImageData}>
+      {props.children}
+    </selectedImageContext.Provider>
   );
 };
