@@ -20,32 +20,38 @@ export const DragableElement = forwardRef<
   const onDragStart = useCallback((e: React.DragEvent) => {
     e.dataTransfer.effectAllowed = "all";
     temp.current = { x: e.clientX, y: e.clientY };
-    setIsDraging(true) ;
+    setIsDraging(true);
   }, []);
 
-  const onDrag = useCallback((e: React.DragEvent) => {
-    if (isDraging) {
-      const newOffset = getOffset(e);
-      requestAnimationFrame(() => {
-        setOffsetX(newOffset.x);
-        setOffsetY(newOffset.y);
-      });
-    }
-  }, [isDraging]);
+  const onDrag = useCallback(
+    (e: React.DragEvent) => {
+      if (isDraging) {
+        const newOffset = getOffset(e);
+        requestAnimationFrame(() => {
+          setOffsetX(newOffset.x);
+          setOffsetY(newOffset.y);
+        });
+      }
+    },
+    [isDraging]
+  );
 
-  const onDragEnd = useCallback((e: React.DragEvent) => {
-    e.dataTransfer.dropEffect = "copy";
+  const onDragEnd = useCallback(
+    (e: React.DragEvent) => {
+      e.dataTransfer.dropEffect = "copy";
 
-    if (isDraging) {
-      const newOffset = getOffset(e);
-      requestAnimationFrame(() => {
-        setOffsetX(newOffset.x);
-        setOffsetY(newOffset.y);
-      });
-      setIsDraging(false) ;
-      lastOffset.current = newOffset;
-    }
-  }, [isDraging]);
+      if (isDraging) {
+        const newOffset = getOffset(e);
+        requestAnimationFrame(() => {
+          setOffsetX(newOffset.x);
+          setOffsetY(newOffset.y);
+        });
+        setIsDraging(false);
+        lastOffset.current = newOffset;
+      }
+    },
+    [isDraging]
+  );
 
   const getOffset = (e: React.MouseEvent) => {
     const newOffset = {
@@ -57,19 +63,22 @@ export const DragableElement = forwardRef<
 
   return (
     <div
+      id={String(Math.random())}
       style={{
         ...props.style,
         position: "absolute",
         top: offsetY,
         left: offsetX,
         // transform: `scale(${scale})`,
-        cursor: isDraging ? "grabbing" : "grab"
+        cursor: isDraging ? "grabbing" : "grab",
       }}
       ref={ref}
       onDragStart={onDragStart}
       onDrag={onDrag}
       onDragEnd={onDragEnd}
-      onClick={(e)=>{e.stopPropagation()}}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
       draggable={true}
     >
       {props.children}

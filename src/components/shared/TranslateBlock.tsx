@@ -9,7 +9,7 @@ const TranslateBlock = forwardRef<
 >(({ src, dest }, ref) => {
   const { t } = useTranslation();
   return (
-    <div ref={ref}>
+    <div ref={ref} id={String(Math.random())}>
       <Box
         fontSize={32}
         fontWeight={600}

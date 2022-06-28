@@ -27,7 +27,7 @@ export const OcrPage = () => {
     );
   if (!cvReady) return <div>{t("ocr.opencvLoading")}</div>;
   return (
-    <div>
+    <div id={String(Math.random())}>
       {selectedImageData ? <FilterSetting /> : null}
       <PreProcessCanvas />
       <PlayElement />

@@ -104,6 +104,7 @@ const SelectArea: React.FC = (props) => {
   if (stream && stream?.getTracks().length > 0) {
     return (
       <div
+        id={String(Math.random())}
         style={{
           position: "relative",
           width: mediaDevicesConfig.video.width,
