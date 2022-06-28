@@ -1,8 +1,8 @@
+import { forwardRef } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
 import ClipboardButton from "./ClipboardButton";
-import { forwardRef } from "react";
+
 const TranslateBlock = forwardRef<
   HTMLDivElement,
   { src: string; dest: string }

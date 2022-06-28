@@ -1,5 +1,6 @@
 import { Filter } from "@/utils/types/Filter";
 import { rgb2l } from "./rgb2hsl";
+
 const runFilter = (filters: Filter[], image: ImageData) => {
   const pixelNum = image.height * image.width * 4;
   for (let pos = 0; pos < pixelNum; pos += 4) {
@@ -9,8 +10,7 @@ const runFilter = (filters: Filter[], image: ImageData) => {
       const b = pos + 2;
       switch (filter.type) {
         case "binary":
-          const result = rgb2l(image.data[r], image.data[g], image.data[b]) > filter.coreValue! ? 255 : 0;
-          image.data[r] = image.data[g] = image.data[b] = result;
+          image.data[r] = image.data[g] = image.data[b] = rgb2l(image.data[r], image.data[g], image.data[b]) > (filter.coreValue || 0) ? 255 : 0;
           break;
         case "reverse":
           image.data[r] = 255 - image.data[r]

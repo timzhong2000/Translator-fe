@@ -12,7 +12,7 @@ export const DragableElement = forwardRef<
 >((props, ref) => {
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
-  const [scale, setScale] = useState(1);
+  // const [scale, setScale] = useState(1);
   const lastOffset = useRef({ x: 0, y: 0 }); // 上一次拖动结束时的坐标
   const [isDraging, setIsDraging] = useState(false);
   const temp = useRef({ x: 0, y: 0 });
@@ -62,7 +62,7 @@ export const DragableElement = forwardRef<
         position: "absolute",
         top: offsetY,
         left: offsetX,
-        transform: `scale(${scale})`,
+        // transform: `scale(${scale})`,
         cursor: isDraging ? "grabbing" : "grab"
       }}
       ref={ref}

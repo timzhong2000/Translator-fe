@@ -9,7 +9,7 @@ import TranslateBlock from "../shared/TranslateBlock";
 
 const TextractorPage = () => {
   const [url, setUrl] = useState("ws://localhost:1234");
-  const { text, ok, error } = useTextractor(url);
+  const { text } = useTextractor(url);
   const [list, setList] = useState<string[]>([]);
   useEffect(() => {
     setList([...list, text]);

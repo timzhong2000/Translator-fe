@@ -29,7 +29,7 @@ export const VideoContextProvider: React.FC = (props) => {
     g: 255,
     b: 255,
   });
-  const { mediaDevicesConfig, cutArea, setMediaDevicesConfig } =
+  const { mediaDevicesConfig, setMediaDevicesConfig } =
     useContext(configContext);
   const { stream, ready: streamReady } = useStream();
 

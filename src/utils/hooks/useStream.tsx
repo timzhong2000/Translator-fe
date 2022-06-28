@@ -1,5 +1,4 @@
 import { configContext } from "@/context/config";
-import { MediaDevicesConfig } from "@/types/globalConfig";
 import { useState, useEffect, useContext } from "react";
 import { MediaStreamSubscriber } from "../MediaStreamSubscriber";
 

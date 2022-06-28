@@ -15,7 +15,9 @@ export const OpencvTest = () => {
   } = useContext(tesseractContext);
 
   const openimg = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    imgEl.current!.src = URL.createObjectURL(e.target.files![0]);
+    if(imgEl.current && e.target.files){
+      imgEl.current.src = URL.createObjectURL(e.target.files[0]);
+    }
   };
 
   useEffect(() => {

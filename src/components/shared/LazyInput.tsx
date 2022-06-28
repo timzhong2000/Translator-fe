@@ -7,7 +7,7 @@ import { useState } from "react";
 const LazyInput: React.FC<{
   label: string;
   initValue: string;
-  onSave: (text: string) => any;
+  onSave: (text: string) => void;
   errorFn?: (input: string) => boolean;
   helperTextFn?: (input: string) => string;
   saveBtnTextFn?: (input: string) => string;

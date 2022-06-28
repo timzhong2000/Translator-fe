@@ -4,14 +4,12 @@ export const rgb2hsl = (r: number, g: number, b: number) => {
   b /= 255;
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  let temp = { h: 0, s: 0, l: 0 };
+  const temp = { h: 0, s: 0, l: 0 };
   // compute H
   if (min === max) {
     temp.h = 0;
   } else if (max === r && g > b) {
     temp.h = (60 * (g - b)) / (max - min);
-  } else if (max === r && g > b) {
-    temp.h = (60 * (g - b)) / (max - min) + 360;
   } else if (max === g) {
     temp.h = (60 * (b - r)) / (max - min) + 120;
   } else if (max === b) {

@@ -1,5 +1,5 @@
 import { TranslatorConfig } from "@/types/globalConfig";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TranslateResult } from "@/types/Payload";
 import { TranslatorClientBase } from "../TranslatorClient";
 

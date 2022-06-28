@@ -59,12 +59,12 @@ export function filter2GLSL(
   filters.forEach((filter) => {
     switch (filter.type) {
       case "binary":
-        mainFunction += `binary(color,${filter.coreValue!.toFixed(4)});\n`;
+        mainFunction += `binary(color,${filter.coreValue?.toFixed(4)});\n`;
         break;
       case "removeColor":
-        mainFunction += `removeColor(color,${filter.coreValue!.toFixed(
+        mainFunction += `removeColor(color,${filter.coreValue?.toFixed(
           4
-        )},${filter.tolerance!.toFixed(4)});\n`;
+        )},${filter.tolerance?.toFixed(4)});\n`;
         break;
       case "reverse":
         mainFunction += "reverse(color);\n";

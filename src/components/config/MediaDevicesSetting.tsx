@@ -117,7 +117,7 @@ const MediaDevicesSetting = () => {
                     ...localConfig,
                     videoDeviceId: mediaDeviceList.find(
                       (dev) => dev.label === e.target.value
-                    )!.deviceId,
+                    )?.deviceId,
                   })
                 }
               >
@@ -144,7 +144,7 @@ const MediaDevicesSetting = () => {
                     ...localConfig,
                     audioDeviceId: audioDeviceList.find(
                       (dev) => dev.label === e.target.value
-                    )!.deviceId,
+                    )?.deviceId,
                   })
                 }
               >
