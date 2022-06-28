@@ -6,13 +6,16 @@ import Box from "@mui/material/Box";
 import React, { useContext, useEffect, useState } from "react";
 import LazyInput from "../shared/LazyInput";
 import TranslateBlock from "../shared/TranslateBlock";
+import md5 from 'md5';
 
 const TextractorPage = () => {
   const [url, setUrl] = useState("ws://localhost:1234");
   const { text } = useTextractor(url);
   const [list, setList] = useState<string[]>([]);
   useEffect(() => {
-    setList([...list, text]);
+    const newList = [...list, text];
+    if (newList.length > 10) newList.slice(1);
+    setList(newList);
   }, [text]);
 
   const validPrefix = (input: string) =>
@@ -30,8 +33,8 @@ const TextractorPage = () => {
         errorFn={(input) => !validPrefix(input)}
       />
       <Stack direction="column-reverse">
-        {list.map((item, index) => (
-          <ListItem key={index} src={item} />
+        {list.map((item) => (
+          <ListItem key={md5(item)} src={item} />
         ))}
       </Stack>
     </Box>
