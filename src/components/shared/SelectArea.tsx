@@ -1,23 +1,29 @@
-import React, { useCallback, useContext, useRef } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 
 import { configContext } from "@/context/config";
-import { videoContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/video";
 import { cutAreaParser } from "@/utils/cutAreaParser";
 import { useTranslation } from "react-i18next";
+import PreProcessCanvas from "./PreProcessCanvas";
+import { useEffect } from "react";
+
+const defaultOpacity = 0.3;
 
 const SelectArea: React.FC = (props) => {
-  const { mediaDevicesConfig, cutArea, setCutArea } = useContext(configContext);
+  const { mediaDevicesConfig, cutArea, setCutArea, filterConfig } =
+    useContext(configContext);
   const { stream } = useContext(videoContext);
   const cutAreaEl = useRef<HTMLDivElement>(null);
   const areaConfig = cutAreaParser(cutArea);
-  const isResizing = useRef(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [opacity, setOpacity] = useState(defaultOpacity);
   const startAbsolutePos = useRef({ x: 0, y: 0 });
   const { t } = useTranslation();
 
   const onResizeStart = useCallback(
     (e: React.TouchEvent | React.MouseEvent) => {
-      if (isResizing.current === true) return;
+      if (isResizing === true) return;
       if (e.nativeEvent.target === cutAreaEl.current) return;
       let clientX = 0,
         clientY = 0,
@@ -35,7 +41,7 @@ const SelectArea: React.FC = (props) => {
         // offsetX = e.nativeEvent.targetTouches[0].pageX - e.nativeEvent.targetTouches[0].getBoundingClientRect().left;
         // offsetX = e.nativeEvent.targetTouches[0].pageY - e.nativeEvent.targetTouches[0].getBoundingClientRect().top;
       }
-      isResizing.current = true;
+      setIsResizing(true);
       startAbsolutePos.current = {
         x: clientX,
         y: clientY,
@@ -48,12 +54,12 @@ const SelectArea: React.FC = (props) => {
         y2: offsetY,
       });
     },
-    []
+    [isResizing]
   );
 
   const onResize = useCallback(
     (e: React.TouchEvent | React.MouseEvent) => {
-      if (isResizing.current) {
+      if (isResizing) {
         let clientX = 0,
           clientY = 0;
         if (e.nativeEvent instanceof MouseEvent) {
@@ -75,13 +81,13 @@ const SelectArea: React.FC = (props) => {
         });
       }
     },
-    [cutArea]
+    [cutArea, isResizing]
   );
 
   const onResizeEnd = useCallback(
     (e: React.TouchEvent | React.MouseEvent) => {
-      if (isResizing.current == false) return;
-      isResizing.current = false;
+      if (isResizing == false) return;
+      setIsResizing(false);
       let clientX = 0,
         clientY = 0;
       if (e.nativeEvent instanceof MouseEvent) {
@@ -98,8 +104,14 @@ const SelectArea: React.FC = (props) => {
         y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
       });
     },
-    [cutArea]
+    [cutArea, isResizing]
   );
+
+  useEffect(() => {
+    setOpacity(1);
+    const timeout = setTimeout(() => setOpacity(defaultOpacity), 8000);
+    return () => clearTimeout(timeout);
+  }, [filterConfig, isResizing]);
 
   if (stream && stream?.getTracks().length > 0) {
     return (
@@ -121,7 +133,7 @@ const SelectArea: React.FC = (props) => {
             position: "absolute",
             width: areaConfig.width,
             height: areaConfig.height,
-            borderStyle: "solid",
+            borderStyle: isResizing || opacity === 1 ? "solid" : "none",
             borderColor: "red",
             borderWidth: "2px",
             top: areaConfig.startY,
@@ -129,7 +141,12 @@ const SelectArea: React.FC = (props) => {
             overflow: "visible",
           }}
           onDoubleClick={onResizeEnd}
-        ></div>
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div style={{ opacity: opacity }}>
+            {isResizing ? null : <PreProcessCanvas />}
+          </div>
+        </div>
       </div>
     );
   } else {

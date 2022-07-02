@@ -15,7 +15,7 @@ const TranslateServerConfig = () => {
         <Grid item sm={12} md={6} xl={3}>
           <LazyInput
             label={t("setting.translator.server")}
-            initValue={translatorConfig.url}
+            value={translatorConfig.url}
             errorFn={(input) => input == ""}
             helperTextFn={(input) =>
               input == ""
@@ -30,7 +30,7 @@ const TranslateServerConfig = () => {
         <Grid item sm={12} md={6} xl={2}>
           <LazyInput
             label={t("setting.translator.key")}
-            initValue={translatorConfig.key}
+            value={translatorConfig.key}
             onSave={(key) =>
               setTranslatorConfig((prev) => ({ ...prev, key: key }))
             }

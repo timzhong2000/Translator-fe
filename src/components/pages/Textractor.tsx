@@ -25,7 +25,7 @@ const TextractorPage = () => {
     <Box sx={{ padding: "1em" }}>
       <LazyInput
         label="TextRactor Websocket地址"
-        initValue={url}
+        value={url}
         onSave={(url) => setUrl(url)}
         helperTextFn={(input) =>
           !validPrefix(input) ? "请输入以ws://开头的地址" : ""

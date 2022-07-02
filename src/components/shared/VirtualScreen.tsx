@@ -1,5 +1,5 @@
 import { configContext } from "@/context/config";
-import { videoContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/video";
 import { useContext, useRef, useEffect, MouseEventHandler } from "react";
 
 const VirtualScreen: React.FC<{

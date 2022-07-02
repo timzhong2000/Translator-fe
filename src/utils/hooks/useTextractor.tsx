@@ -5,6 +5,7 @@ const useTextractor = (url: string) => {
   const [text, setText] = useState("");
   const [error, setError] = useState();
   const [ok, setOk] = useState(false);
+  
   useEffect(() => {
     setOk(false);
     setError(undefined);

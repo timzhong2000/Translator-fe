@@ -5,17 +5,22 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 import { tesseractContext } from "@/context/tesseract";
-import { DragableElement } from "@/utils/dragableElement";
+import { DragableElement } from "@/components/shared/dragableElement";
 import { useTranslation } from "react-i18next";
 import TranslateBlock from "./TranslateBlock";
 import { useTranslate } from "@/utils/hooks/useTranslate";
 import { configContext } from "@/context/config";
+import { ocrContext } from "@/context/ocrContext";
 
 export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
   props
 ) => {
-  const { result: srcText, statusList: tesseractStatus } =
-    useContext(tesseractContext);
+  const { statusList: tesseractStatus } = useContext(tesseractContext);
+  const {
+    text: srcText,
+    enable: ocrEnable,
+    setEnable: setOcrEnable,
+  } = useContext(ocrContext);
   const { translatorConfig } = useContext(configContext);
   const [enabled, setEnabled] = useState(true);
 
@@ -65,12 +70,21 @@ export const TransResult: React.FC<{ style?: React.CSSProperties }> = (
       <Button
         onClick={(e) => {
           e.stopPropagation();
-          setEnabled((e) => !e);
+          setEnabled((enable) => !enable);
         }}
       >
         {enabled
           ? t("translator.pauseTranslating")
           : t("translator.startTranslating")}
+      </Button>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          if (ocrEnable) setEnabled((enable) => !enable); // 关闭ocr时提前关闭翻译
+          setOcrEnable((enable) => !enable);
+        }}
+      >
+        {ocrEnable ? t("translator.pauseOcr") : t("translator.startOcr")}
       </Button>
     </DragableElement>
   );

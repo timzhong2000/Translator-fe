@@ -21,11 +21,9 @@ const defaultConfig: Partial<WorkerOptions> = {
 };
 
 export interface TesseractContext {
-  result: string;
-  setResult: React.Dispatch<React.SetStateAction<string>>;
   statusList: MutableRefObject<TesseractHook.Status[]>;
   progressList: MutableRefObject<number[]>;
-  recognize: (pic: ImageLike) => Promise<void>;
+  recognize: (pic: ImageLike) => Promise<string>;
 }
 
 export const tesseractContext = createContext({} as TesseractContext);
@@ -81,12 +79,11 @@ export namespace TesseractHook {
     const pool = useRef<Tesseract.Worker[]>([]);
     const statusList = useRef<Status[]>([]);
     const progressList = useRef<number[]>([]);
-    const [result, setResult] = useState("");
 
     // initial tesseract
     useEffect(() => {
       for (let i = 0; i < props.poolSize; i++) {
-        console.log("[tesseract] create server")
+        console.log("[tesseract] create server");
         pool.current.push(
           createServer(
             {
@@ -112,17 +109,19 @@ export namespace TesseractHook {
         const id = statusList.current.findIndex((v) => v === "idle");
         if (id >= 0) {
           statusList.current[id] = "recognizing text";
-          (async () => {
-            console.time(`[Tesseract Hook] (worker ${id}) recognize`);
+          console.time(`[Tesseract Hook] (worker ${id}) recognize`);
+          try {
             const {
               data: { text: text },
             } = await pool.current[id].recognize(pic);
             console.timeEnd(`[Tesseract Hook] (worker ${id}) recognize`);
-            setResult(removeStopWords(text));
             statusList.current[id] = "idle";
-          })();
+            return removeStopWords(text);
+          } finally {
+            
+          }
         } else {
-          console.error("all busy");
+          throw new Error("all busy");
         }
       },
       [statusList]
@@ -130,7 +129,7 @@ export namespace TesseractHook {
 
     return (
       <tesseractContext.Provider
-        value={{ statusList, progressList, result, setResult, recognize }}
+        value={{ statusList, progressList, recognize }}
       >
         {props.children}
       </tesseractContext.Provider>
@@ -140,7 +139,10 @@ export namespace TesseractHook {
   export const TesseractContextProviderWithConfig: React.FC = (props) => {
     const { ocrConfig } = useContext(configContext);
     return (
-      <TesseractContextProvider lang={ocrConfig.lang} poolSize={ocrConfig.poolSize}>
+      <TesseractContextProvider
+        lang={ocrConfig.lang}
+        poolSize={ocrConfig.poolSize}
+      >
         {props.children}
       </TesseractContextProvider>
     );

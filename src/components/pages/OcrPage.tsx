@@ -6,7 +6,7 @@ import FilterSetting from "../config/FilterSetting";
 import PreProcessCanvas from "../shared/PreProcessCanvas";
 
 import { configContext } from "@/context/config";
-import { selectedImageContext } from "@/context/videoProcessor";
+import { selectedImageContext } from "@/context/video";
 import { openCvContext } from "@/context/opencv";
 import { useTranslation } from "react-i18next";
 import VirtualScreen from "../shared/VirtualScreen";
@@ -25,11 +25,12 @@ export const OcrPage = () => {
         <Link href="/#/setting">{t("navbar.setting")}</Link>
       </div>
     );
+
   if (!cvReady) return <div>{t("ocr.opencvLoading")}</div>;
+
   return (
     <div id={String(Math.random())}>
       {selectedImageData ? <FilterSetting /> : null}
-      <PreProcessCanvas />
       <PlayElement />
     </div>
   );

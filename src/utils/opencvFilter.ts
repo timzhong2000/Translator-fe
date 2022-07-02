@@ -6,7 +6,8 @@ export const opencvBackgroundColor = (cv: Opencv, src: Mat) => {
   return {
     r: mean[0],
     g: mean[1],
-    b: mean[2]
+    b: mean[2],
+    a: mean[3]
   }
 };
 
@@ -68,5 +69,6 @@ export const opencvFilter = (
     zoomNormalization / zoomFactor,
     zoomNormalization / zoomFactor
   ); // 缩放到原始大小 * zoomNormalization的尺寸
+  
   console.timeEnd("[opencv] run filter");
 };

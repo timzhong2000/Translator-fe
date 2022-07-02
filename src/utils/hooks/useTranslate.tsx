@@ -8,8 +8,9 @@ export const useTranslate = (config: TranslatorConfig, srcText: string) => {
 
   useEffect(() => {
     if (!srcText) return;
-    const client = new TranslatorClientBase(config, console.log);
-    client.translate(srcText).then(res => setResult(res));
+    new TranslatorClientBase(config, console.log)
+      .translate(srcText)
+      .then((res) => setResult(res));
   }, [config, srcText]);
 
   return result;

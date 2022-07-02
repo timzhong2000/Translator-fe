@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { useTranslation } from "react-i18next";
 import { configContext } from "@/context/config";
-import { videoContext } from "@/context/videoProcessor";
+import { videoContext } from "@/context/video";
 import { MediaDevicesConfig } from "@/types/globalConfig";
 import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
 

@@ -10,7 +10,7 @@ export class TranslatorClientBase implements TranslatorClient {
   constructor(
     private config: TranslatorConfig,
     private onError: (err: any) => any
-  ) {}
+  ) { }
 
   async translate(srcText: string) {
     const cache = this.getCache(srcText);
@@ -34,8 +34,16 @@ export class TranslatorClientBase implements TranslatorClient {
     }
   }
 
+  hasKey() {
+    return typeof this.config.key === "string" && this.config.key !== "";
+  }
+
   private getUrl(srcText: string) {
-    return `${this.config.url}/api/${this.config.provider}/${this.config.srcLang}/${this.config.destLang}/${srcText}?key=${this.config.key}`;
+    const base = `${this.config.url}/api/${this.config.provider}/${this.config.srcLang}/${this.config.destLang}/${srcText}`;
+    if (this.hasKey())
+      return `${base}?key=${this.config.key}`
+    else
+      return base;
   }
 
   private getCache(srcText: string) {

@@ -1,25 +1,33 @@
-import { useContext, useRef, useMemo, useEffect } from "react";
+import {
+  useContext,
+  useRef,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import Box from "@mui/material/Box";
 import debounce from "lodash/debounce";
 
 import { configContext } from "@/context/config";
 import { openCvContext } from "@/context/opencv";
-import { tesseractContext } from "@/context/tesseract";
-import { selectedImageContext } from "@/context/videoProcessor";
+import { selectedImageContext } from "@/context/video";
 import { putImageData } from "@/utils/filter/2dFilter";
 import { opencvFilter } from "@/utils/opencvFilter";
 import { useTranslation } from "react-i18next";
+import { OcrImage } from "@/utils/OcrClient";
+import { ocrContext } from "@/context/ocrContext";
 
 const PreProcessCanvas = () => {
   const { cutArea, filterConfig } = useContext(configContext);
   const selectedImageData = useContext(selectedImageContext);
-  const canvasEl = useRef<HTMLCanvasElement>(null);
   const { ready: cvReady, cv } = useContext(openCvContext);
-  const { recognize } = useContext(tesseractContext);
+  const { recongnize } = useContext(ocrContext);
+  const canvasEl = useRef<HTMLCanvasElement>(null);
   const { t } = useTranslation();
 
-  const applyFilter = useMemo(() => {
-    return debounce((selectedImageData?: ImageData) => {
+  const applyFilter = useCallback(
+    debounce(async (selectedImageData?: ImageData) => {
       if (!canvasEl.current || !selectedImageData || !cvReady) return;
       console.time(`[PreProcess Component] runfilter `);
       putImageData(canvasEl.current, selectedImageData);
@@ -41,15 +49,15 @@ const PreProcessCanvas = () => {
       cv.imshow(canvasEl.current, mat);
       mat.delete();
       console.timeEnd(`[PreProcess Component] runfilter `);
-      requestAnimationFrame(() => {
-        if (canvasEl.current) recognize(canvasEl.current.toDataURL());
-      });
-    }, cutArea.interval / 5);
-  }, [filterConfig]);
+      recongnize(await OcrImage.canvasToBlob(canvasEl.current));
+    }, cutArea.interval / 5),
+    [filterConfig]
+  );
 
-  useEffect(() => {
-    requestAnimationFrame(() => applyFilter(selectedImageData));
-  }, [selectedImageData, cutArea]);
+  useEffect(
+    () => void requestAnimationFrame(() => applyFilter(selectedImageData)),
+    [selectedImageData, cutArea]
+  );
 
   if (selectedImageData) {
     return (

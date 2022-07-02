@@ -6,14 +6,14 @@ import { useState } from "react";
 // 带有确认按钮的输入框
 const LazyInput: React.FC<{
   label: string;
-  initValue: string;
+  value: string;
   onSave: (text: string) => void;
   errorFn?: (input: string) => boolean;
   helperTextFn?: (input: string) => string;
   saveBtnTextFn?: (input: string) => string;
-}> = ({ label, initValue, onSave, errorFn, helperTextFn, saveBtnTextFn }) => {
-  const [input, setInput] = useState(initValue);
-  const dirty = input !== initValue;
+}> = ({ label, value, onSave, errorFn, helperTextFn, saveBtnTextFn }) => {
+  const [input, setInput] = useState(value);
+  const dirty = input !== value;
   return (
     <Stack direction="row" spacing={1}>
       <TextField
