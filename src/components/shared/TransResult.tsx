@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 import { tesseractContext } from "@/context/tesseract";
-import { DragableElement } from "@/components/shared/dragableElement";
+import DragableElement from "@/components/shared/DragableElement";
 import { useTranslation } from "react-i18next";
 import TranslateBlock from "./TranslateBlock";
 import { useTranslate } from "@/utils/hooks/useTranslate";

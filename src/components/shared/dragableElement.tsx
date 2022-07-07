@@ -6,7 +6,9 @@ import {
   useState,
 } from "react";
 
-export const DragableElement = forwardRef<
+const allowDrag = (e: DragEvent) => e.preventDefault();
+
+const DragableElement = forwardRef<
   HTMLDivElement,
   { style?: CSSProperties; children: any }
 >((props, ref) => {
@@ -21,6 +23,7 @@ export const DragableElement = forwardRef<
     e.dataTransfer.effectAllowed = "all";
     temp.current = { x: e.clientX, y: e.clientY };
     setIsDraging(true);
+    document.addEventListener("dragover", allowDrag);
   }, []);
 
   const onDrag = useCallback(
@@ -39,7 +42,7 @@ export const DragableElement = forwardRef<
   const onDragEnd = useCallback(
     (e: React.DragEvent) => {
       e.dataTransfer.dropEffect = "copy";
-
+      document.removeEventListener("dragover", allowDrag);
       if (isDraging) {
         const newOffset = getOffset(e);
         requestAnimationFrame(() => {
@@ -85,3 +88,5 @@ export const DragableElement = forwardRef<
     </div>
   );
 });
+
+export default DragableElement;
