@@ -71,13 +71,11 @@ const SelectArea: React.FC = (props) => {
           clientY = e.nativeEvent.touches[0].clientY;
         }
         requestAnimationFrame(() => {
-          setTimeout(() => {
-            setCutArea({
-              ...cutArea,
-              x2: cutArea.x1 + (clientX - startAbsolutePos.current.x),
-              y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
-            });
-          }, 0);
+          setCutArea({
+            ...cutArea,
+            x2: cutArea.x1 + (clientX - startAbsolutePos.current.x),
+            y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
+          });
         });
       }
     },
