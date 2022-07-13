@@ -73,7 +73,7 @@ const DragableElement = forwardRef<
         top: offsetY,
         left: offsetX,
         // transform: `scale(${scale})`,
-        cursor: isDraging ? "grabbing" : "grab",
+        cursor: "grab",
       }}
       ref={ref}
       onDragStart={onDragStart}

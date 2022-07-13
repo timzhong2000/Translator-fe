@@ -119,6 +119,7 @@ const SelectArea: React.FC = (props) => {
           position: "relative",
           width: mediaDevicesConfig.video.width,
           height: mediaDevicesConfig.video.height,
+          cursor: "crosshair"
         }}
         onMouseMove={onResize}
         onDoubleClick={onResizeEnd}
@@ -137,6 +138,7 @@ const SelectArea: React.FC = (props) => {
             top: areaConfig.startY,
             left: areaConfig.startX,
             overflow: "visible",
+            cursor: "not-allowed"
           }}
           onDoubleClick={onResizeEnd}
           onClick={(e) => e.stopPropagation()}
