@@ -93,7 +93,7 @@ export const ConfigContextProvider: React.FC = (props) => {
     getConfig("FilterConfig", defaultFilterConfig)
   );
   const [cutArea, setCutArea] = useState<CutArea>(
-    getConfig("CutArea", defaultCutAreaConfig)
+    getConfig("CutAreaConfig", defaultCutAreaConfig)
   );
   const [translatorConfig, setTranslatorConfig] = useState<TranslatorConfig>(
     getConfig("TranslatorConfig", defaultTranslatorConfig)
