@@ -29,7 +29,6 @@ const PreProcessCanvas = () => {
   const applyFilter = useCallback(
     debounce(async (selectedImageData?: ImageData) => {
       if (!canvasEl.current || !selectedImageData || !cvReady) return;
-      console.time(`[PreProcess Component] runfilter `);
       putImageData(canvasEl.current, selectedImageData);
       const mat = cv.imread(canvasEl.current);
       opencvFilter(
@@ -48,7 +47,6 @@ const PreProcessCanvas = () => {
       );
       cv.imshow(canvasEl.current, mat);
       mat.delete();
-      console.timeEnd(`[PreProcess Component] runfilter `);
       recongnize(await OcrImage.canvasToBlob(canvasEl.current));
     }, cutArea.interval / 5),
     [filterConfig]

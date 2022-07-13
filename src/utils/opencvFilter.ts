@@ -1,6 +1,6 @@
 import { Mat } from "opencv-ts";
 import { Opencv } from "@/context/opencv";
-
+import { logger, LogType } from './logger';
 export const opencvBackgroundColor = (cv: Opencv, src: Mat) => {
   const mean = cv.mean(src) as unknown as Array<number>; // todo
   return {
@@ -20,7 +20,7 @@ export const opencvFilter = (
   dilate = { kernelSize: 3, iterations: 0 },
   zoomNormalization = 2
 ) => {
-  console.time("[opencv] run filter");
+  const endTimer = logger.timing(LogType.OPENCV_PROCESS)
   const zoomFactor = Math.min(
     3,
     Math.ceil(1 / ((src.rows * src.cols) / 1000000))
@@ -69,6 +69,6 @@ export const opencvFilter = (
     zoomNormalization / zoomFactor,
     zoomNormalization / zoomFactor
   ); // 缩放到原始大小 * zoomNormalization的尺寸
-  
-  console.timeEnd("[opencv] run filter");
+
+  endTimer();
 };

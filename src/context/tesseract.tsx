@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { createWorker, ImageLike, WorkerOptions } from "tesseract.js";
 import { configContext } from "./config";
+import { logger, LogType } from "../utils/logger";
 
 const defaultConfig: Partial<WorkerOptions> = {
   corePath: "/vendor/tesseract/tesseract-core.wasm.js",
@@ -83,7 +84,7 @@ export namespace TesseractHook {
     // initial tesseract
     useEffect(() => {
       for (let i = 0; i < props.poolSize; i++) {
-        console.log("[tesseract] create server");
+        logger.print(LogType.TESSERACT_START, `worker id: ${i}`);
         pool.current.push(
           createServer(
             {
@@ -109,16 +110,16 @@ export namespace TesseractHook {
         const id = statusList.current.findIndex((v) => v === "idle");
         if (id >= 0) {
           statusList.current[id] = "recognizing text";
-          console.time(`[Tesseract Hook] (worker ${id}) recognize`);
+          const endTimer = logger.timing(LogType.TESSERACT_PROCESS);
           try {
             const {
               data: { text: text },
             } = await pool.current[id].recognize(pic);
-            console.timeEnd(`[Tesseract Hook] (worker ${id}) recognize`);
+            logger.print(LogType.TESSERACT_PROCESS, `(worker ${id}) finish`);
+            endTimer();
             statusList.current[id] = "idle";
             return removeStopWords(text);
           } finally {
-            
           }
         } else {
           throw new Error("all busy");

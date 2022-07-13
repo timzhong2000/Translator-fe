@@ -1,13 +1,10 @@
-import { configContext } from "@/context/config";
-import { tesseractContext } from "@/context/tesseract";
+import { logger, LogType } from "@/utils/logger";
 import ISO963_1 from "@/types/ISO963";
-import axios from "axios";
-import { useContext, useEffect, useMemo, useState } from "react";
 
 export type ImageLike = string | File | Blob | ImageData | Buffer | HTMLCanvasElement;
 
 export class OcrImage {
-  constructor(private image: ImageLike) {}
+  constructor(private image: ImageLike) { }
 
   /**
    * 对于base64编码的图片的处理，要求image以 "data:image/png;base64,<raw base64>" 方式编码
@@ -84,11 +81,11 @@ export abstract class OcrClient {
 // wip: 解决tesseract的blob输入问题
 function blobToDataURL(blob: Blob) {
   return new Promise<string>((resolve) => {
-    console.time("blobToDataURL");
+    const endTimer = logger.timing(LogType.BLOB_TO_DATAURL)
     const a = new FileReader();
     a.onload = function (e) {
       resolve(e.target!.result as string);
-      console.timeEnd("blobToDataURL");
+      endTimer();
     };
     a.readAsDataURL(blob);
   });
@@ -99,7 +96,7 @@ class LocalTesseractClient implements OcrClient {
   constructor(
     private ctxRecognizeFn: (image: ImageLike) => Promise<string>,
     private lang: ISO963_1
-  ) {}
+  ) { }
   async recognize(image: OcrImage): Promise<OcrResult> {
     return {
       lang: this.lang,
@@ -111,7 +108,7 @@ class LocalTesseractClient implements OcrClient {
 }
 
 class RemotePaddleOcrClient implements OcrClient {
-  constructor(server: string) {}
+  constructor(server: string) { }
   async recognize(image: OcrImage): Promise<OcrResult> {
     throw new Error("Method not implemented.");
   }

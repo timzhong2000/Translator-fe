@@ -1,6 +1,12 @@
 import { TranslatorConfig } from "@/types/globalConfig";
 import { TranslateLevel, TranslateResult } from "@/types/Payload";
 import axios from "axios";
+import { logger, LogType } from "@/utils/logger";
+export enum CacheStatus {
+  MISS,
+  HIT,
+  PUT,
+}
 
 export declare class TranslatorClient {
   translate(srcText: string): Promise<TranslateResult>;
@@ -10,15 +16,19 @@ export class TranslatorClientBase implements TranslatorClient {
   constructor(
     private config: TranslatorConfig,
     private onError: (err: any) => any
-  ) { }
+  ) {}
+
+  private record(status: CacheStatus) {
+    logger.record(LogType.TRANSLATOR_LOCAL_CACHE, status);
+  }
 
   async translate(srcText: string) {
     const cache = this.getCache(srcText);
     if (cache) {
-      console.log("[Translate Hook] cache hit");
+      this.record(CacheStatus.HIT);
       return JSON.parse(cache) as TranslateResult;
     }
-    console.log("[Translate Hook] cache miss");
+    this.record(CacheStatus.MISS);
     try {
       const res = await axios.get<{ payload: TranslateResult }>(
         this.getUrl(encodeURIComponent(srcText))
@@ -40,10 +50,8 @@ export class TranslatorClientBase implements TranslatorClient {
 
   private getUrl(srcText: string) {
     const base = `${this.config.url}/api/${this.config.provider}/${this.config.srcLang}/${this.config.destLang}/${srcText}`;
-    if (this.hasKey())
-      return `${base}?key=${this.config.key}`
-    else
-      return base;
+    if (this.hasKey()) return `${base}?key=${this.config.key}`;
+    else return base;
   }
 
   private getCache(srcText: string) {
@@ -58,7 +66,7 @@ export class TranslatorClientBase implements TranslatorClient {
 
   private putCache(result: TranslateResult) {
     localStorage.setItem(result.src, JSON.stringify(result));
-    console.log("[Translate Hook] cache put");
+    this.record(CacheStatus.PUT);
   }
 
   private getFailResponse(srcText: string): TranslateResult {
