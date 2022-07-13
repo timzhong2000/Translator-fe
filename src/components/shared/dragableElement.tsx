@@ -41,7 +41,7 @@ const DragableElement = forwardRef<
 
   const onDragEnd = useCallback(
     (e: React.DragEvent) => {
-      e.dataTransfer.dropEffect = "copy";
+      e.dataTransfer.dropEffect = "move";
       document.removeEventListener("dragover", allowDrag);
       if (isDraging) {
         const newOffset = getOffset(e);
