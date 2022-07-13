@@ -23,7 +23,8 @@ const TranslateBlock = forwardRef<
             2px 2px 3px white",
         }}
       >
-        {`${t("translator.sourceText")}: ${src}`}
+        {/* {`${t("translator.sourceText")}: ${src}`} */}
+        {src}
         {src ? <ClipboardButton text={src} /> : null}
       </Box>
       <Box
@@ -39,7 +40,8 @@ const TranslateBlock = forwardRef<
             2px 2px 3px white",
         }}
       >
-        {`${t("translator.destText")}: ${dest || ""}`}
+        {/* {`${t("translator.destText")}: ${dest || ""}`} */}
+        {dest ?? ""}
         {dest ? <ClipboardButton text={dest} /> : null}
       </Box>
     </div>
