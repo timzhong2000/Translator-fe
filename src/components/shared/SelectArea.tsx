@@ -6,7 +6,7 @@ import { videoContext } from "@/context/video";
 import { cutAreaParser } from "@/utils/cutAreaParser";
 import { useTranslation } from "react-i18next";
 import PreProcessCanvas from "./PreProcessCanvas";
-import { useEffect } from "react";
+import { useChange } from "../../utils/hooks/useChange";
 
 const defaultOpacity = 0.3;
 
@@ -17,8 +17,13 @@ const SelectArea: React.FC = (props) => {
   const cutAreaEl = useRef<HTMLDivElement>(null);
   const areaConfig = cutAreaParser(cutArea);
   const [isResizing, setIsResizing] = useState(false);
-  const [opacity, setOpacity] = useState(defaultOpacity);
+  const isResizeingChanged = useChange(1000)(isResizing);
+  const filterConfigChanged = useChange(8000)(filterConfig);
   const startAbsolutePos = useRef({ x: 0, y: 0 });
+  const shouldShowBorder =
+    isResizing || isResizeingChanged || filterConfigChanged;
+  /* preview 模式下，预处理结果完全不透明显示在页面上，非preview模式下，预处理结果变透明*/
+  const isPreviewMode = isResizeingChanged || filterConfigChanged;
   const { t } = useTranslation();
 
   const onResizeStart = useCallback(
@@ -105,12 +110,6 @@ const SelectArea: React.FC = (props) => {
     [cutArea, isResizing]
   );
 
-  useEffect(() => {
-    setOpacity(1);
-    const timeout = setTimeout(() => setOpacity(defaultOpacity), 8000);
-    return () => clearTimeout(timeout);
-  }, [filterConfig, isResizing]);
-
   if (stream && stream?.getTracks().length > 0) {
     return (
       <div
@@ -119,7 +118,7 @@ const SelectArea: React.FC = (props) => {
           position: "relative",
           width: mediaDevicesConfig.video.width,
           height: mediaDevicesConfig.video.height,
-          cursor: "crosshair"
+          cursor: "crosshair",
         }}
         onMouseMove={onResize}
         onDoubleClick={onResizeEnd}
@@ -132,18 +131,22 @@ const SelectArea: React.FC = (props) => {
             position: "absolute",
             width: areaConfig.width,
             height: areaConfig.height,
-            borderStyle: isResizing || opacity === 1 ? "solid" : "none",
+            borderStyle: shouldShowBorder ? "solid" : "none",
             borderColor: "red",
             borderWidth: "2px",
             top: areaConfig.startY,
             left: areaConfig.startX,
             overflow: "visible",
-            cursor: "not-allowed"
+            cursor: "not-allowed",
           }}
           onDoubleClick={onResizeEnd}
           onClick={(e) => e.stopPropagation()}
         >
-          <div style={{ opacity: opacity }}>
+          <div
+            style={{
+              opacity: isPreviewMode ? 1 : defaultOpacity,
+            }}
+          >
             {isResizing ? null : <PreProcessCanvas />}
           </div>
         </div>
