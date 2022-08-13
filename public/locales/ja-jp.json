@@ -21,7 +21,7 @@
       "applyTranslatorConfig" :"翻訳設定の適用"
     },
     "media": {
-      "currentSource": "現在のビデオソース",
+      "currentSource": "現在のビデオソース: {{source}}",
       "screen": "ネイティブ画面",
       "captureCard": "採集カード",
       "resolution": "録画解像度",

@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { useState } from "react";
+import { Box, Button } from "@mui/material";
 
 import TranslateConfig from "./TranslateConfig";
 import TranslateTest from "./TranslateTest";
@@ -8,13 +7,19 @@ import FilterSetting from "./FilterSetting";
 import MediaDevicesSetting from "./MediaDevicesSetting";
 import TranslateServerConfig from "./TranslateServerConfig";
 
-import { configContext } from "@/context/config";
+import { storeContext } from "@/context/store";
 import { useTranslation } from "react-i18next";
 import OcrSetting from "./OcrSetting";
+import { ConnectedComponentType, createConnector } from "@/context/connector";
 
-const ConfigPanel = () => {
+const connector = createConnector(
+  storeContext,
+  ({ reset }) => ({ reset }),
+  () => ({})
+);
+
+const ConfigPanel: ConnectedComponentType<typeof connector> = ({ reset }) => {
   const [advanceMode, setAdvanceMode] = useState(false);
-  const { reset } = useContext(configContext);
   const { t } = useTranslation();
 
   return (
@@ -57,4 +62,4 @@ const ConfigPanel = () => {
   );
 };
 
-export default ConfigPanel;
+export default connector(ConfigPanel);

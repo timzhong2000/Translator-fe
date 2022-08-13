@@ -1,15 +1,11 @@
-import { forwardRef } from "react";
+import { FC } from "react";
 import Box from "@mui/material/Box";
-import { useTranslation } from "react-i18next";
 import ClipboardButton from "./ClipboardButton";
 
-const TranslateBlock = forwardRef<
-  HTMLDivElement,
-  { src: string; dest: string }
->(({ src, dest }, ref) => {
-  const { t } = useTranslation();
+const TranslateBlock: FC<{ src: string; dest: string }> = ({ src, dest }) => {
+  // const { t } = useTranslation();
   return (
-    <div ref={ref} id={String(Math.random())}>
+    <div id={String(Math.random())}>
       <Box
         fontSize={32}
         fontWeight={600}
@@ -46,6 +42,6 @@ const TranslateBlock = forwardRef<
       </Box>
     </div>
   );
-});
+};
 
 export default TranslateBlock;

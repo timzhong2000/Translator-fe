@@ -1,12 +1,41 @@
-import { useContext } from "react";
 import Grid from "@mui/material/Grid";
 
-import { configContext } from "@/context/config";
+import { storeContext } from "@/context/store";
 import { useTranslation } from "react-i18next";
 import LazyInput from "../shared/LazyInput";
+import {
+  ConnectedComponentType,
+  createConnector,
+} from "@/context/connector";
+import { TranslatorConfig } from "@/model";
 
-const TranslateServerConfig = () => {
-  const { translatorConfig, setTranslatorConfig } = useContext(configContext);
+const connector = createConnector(
+  storeContext,
+  ({ translatorConfig }) => ({
+    translatorConfig,
+  }),
+  ({ translatorConfig, setTranslatorConfig }) => {
+    const partialSet = (val: Partial<TranslatorConfig>) => {
+      setTranslatorConfig({
+        ...translatorConfig,
+        ...val,
+      });
+    };
+    return {
+      setUrl: (url: string) => partialSet({ url }),
+      setSecretKey: (secretKey: string) => partialSet({ secretKey }),
+    };
+  }
+);
+const TranslateServerConfig: ConnectedComponentType<typeof connector> = (
+  props
+) => {
+  const {
+    translatorConfig: { url, secretKey },
+    setUrl,
+    setSecretKey,
+  } = props;
+
   const { t } = useTranslation();
 
   return (
@@ -15,25 +44,21 @@ const TranslateServerConfig = () => {
         <Grid item sm={12} md={6} xl={3}>
           <LazyInput
             label={t("setting.translator.server")}
-            value={translatorConfig.url}
+            value={url}
             errorFn={(input) => input == ""}
             helperTextFn={(input) =>
               input == ""
                 ? t("setting.translator.pleaseFillTranslatorServerUrl")
                 : ""
             }
-            onSave={(url) =>
-              setTranslatorConfig((prev) => ({ ...prev, url: url }))
-            }
+            onSave={(url) => setUrl(url)}
           />
         </Grid>
         <Grid item sm={12} md={6} xl={2}>
           <LazyInput
             label={t("setting.translator.key")}
-            value={translatorConfig.key}
-            onSave={(key) =>
-              setTranslatorConfig((prev) => ({ ...prev, key: key }))
-            }
+            value={secretKey}
+            onSave={(secretKey) => setSecretKey(secretKey)}
           />
         </Grid>
       </Grid>
@@ -41,4 +66,4 @@ const TranslateServerConfig = () => {
   );
 };
 
-export default TranslateServerConfig;
+export default connector(TranslateServerConfig);

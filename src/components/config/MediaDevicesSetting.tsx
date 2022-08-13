@@ -1,69 +1,102 @@
-import { useContext, useState, Fragment } from "react";
-import Grid from "@mui/material/Grid";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
+import { Grid, FormControlLabel, Checkbox, TextField, MenuItem, Button } from "@mui/material";
+import { Fragment } from "react";
 
 import { useTranslation } from "react-i18next";
-import { configContext } from "@/context/config";
-import { videoContext } from "@/context/video";
-import { MediaDevicesConfig } from "@/types/globalConfig";
+import { storeContext } from "@/context/store";
 import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
+import { ConnectedComponentType, createConnector } from "@/context/connector";
+import { StreamConfig, StreamModelEvent, StreamStatus } from "@/model";
+import { useStreamModel } from "@/context/hook";
+import {
+  fromMediaDevice,
+} from "@/utils/common/MediaStreamSubscriber";
+import { itemIn, itemNotIn } from "@/utils/common/enumTool";
 
-const getStreamStatus = (
-  stream: MediaStream | undefined,
-  mediaDevicesConfig: MediaDevicesConfig
-) => {
-  const { t } = useTranslation();
+const connector = createConnector(
+  storeContext,
+  ({ streamConfig }) => ({
+    streamConfig,
+  }),
+  ({ streamConfig, setStreamConfig }) => {
+    const partialSet = (val: Partial<StreamConfig>) => {
+      setStreamConfig({
+        ...streamConfig,
+        ...val,
+      });
+    };
+    return {
+      streamConfig,
+      toggleFromScreen: () =>
+        partialSet({ fromScreen: !streamConfig.fromScreen }),
+      toggleAudioEnabled: () => partialSet({ audio: !streamConfig.audio }),
+      setAudioDeviceId: (audioDeviceId?: string) =>
+        partialSet({ audioDeviceId }),
+      setVideoDeviceId: (videoDeviceId?: string) =>
+        partialSet({ videoDeviceId }),
+    };
+  }
+);
 
-  return mediaDevicesConfig.enabled
-    ? stream && stream.getTracks().length > 0
-      ? t("setting.media.stopRecord")
-      : t("setting.media.startingRecord")
-    : t("setting.media.startRecord");
+function getIdByLabel(list: MediaDeviceInfo[], label?: string) {
+  return list.find((dev) => dev.label === label)?.deviceId;
+}
+
+function getLabelById(list: MediaDeviceInfo[], id?: string) {
+  return list.find((dev) => dev.deviceId === id)?.label ?? list[0]?.label ?? "";
+}
+
+const buttonTitle: { [key in StreamStatus]: string } = {
+  [StreamStatus.ACTIVE]: "setting.media.stopRecord",
+  [StreamStatus.EMPTY]: "setting.media.restartRecord",
+  [StreamStatus.INACTIVE]: "setting.media.restartRecord",
+  [StreamStatus.LOADING]: "setting.media.startingRecord",
+  [StreamStatus.NOT_READY]: "setting.media.startRecord",
+  [StreamStatus.TIMEOUT]: "error.timeout",
+  [StreamStatus.UNKNOWN]: "error.unknown",
 };
 
-const MediaDevicesSetting = () => {
-  const { mediaDevicesConfig, setMediaDevicesConfig } =
-    useContext(configContext);
-  const [localConfig, setLocalConfig] = useState(mediaDevicesConfig);
-  const { stream } = useContext(videoContext);
+const editable = itemIn([
+  StreamStatus.INACTIVE,
+  StreamStatus.NOT_READY,
+  StreamStatus.EMPTY,
+]);
+
+const isStreamOpened = itemIn([StreamStatus.ACTIVE, StreamStatus.LOADING]);
+
+const isButtomEnabled = itemNotIn([StreamStatus.LOADING]);
+
+const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
+  props
+) => {
+  const {
+    streamConfig,
+    toggleFromScreen,
+    setAudioDeviceId,
+    toggleAudioEnabled,
+    setVideoDeviceId,
+  } = props;
+  const { videoDeviceId, audioDeviceId, fromScreen, audio } = streamConfig;
+  const streamModel = useStreamModel([
+    StreamModelEvent.ON_STREAM_CHANGED,
+    StreamModelEvent.ON_LOADING_CHANGED,
+  ]);
   const { t } = useTranslation();
-  const mediaDeviceList = useMediaDeviceList();
-  const videoDeviceList = mediaDeviceList.filter(
-    (dev) => dev.kind === "videoinput" && dev.deviceId.length > 20
-  );
-  const audioDeviceList = mediaDeviceList.filter(
-    (dev) => dev.kind === "audioinput" && dev.deviceId.length > 20
-  );
-  const selectedVideoDeviceLabel =
-    videoDeviceList.find((dev) => dev.deviceId === localConfig.videoDeviceId)
-      ?.label ||
-    videoDeviceList[0]?.label ||
-    "";
-  const selectedAudioDeviceLabel =
-    audioDeviceList.find((dev) => dev.deviceId === localConfig.audioDeviceId)
-      ?.label ||
-    audioDeviceList[0]?.label ||
-    "";
-  const streamStatus = getStreamStatus(stream, localConfig);
-  const editAble = streamStatus === t("setting.media.startRecord");
-  const currentSourceLabel =
-    streamStatus === t("setting.media.stopRecord")
-      ? `${t("setting.media.currentSource")}: ${
-          localConfig.fromScreen
-            ? t("setting.media.screen")
-            : t("setting.media.captureCard")
-        } ${t("setting.media.resolution")}: ${
-          mediaDevicesConfig.video.width
-        } * ${mediaDevicesConfig.video.height}`
-      : `${t("setting.media.currentSource")}: ${
-          localConfig.fromScreen
-            ? t("setting.media.screen")
-            : t("setting.media.captureCard")
-        }`;
+  const { videoDevices, audioDevices } = useMediaDeviceList();
+  const selectedVideoDeviceLabel = getLabelById(videoDevices, videoDeviceId);
+  const selectedAudioDeviceLabel = getLabelById(audioDevices, audioDeviceId);
+  const status = streamModel.getStatus();
+  const isFormEditable = editable(status);
+  const currentSourceLabel = `${t("setting.media.currentSource", {
+    source: fromScreen
+      ? t("setting.media.screen")
+      : t("setting.media.captureCard"),
+  })}`;
+
+  const onclick = () => {
+    if (isStreamOpened(status)) streamModel.reset();
+    else streamModel.setStreamAsync(fromMediaDevice(streamConfig));
+  };
+
   return (
     <div>
       <Grid container spacing={3} my={3}>
@@ -72,33 +105,23 @@ const MediaDevicesSetting = () => {
             label={currentSourceLabel}
             control={
               <Checkbox
-                checked={localConfig.fromScreen}
-                disabled={!editAble}
-                onClick={() =>
-                  setLocalConfig({
-                    ...localConfig,
-                    fromScreen: !localConfig.fromScreen,
-                  })
-                }
+                checked={fromScreen}
+                disabled={!isFormEditable}
+                onClick={() => toggleFromScreen()}
               />
             }
           ></FormControlLabel>
         </Grid>
-        {localConfig.fromScreen ? null : (
+        {fromScreen ? null : (
           <Fragment>
             <Grid item sm={12} md={6} xl={2} mt={1}>
               <FormControlLabel
                 label={t("setting.media.enableAudio") as string}
                 control={
                   <Checkbox
-                    checked={localConfig.audio}
-                    disabled={!editAble}
-                    onClick={() =>
-                      setLocalConfig({
-                        ...localConfig,
-                        audio: !localConfig.audio,
-                      })
-                    }
+                    checked={audio}
+                    disabled={!isFormEditable}
+                    onClick={() => toggleAudioEnabled()}
                   />
                 }
               ></FormControlLabel>
@@ -108,26 +131,19 @@ const MediaDevicesSetting = () => {
               <TextField
                 select
                 label={t("setting.media.videoDevice") as string}
-                disabled={!editAble}
+                disabled={!isFormEditable}
                 required
                 value={selectedVideoDeviceLabel}
                 sx={{ width: "100%" }}
                 onChange={(e) =>
-                  setLocalConfig({
-                    ...localConfig,
-                    videoDeviceId: mediaDeviceList.find(
-                      (dev) => dev.label === e.target.value
-                    )?.deviceId,
-                  })
+                  setVideoDeviceId(getIdByLabel(videoDevices, e.target.value))
                 }
               >
-                {mediaDeviceList
-                  .filter((dev) => dev.kind === "videoinput")
-                  .map((dev) => (
-                    <MenuItem key={dev.label} value={dev.label}>
-                      {dev.label}
-                    </MenuItem>
-                  ))}
+                {videoDevices.map((dev) => (
+                  <MenuItem key={dev.label} value={dev.label}>
+                    {dev.label}
+                  </MenuItem>
+                ))}
               </TextField>
             </Grid>
 
@@ -135,52 +151,32 @@ const MediaDevicesSetting = () => {
               <TextField
                 select
                 label={t("setting.media.audioDevice") as string}
-                disabled={!editAble}
+                disabled={!isFormEditable}
                 required
                 value={selectedAudioDeviceLabel}
                 sx={{ width: "100%" }}
                 onChange={(e) =>
-                  setLocalConfig({
-                    ...localConfig,
-                    audioDeviceId: audioDeviceList.find(
-                      (dev) => dev.label === e.target.value
-                    )?.deviceId,
-                  })
+                  setAudioDeviceId(getIdByLabel(audioDevices, e.target.value))
                 }
               >
-                {mediaDeviceList
-                  .filter(
-                    (dev) =>
-                      dev.kind === "audioinput" && dev.deviceId.length > 20
-                  )
-                  .map((dev) => (
-                    <MenuItem key={dev.label} value={dev.label}>
-                      {dev.label}
-                    </MenuItem>
-                  ))}
+                {audioDevices.map((dev) => (
+                  <MenuItem key={dev.label} value={dev.label}>
+                    {dev.label}
+                  </MenuItem>
+                ))}
               </TextField>
             </Grid>
           </Fragment>
         )}
       </Grid>
-
       <Button
         variant="outlined"
-        disabled={
-          getStreamStatus(stream, localConfig) ===
-          t("setting.media.startingRecord")
-        }
-        onClick={() => {
-          setLocalConfig((prev) => {
-            const newConfig = { ...prev, enabled: !prev.enabled };
-            setMediaDevicesConfig(newConfig);
-            return newConfig;
-          });
-        }}
+        disabled={!isButtomEnabled(status)}
+        onClick={() => onclick()}
       >
-        {getStreamStatus(stream, localConfig)}
+        {t(buttonTitle[status])}
       </Button>
     </div>
   );
 };
-export default MediaDevicesSetting;
+export default connector(MediaDevicesSetting);

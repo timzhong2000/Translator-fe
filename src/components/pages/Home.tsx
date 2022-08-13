@@ -1,5 +1,4 @@
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
+import { Box, Link } from "@mui/material";
 
 const Home = () => {
   return (

@@ -1,19 +1,52 @@
-import { useContext, useState } from "react";
-import Grid from "@mui/material/Grid";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Typography from "@mui/material/Typography";
-import Slider from "@mui/material/Slider";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-
-import { configContext } from "@/context/config";
+import { storeContext } from "@/context/store";
 import { useTranslation } from "react-i18next";
+import {
+  ConnectedComponentType,
+  createConnector,
+} from "@/context/connector";
+import { FilterConfig } from "@/types/globalConfig";
+import { useState } from "react";
+import { Grid, FormControlLabel, Checkbox, Typography, Slider, TextField } from "@mui/material";
 
-export const FilterSetting = () => {
-  const { filterConfig, setFilterConfig } = useContext(configContext);
-  const [localConfig, setLocalConfig] = useState(filterConfig);
-  const { t } = useTranslation()
+const connector = createConnector(
+  storeContext,
+  ({ filterConfig }) => ({
+    filterConfig,
+  }),
+  ({ filterConfig, setFilterConfig }) => {
+    const partialSet = (val: Partial<FilterConfig>) => {
+      setFilterConfig({
+        ...filterConfig,
+        ...val,
+      });
+    };
+
+    return {
+      filterConfig,
+      toggleInverse: () => partialSet({ inverse: !filterConfig.inverse }),
+      setBinaryThreshold: (val: number) => partialSet({ binaryThreshold: val }),
+      setErodeKernelSize: (val: number) => partialSet({ erodeKernelSize: val }),
+      setErodeIterations: (val: number) => partialSet({ erodeIterations: val }),
+      setDilateKernelSize: (val: number) =>
+        partialSet({ dilateKernelSize: val }),
+      setDilateIterations: (val: number) =>
+        partialSet({ dilateIterations: val }),
+      setZoom: (val: number) => partialSet({ zoom: val }),
+    };
+  }
+);
+
+const FilterSetting: ConnectedComponentType<typeof connector> = ({
+  filterConfig,
+  toggleInverse,
+  setBinaryThreshold,
+  setErodeKernelSize,
+  setErodeIterations,
+  setDilateKernelSize,
+  setDilateIterations,
+  setZoom,
+}) => {
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -23,13 +56,8 @@ export const FilterSetting = () => {
             label={t("setting.filter.revert") as string}
             control={
               <Checkbox
-                checked={localConfig.inverse}
-                onClick={() =>
-                  setLocalConfig({
-                    ...localConfig,
-                    inverse: !localConfig.inverse,
-                  })
-                }
+                checked={filterConfig.inverse}
+                onClick={() => toggleInverse()}
               />
             }
           ></FormControlLabel>
@@ -39,16 +67,13 @@ export const FilterSetting = () => {
             {t("setting.filter.binaryThreshold")}
           </Typography>
           <Slider
-            value={localConfig.binaryThreshold}
+            value={filterConfig.binaryThreshold}
             aria-labelledby="binaryThreshold-slider"
             valueLabelDisplay="auto"
             min={1}
             max={255}
             onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                binaryThreshold: Number((e.target as unknown as any).value),
-              })
+              setBinaryThreshold(Number((e.target as unknown as any).value))
             }
           />
         </Grid>
@@ -56,56 +81,36 @@ export const FilterSetting = () => {
           <TextField
             label={t("setting.filter.erodeKernalSize")}
             required
-            value={localConfig.erodeKernelSize}
+            value={filterConfig.erodeKernelSize}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                erodeKernelSize: Number(e.target.value),
-              })
-            }
+            onChange={(e) => setErodeKernelSize(Number(e.target.value))}
           ></TextField>
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
             label={t("setting.filter.erodeIterations")}
             required
-            value={localConfig.erodeIterations}
+            value={filterConfig.erodeIterations}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                erodeIterations: Number(e.target.value),
-              })
-            }
+            onChange={(e) => setErodeIterations(Number(e.target.value))}
           ></TextField>
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
             label={t("setting.filter.dilateKernalSize")}
             required
-            value={localConfig.dilateKernelSize}
+            value={filterConfig.dilateKernelSize}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                dilateKernelSize: Number(e.target.value),
-              })
-            }
+            onChange={(e) => setDilateKernelSize(Number(e.target.value))}
           ></TextField>
         </Grid>
         <Grid item xs={3} md={2} xl={1}>
           <TextField
             label={t("setting.filter.dilateIterations")}
             required
-            value={localConfig.dilateIterations}
+            value={filterConfig.dilateIterations}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                dilateIterations: Number(e.target.value),
-              })
-            }
+            onChange={(e) => setDilateIterations(Number(e.target.value))}
           ></TextField>
         </Grid>
         <Grid item xs={6} md={6} xl={2}>
@@ -113,25 +118,39 @@ export const FilterSetting = () => {
             {t("setting.filter.dpiNormalization")}
           </Typography>
           <Slider
-            value={localConfig.zoom}
+            value={filterConfig.zoom}
             aria-labelledby="zoomNormalization-slider"
             valueLabelDisplay="auto"
             min={1}
             max={5}
             onChange={(e) =>
-              setLocalConfig({
-                ...localConfig,
-                zoom: Number((e.target as unknown as any).value),
-              })
+              setZoom(Number((e.target as unknown as any).value))
             }
           />
         </Grid>
+        <Test/>
       </Grid>
-      <Button variant="outlined" onClick={() => setFilterConfig(localConfig)}>
-        {t("setting.filter.apply")}
-      </Button>
     </div>
   );
 };
 
-export default FilterSetting;
+const Test = () => {
+  const [data, setData] = useState(1);
+  return (
+    <Grid item xs={6} md={6} xl={2}>
+      <Typography id="binaryThreshold-slider" gutterBottom>
+        {"test"}
+      </Typography>
+      <Slider
+        value={data}
+        aria-labelledby="binaryThreshold-slider"
+        valueLabelDisplay="auto"
+        min={1}
+        max={255}
+        onChange={(e) => setData(Number((e.target as unknown as any).value))}
+      />
+    </Grid>
+  );
+};
+
+export default connector(FilterSetting);

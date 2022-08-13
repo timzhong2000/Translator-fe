@@ -1,7 +1,5 @@
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { Stack, TextField, Button } from "@mui/material";
+import { memo, useState } from "react";
 
 // 带有确认按钮的输入框
 const LazyInput: React.FC<{
@@ -38,4 +36,4 @@ const LazyInput: React.FC<{
     </Stack>
   );
 };
-export default LazyInput;
+export default memo(LazyInput);

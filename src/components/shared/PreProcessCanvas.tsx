@@ -1,75 +1,31 @@
-import {
-  useContext,
-  useRef,
-  useMemo,
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
-import Box from "@mui/material/Box";
-import debounce from "lodash/debounce";
+import { FC, useEffect } from "react";
+import { usePreProcessorModel, useStreamModel } from "@/context/hook";
+import { PreProcessorEvent, StreamModelEvent } from "@/model";
+import { CutArea } from "@/types/globalConfig";
+import { cutAreaParser } from "@/utils/common/cutAreaParser";
+import { storeContext } from "@/context";
+import { createConnector } from "@/context/connector";
 
-import { configContext } from "@/context/config";
-import { openCvContext } from "@/context/opencv";
-import { selectedImageContext } from "@/context/video";
-import { putImageData } from "@/utils/filter/2dFilter";
-import { opencvFilter } from "@/utils/opencvFilter";
-import { useTranslation } from "react-i18next";
-import { OcrImage } from "@/utils/OcrClient";
-import { ocrContext } from "@/context/ocrContext";
+const connector = createConnector(
+  storeContext,
+  ({ cutArea, filterConfig }) => ({ cutArea, filterConfig }),
+  () => ({})
+);
 
-const PreProcessCanvas = () => {
-  const { cutArea, filterConfig } = useContext(configContext);
-  const selectedImageData = useContext(selectedImageContext);
-  const { ready: cvReady, cv } = useContext(openCvContext);
-  const { recongnize } = useContext(ocrContext);
-  const canvasEl = useRef<HTMLCanvasElement>(null);
-  const { t } = useTranslation();
+const PreProcessCanvas: FC<{
+  cutArea: CutArea;
+}> = (props) => {
+  const { cutArea } = props;
+  const preProcessorModel = usePreProcessorModel([
+    PreProcessorEvent.ON_SIZE_CHANGED,
+  ]);
 
-  const applyFilter = useCallback(
-    debounce(async (selectedImageData?: ImageData) => {
-      if (!canvasEl.current || !selectedImageData || !cvReady) return;
-      putImageData(canvasEl.current, selectedImageData);
-      const mat = cv.imread(canvasEl.current);
-      opencvFilter(
-        cv,
-        mat,
-        filterConfig.binaryThreshold,
-        filterConfig.inverse,
-        {
-          kernelSize: filterConfig.erodeKernelSize,
-          iterations: filterConfig.erodeIterations,
-        },
-        {
-          kernelSize: filterConfig.dilateKernelSize,
-          iterations: filterConfig.dilateIterations,
-        }
-      );
-      cv.imshow(canvasEl.current, mat);
-      mat.delete();
-      recongnize(await OcrImage.canvasToBlob(canvasEl.current));
-    }, cutArea.interval / 5),
-    [filterConfig]
-  );
+  useEffect(() => {
+    const area = cutAreaParser(cutArea);
+    preProcessorModel.changeSize({ x: area.width, y: area.height });
+  }, [cutArea]);
 
-  useEffect(
-    () => void requestAnimationFrame(() => applyFilter(selectedImageData)),
-    [selectedImageData, cutArea]
-  );
-
-  if (selectedImageData) {
-    return (
-      <canvas
-        ref={canvasEl}
-        style={{
-          width: selectedImageData.width,
-          height: selectedImageData.height,
-        }}
-      ></canvas>
-    );
-  } else {
-    return <Box>{t("selectArea.missingSelection")}</Box>;
-  }
+  return <div ref={(el) => el && preProcessorModel.setRoot(el)}></div>;
 };
 
-export default PreProcessCanvas;
+export default connector(PreProcessCanvas);

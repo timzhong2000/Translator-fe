@@ -1,52 +1,30 @@
-import { memo, useContext } from "react";
-import Link from "@mui/material/Link";
-
-import SelectArea from "../shared/SelectArea";
+import OcrPlayer from "../shared/OcrPlayer";
 import FilterSetting from "../config/FilterSetting";
-import PreProcessCanvas from "../shared/PreProcessCanvas";
-
-import { configContext } from "@/context/config";
-import { selectedImageContext } from "@/context/video";
-import { openCvContext } from "@/context/opencv";
-import { useTranslation } from "react-i18next";
 import VirtualScreen from "../shared/VirtualScreen";
 import { TransResult } from "../shared/TransResult";
+import { useStreamModel } from "@/context/hook";
+import {
+  StreamModelEvent,
+  StreamStatus,
+} from "@/model";
+import MediaDevicesSetting from "../config/MediaDevicesSetting";
+import { itemIn } from "@/utils/common/enumTool";
+
+const isStreamReady = itemIn([StreamStatus.ACTIVE]);
 
 export const OcrPage = () => {
-  const selectedImageData = useContext(selectedImageContext);
-  const { mediaDevicesConfig } = useContext(configContext);
-  const { ready: cvReady } = useContext(openCvContext);
-  const { t } = useTranslation();
+  const streamModel = useStreamModel([StreamModelEvent.ON_STREAM_CHANGED]);
 
-  if (!mediaDevicesConfig.enabled)
-    return (
-      <div>
-        {t("ocr.RecordStatusIsDisable")}
-        <Link href="/#/setting">{t("navbar.setting")}</Link>
-      </div>
-    );
-
-  if (!cvReady) return <div>{t("ocr.opencvLoading")}</div>;
-
+  if (!isStreamReady(streamModel.getStatus())) return <MediaDevicesSetting />;
   return (
     <div id={String(Math.random())}>
-      {selectedImageData ? <FilterSetting /> : null}
-      <PlayElement />
+      <FilterSetting />
+      <OcrPlayer>
+        <VirtualScreen />
+        <TransResult />
+      </OcrPlayer>
     </div>
   );
 };
-
-const PlayElement = memo(() => {
-  return (
-    <SelectArea>
-      <VirtualScreen />
-      <TransResult
-        style={{
-          zIndex: 1,
-        }}
-      />
-    </SelectArea>
-  );
-});
 
 export default OcrPage;

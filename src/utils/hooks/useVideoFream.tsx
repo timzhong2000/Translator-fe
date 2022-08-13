@@ -1,12 +1,11 @@
 import { CutArea } from "@/types/globalConfig";
 import { useEffect, useState } from "react";
-import { cutAreaParser } from "@/utils/cutAreaParser";
+import { cutAreaParser } from "@/utils/common/cutAreaParser";
 import { logger, LogType } from "@/utils/logger";
 
 // 截取视频帧，转换为ImageData
 export const useVideoFream = (
-  stream: MediaStream | undefined,
-  videoEl: React.RefObject<HTMLVideoElement> | undefined,
+  videoEl: HTMLVideoElement | undefined,
   cutArea: CutArea,
   interval: number
 ) => {
@@ -14,7 +13,7 @@ export const useVideoFream = (
 
   useEffect(() => {
     const captureInterval = setInterval(() => {
-      if (!stream || !videoEl || !videoEl.current) return;
+      if (!videoEl) return;
       const endTimer = logger.timing(LogType.CAPTURE_VIDEO_FRAME);
       const areaConfig = cutAreaParser(cutArea);
       const offscreenCanvas = document.createElement("canvas");
@@ -25,7 +24,7 @@ export const useVideoFream = (
       offscreenCanvas.height = areaConfig.height;
       const ctx = offscreenCanvas.getContext("2d") as CanvasRenderingContext2D;
       ctx.drawImage(
-        videoEl.current,
+        videoEl,
         areaConfig.startX,
         areaConfig.startY,
         areaConfig.width,
@@ -39,7 +38,7 @@ export const useVideoFream = (
       endTimer();
     }, interval);
     return () => void clearInterval(captureInterval);
-  }, [stream, videoEl, cutArea, interval]);
+  }, [videoEl, cutArea, interval]);
 
   return { imageData };
 };

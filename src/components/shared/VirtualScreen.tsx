@@ -1,35 +1,24 @@
-import { configContext } from "@/context/config";
-import { videoContext } from "@/context/video";
-import { useContext, useRef, useEffect, MouseEventHandler } from "react";
+import { useStreamModel } from "@/context/hook";
+import { StreamModelEvent } from "@/model";
+import { MouseEventHandler } from "react";
 
 const VirtualScreen: React.FC<{
   onClick?: MouseEventHandler;
   onDoubleClick?: MouseEventHandler;
 }> = (props) => {
-  const { mediaDevicesConfig } = useContext(configContext);
-  const { stream, setVideoRef } = useContext(videoContext);
-  const videoEl = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => void setVideoRef(videoEl), []); // 转发到context中
-
-  useEffect(() => {
-    if (stream && videoEl.current)
-      videoEl.current.srcObject = stream;
-  }, [stream]);
-
+  const streamModel = useStreamModel([
+    StreamModelEvent.ON_RESOLUTION_CHANGED,
+  ]);
   return (
-    <video
-      autoPlay
-      muted={!mediaDevicesConfig.audio}
-      ref={videoEl}
+    <div
+      ref={(el) => el && streamModel.setRoot(el)}
+      className="video-container"
       style={{
         position: "absolute",
-        width: mediaDevicesConfig.video.width,
-        height: mediaDevicesConfig.video.height,
       }}
       onClick={props.onClick}
       onDoubleClick={props.onDoubleClick}
-    ></video>
+    ></div>
   );
 };
 

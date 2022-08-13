@@ -3,6 +3,7 @@
     "home": "主页",
     "translator": "翻译器",
     "virtualScreen": "虚拟屏幕",
+    "textractor": "Textractor",
     "setting": "设置",
     "about": "关于"
   },
@@ -21,7 +22,7 @@
       "applyTranslatorConfig": "应用翻译设置"
     },
     "media": {
-      "currentSource": "当前视频源",
+      "currentSource": "当前视频源: {{source}}",
       "screen": "本机屏幕",
       "captureCard": "采集卡",
       "resolution": "录制分辨率",
@@ -30,6 +31,7 @@
       "audioDevice": "音频输入设备选择",
       "startRecord": "开始录制",
       "stopRecord": "停止录制",
+      "restartRecord": "录制中断，点击重启录制",
       "startingRecord": "正在启动录制..."
     },
     "filter": {

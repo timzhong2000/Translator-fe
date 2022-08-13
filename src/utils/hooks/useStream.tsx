@@ -1,15 +1,15 @@
-import { MediaDevicesConfig } from "@/types/globalConfig";
+import { StreamConfig } from "@/model";
 import { useState, useEffect } from "react";
-import { MediaStreamSubscriber } from "../MediaStreamSubscriber";
+import { MediaStreamSubscriber } from "../common/MediaStreamSubscriber";
 
-const useStream = (mediaDevicesConfig: MediaDevicesConfig) => {
+const useStream = (streamConfig: StreamConfig) => {
   const [stream, setStream] = useState<MediaStream>();
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     let temp: MediaStreamSubscriber | undefined;
-    MediaStreamSubscriber.createSubscriber(mediaDevicesConfig)
+    MediaStreamSubscriber.createSubscriber(streamConfig)
       .then((subscriber) => {
         temp = subscriber;
         subscriber.subscribe((stream) => {
@@ -30,11 +30,11 @@ const useStream = (mediaDevicesConfig: MediaDevicesConfig) => {
       }
     };
   }, [
-    mediaDevicesConfig.enabled,
-    mediaDevicesConfig.audio,
-    mediaDevicesConfig.fromScreen,
-    mediaDevicesConfig.videoDeviceId,
-    mediaDevicesConfig.audioDeviceId,
+    streamConfig.enabled,
+    streamConfig.audio,
+    streamConfig.fromScreen,
+    streamConfig.videoDeviceId,
+    streamConfig.audioDeviceId,
   ]);
 
   return { stream, ready, error };

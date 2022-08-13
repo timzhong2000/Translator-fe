@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TextractorSubscriber } from "../TextractorClient";
+import { TextractorSubscriber } from "../textractor/TextractorClient";
 
 const useTextractor = (url: string) => {
   const [text, setText] = useState("");

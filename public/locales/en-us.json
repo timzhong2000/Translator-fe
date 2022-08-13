@@ -21,7 +21,7 @@
       "applyTranslatorConfig": "Apply Translator Config"
     },
     "media": {
-      "currentSource": "Current video source",
+      "currentSource": "Current video source: {{source}}",
       "screen": "Screen Record",
       "captureCard": "Capture Card",
       "resolution": "resolution",

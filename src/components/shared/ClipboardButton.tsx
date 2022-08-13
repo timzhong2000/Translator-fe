@@ -3,7 +3,7 @@ import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import DoneIcon from "@mui/icons-material/Done";
 import Tooltip from "@mui/material/Tooltip";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const ClipboardButton = forwardRef<HTMLButtonElement, { text: string }>(
@@ -45,4 +45,4 @@ const ClipboardButton = forwardRef<HTMLButtonElement, { text: string }>(
   }
 );
 
-export default ClipboardButton;
+export default memo(ClipboardButton);

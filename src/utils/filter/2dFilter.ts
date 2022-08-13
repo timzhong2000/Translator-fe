@@ -1,4 +1,4 @@
-import { Filter } from "@/utils/types/Filter";
+import { Filter } from "@/utils/preprocessor/Filter";
 import { rgb2l } from "./rgb2hsl";
 
 const runFilter = (filters: Filter[], image: ImageData) => {

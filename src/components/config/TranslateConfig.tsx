@@ -1,16 +1,41 @@
-import { useContext } from "react";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-
-import { configContext } from "@/context/config";
+import { Grid, TextField, MenuItem } from "@mui/material";
+import { storeContext } from "@/context/store";
 import ISO963_1 from "@/types/ISO963";
 import { useTranslation } from "react-i18next";
+import {
+  ConnectedComponentType,
+  createConnector,
+} from "@/context/connector";
+import { TranslatorConfig } from "@/model";
 
-
-const TranslateConfig = () => {
-  const { translatorConfig, setTranslatorConfig } = useContext(configContext);
-  const { t } = useTranslation()
+const connector = createConnector(
+  storeContext,
+  ({ translatorConfig, setTranslatorConfig }) => ({
+    translatorConfig,
+    setTranslatorConfig,
+  }),
+  ({ translatorConfig, setTranslatorConfig }) => {
+    const partialSet = (val: Partial<TranslatorConfig>) => {
+      setTranslatorConfig({
+        ...translatorConfig,
+        ...val,
+      });
+    };
+    const { provider, srcLang, destLang } = translatorConfig;
+    return {
+      provider,
+      srcLang,
+      destLang,
+      setSrcLang: (srcLang: ISO963_1) => partialSet({ srcLang }),
+      setDestLang: (destLang: ISO963_1) => partialSet({ destLang }),
+      setProvider: (provider: string) => partialSet({ provider }),
+    };
+  }
+);
+const TranslateConfig: ConnectedComponentType<typeof connector> = (props) => {
+  const { provider, srcLang, destLang, setSrcLang, setDestLang, setProvider } =
+    props;
+  const { t } = useTranslation();
 
   const langList: ISO963_1[] = ["zh_CN", "zh_TW", "ja", "en"];
   const providerList: string[] = [
@@ -27,14 +52,9 @@ const TranslateConfig = () => {
             select
             label={t("setting.translator.provider")}
             required
-            value={translatorConfig.provider}
+            value={provider}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setTranslatorConfig((prev) => ({
-                ...prev,
-                provider: e.target.value,
-              }))
-            }
+            onChange={(e) => setProvider(e.target.value)}
           >
             {providerList.map((provider) => (
               <MenuItem key={provider} value={provider}>
@@ -49,14 +69,9 @@ const TranslateConfig = () => {
             select
             label={t("setting.translator.srcLang")}
             required
-            value={translatorConfig.srcLang}
+            value={srcLang}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setTranslatorConfig((prev) => ({
-                ...prev,
-                srcLang: e.target.value as ISO963_1,
-              }))
-            }
+            onChange={(e) => setSrcLang(e.target.value as ISO963_1)}
           >
             {langList.map((lang) => (
               <MenuItem key={lang} value={lang}>
@@ -71,14 +86,9 @@ const TranslateConfig = () => {
             select
             label={t("setting.translator.destLang")}
             required
-            value={translatorConfig.destLang}
+            value={destLang}
             sx={{ width: "100%" }}
-            onChange={(e) =>
-              setTranslatorConfig((prev) => ({
-                ...prev,
-                destLang: e.target.value as ISO963_1,
-              }))
-            }
+            onChange={(e) => setDestLang(e.target.value as ISO963_1)}
           >
             {langList.map((lang) => (
               <MenuItem key={lang} value={lang}>
@@ -92,4 +102,4 @@ const TranslateConfig = () => {
   );
 };
 
-export default TranslateConfig;
+export default connector(TranslateConfig);

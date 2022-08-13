@@ -1,17 +1,20 @@
-import { useContext, useState } from "react";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
+import { useState } from "react";
 
-import { configContext } from "@/context/config";
 import { useTranslation } from "react-i18next";
-import { useTranslate } from "@/utils/hooks/useTranslate";
 import LazyInput from "../shared/LazyInput";
+import { useTranslatorModel } from "@/context/hook";
+import { useAsync } from "react-async-hook";
+import { TranslatorEvent } from "@/model";
+import { Grid, TextField } from "@mui/material";
 
 const testSrcText = "こんにちは";
 const TranslateTest = () => {
   const [srcText, setSrcText] = useState(testSrcText);
-  const { translatorConfig } = useContext(configContext);
-  const translateResult = useTranslate(translatorConfig, srcText);
+  const translator = useTranslatorModel([TranslatorEvent.ON_SETTING_CHANGE]);
+  const { result, loading } = useAsync(
+    (srcText: string) => translator.translate(srcText),
+    [srcText]
+  );
   const { t } = useTranslation();
 
   return (
@@ -30,7 +33,7 @@ const TranslateTest = () => {
           <TextField
             disabled
             label={t("setting.translator.testResult")}
-            value={translateResult?.dest || ""}
+            value={loading ? "loading..." : result?.dest ?? ""}
             sx={{ width: "100%" }}
           />
         </Grid>

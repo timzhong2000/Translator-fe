@@ -1,12 +1,12 @@
-import { configContext } from "@/context/config";
 import useTextractor from "@/utils/hooks/useTextractor";
-import { useTranslate } from "@/utils/hooks/useTranslate";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import React, { useContext, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import LazyInput from "../shared/LazyInput";
 import TranslateBlock from "../shared/TranslateBlock";
-import md5 from 'md5';
+import md5 from "md5";
+import { useTranslatorModel } from "@/context/hook";
+import { useAsync } from "react-async-hook";
 
 const TextractorPage = () => {
   const [url, setUrl] = useState("ws://localhost:1234");
@@ -40,11 +40,14 @@ const TextractorPage = () => {
     </Box>
   );
 };
-const ListItem: React.FC<{ src: string }> = ({ src }) => {
-  const { translatorConfig } = useContext(configContext);
-  const result = useTranslate(translatorConfig, src);
 
+const ListItem = memo(({ src }: { src: string }) => {
+  const translatorModel = useTranslatorModel();
+  const { result } = useAsync(
+    (src: string) => translatorModel.translate(src),
+    [src]
+  );
   return <TranslateBlock src={src} dest={result ? result.dest : "正在加载"} />;
-};
+});
 
 export default TextractorPage;

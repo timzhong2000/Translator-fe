@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
+import { useAsync } from "react-async-hook";
+import { fromEvent, Observable } from "rxjs";
 
 const getDevices = async () => {
-  return await navigator.mediaDevices.enumerateDevices();
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  return {
+    videoDevices: devices.filter(
+      (dev) => dev.kind === "videoinput" && dev.deviceId.length > 20
+    ),
+    audioDevices: devices.filter(
+      (dev) => dev.kind === "audioinput" && dev.deviceId.length > 20
+    ),
+  };
 };
 
+const fromDeviceChange = fromEvent(navigator.mediaDevices, "devicechange");
+
 const useMediaDeviceList = () => {
-  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const { result: devices, reset } = useAsync(getDevices, []);
   useEffect(() => {
-    const listener = async () => void setDevices(await getDevices());
-    listener();
-    navigator.mediaDevices.addEventListener("devicechange", listener);
-    return () =>
-      navigator.mediaDevices.removeEventListener("devicechange", listener);
+    const subscription = fromDeviceChange.subscribe(reset);
+    return () => subscription.unsubscribe();
   }, []);
-  return devices;
+  return devices ?? {videoDevices: [], audioDevices: []};
 };
 
 export default useMediaDeviceList;
