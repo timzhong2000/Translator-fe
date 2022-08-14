@@ -23,6 +23,7 @@ const _OcrModelContextProvider: ConnectedComponentType<
     createTesseractOcr({ workerConfig: {}, language: "jpn" }).then(
       (tesseract) => setOcr(tesseract)
     );
+    return () => ocr.destroy();
   }, [ocrConfig]);
   return (
     <ocrModelContext.Provider value={ocr}>{children}</ocrModelContext.Provider>
