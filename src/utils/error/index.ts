@@ -16,9 +16,11 @@ export function tagWithPrefix(prefix: string) {
  * @returns
  */
 export function tag(key: string, message: string) {
-  return function decorator(err: any) {
-    err.message = message;
-    err.key = key;
+  return function decorator<T extends new (...args: any[]) => Error>(err: T) {
+    return class Tag extends err {
+      message = message;
+      key = key;
+    };
   };
 }
 

@@ -1,5 +1,5 @@
 import { ModelBase } from "@/model/base";
-import { StageError, UninitializedError } from "./errors";
+import { DisabledError, StageError, UninitializedError } from "./errors";
 import { OcrModelEvent, OcrResult, OcrStage } from "./types";
 
 export abstract class OcrBase extends ModelBase<OcrModelEvent> {
@@ -42,6 +42,7 @@ export abstract class OcrBase extends ModelBase<OcrModelEvent> {
   // 组件外部方法
   async recognize(pic: Blob | File): Promise<OcrResult[]> {
     if (this.ocrStage === OcrStage.INIT) throw new UninitializedError();
+    if (!this.enabled) throw new DisabledError();
     if (this.ocrStage === OcrStage.READY || this.ocrStage === OcrStage.IDLE) {
       return await this._recognize(pic);
     }

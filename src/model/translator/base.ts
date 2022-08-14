@@ -1,4 +1,5 @@
 import { ModelBase } from "../base";
+import { TranslatorDisabledError } from "./errors";
 import { TranslateResult, TranslatorEvent } from "./types";
 
 export abstract class TranslatorBase extends ModelBase<TranslatorEvent> {
@@ -12,5 +13,9 @@ export abstract class TranslatorBase extends ModelBase<TranslatorEvent> {
       enabled ? TranslatorEvent.ON_ENABLED : TranslatorEvent.ON_DISABLED
     );
   }
-  abstract translate(srcText: string): Promise<TranslateResult>;
+  translate(srcText: string): Promise<TranslateResult> {
+    if (!this.enabled) throw new TranslatorDisabledError();
+    return this._translate(srcText);
+  }
+  abstract _translate(srcText: string): Promise<TranslateResult>;
 }

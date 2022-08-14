@@ -99,9 +99,12 @@ const _TransResult: ConnectedComponentType<typeof connector> = ({
       </Button>
       <Button
         onClick={() => {
-          ocrModel.enabled &&
-            translatorModel.setEnabled(!translatorModel.enabled);
-          ocrModel.setEnabled(!ocrModel.enabled);
+          if (ocrModel.enabled) {
+            translatorModel.setEnabled(false);
+            ocrModel.setEnabled(false);
+          } else {
+            ocrModel.setEnabled(true);
+          }
         }}
       >
         {ocrModel.enabled ? t("translator.pauseOcr") : t("translator.startOcr")}

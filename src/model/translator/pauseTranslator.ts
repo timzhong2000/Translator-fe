@@ -20,7 +20,7 @@ export class PauseTranslator extends TranslatorBase {
     super();
   }
 
-  async translate(srcText: string): Promise<TranslateResult> {
+  async _translate(srcText: string): Promise<TranslateResult> {
     return {
       success: false,
       level: TranslateLevel.AI,

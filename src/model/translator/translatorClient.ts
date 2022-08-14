@@ -32,7 +32,7 @@ export class TranslatorClient extends TranslatorBase {
     logger.record(LogType.TRANSLATOR_LOCAL_CACHE, status);
   }
 
-  async translate(srcText: string) {
+  async _translate(srcText: string) {
     const cache = this.getCache(srcText);
     if (cache) {
       this.record(CacheStatus.HIT);

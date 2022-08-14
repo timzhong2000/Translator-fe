@@ -15,3 +15,6 @@ export class StageError extends OcrBaseError {
 
 @tag("uninitialized", "ocr组件未初始化完毕")
 export class UninitializedError extends OcrBaseError {}
+
+@tag("disabled", "ocr组件被暂停")
+export class DisabledError extends OcrBaseError {}
