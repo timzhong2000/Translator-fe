@@ -134,7 +134,7 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
             height: resolution.y,
             cursor: "crosshair",
           }}
-          onMouseMove={onResize}
+          onMouseMove={isResizing ? onResize : undefined}
           onDoubleClick={onResizeEnd}
           onClick={onResizeStart}
         >

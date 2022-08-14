@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
-import LazyInput from "../shared/LazyInput";
+import LazyInput from "../common/LazyInput";
 import { useTranslatorModel } from "@/context/hook";
 import { useAsync } from "react-async-hook";
 import { TranslatorEvent } from "@/model";

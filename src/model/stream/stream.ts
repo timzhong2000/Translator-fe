@@ -57,7 +57,7 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
       } catch (err) {
         updateStatus();
       }
-    }, 1000);
+    }, 500);
   }
 
   isLoading = false;

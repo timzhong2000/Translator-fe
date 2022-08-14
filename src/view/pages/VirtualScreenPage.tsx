@@ -1,4 +1,4 @@
-import VirtualScreen from "../shared/VirtualScreen";
+import VirtualScreen from "../common/VirtualScreen";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { StreamModelEvent, StreamStatus } from "@/model";
 import { itemIn } from "@/utils/common/enumTool";

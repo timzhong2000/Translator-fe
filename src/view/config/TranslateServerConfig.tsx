@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 
 import { storeContext } from "@/context/store";
 import { useTranslation } from "react-i18next";
-import LazyInput from "../shared/LazyInput";
+import LazyInput from "../common/LazyInput";
 import {
   ConnectedComponentType,
   createConnector,

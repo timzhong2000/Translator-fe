@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import "@/utils/common/i18n";
 
-import Home from "@/components/pages/Home";
-import About from "@/components/pages/About";
-import Navbar from "@/components/pages/Navbar";
-import ConfigPanel from "@/components/config/ConfigPanel";
-import OcrPage from "@/components/pages/OcrPage";
-import VirtualScreenPage from "@/components/pages/VirtualScreenPage";
-import TextractorPage from "./components/pages/Textractor";
+import Home from "@/view/pages/Home";
+import About from "@/view/pages/About";
+import Navbar from "@/view/pages/Navbar";
+import ConfigPanel from "@/view/config/ConfigPanel";
+import OcrPage from "@/view/pages/OcrPage";
+import VirtualScreenPage from "@/view/pages/VirtualScreenPage";
+import TextractorPage from "./view/pages/Textractor";
 
 import { StoreContextProvider } from "@/context/store";
 import {
@@ -16,7 +16,7 @@ import {
   StreamModelContextProvider,
   PreProcessorModelProvider,
 } from "./context";
-import { OcrTest } from "./components/pages/OcrTest";
+import { OcrTest } from "./view/pages/OcrTest";
 
 function App() {
   return (
