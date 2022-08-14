@@ -3,7 +3,7 @@ import { StageError, UninitializedError } from "./errors";
 import { OcrModelEvent, OcrResult, OcrStage } from "./types";
 
 export abstract class OcrBase extends ModelBase<OcrModelEvent> {
-  private _enabled: boolean = true;
+  private _enabled = true;
   get enabled() {
     return this._enabled;
   }

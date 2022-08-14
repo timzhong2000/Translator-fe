@@ -1,7 +1,6 @@
 import {
   ConnectedComponentType,
   OcrBase,
-  createPaddleOcr,
   createTesseractOcr,
 } from "@/model";
 import { DefaultOcr } from "@/model";
@@ -16,7 +15,7 @@ export const ocrConfigConnector = createConnector(
   ({ ocrConfig }) => ({ ocrConfig })
 );
 
-const config = { url: "http://localhost:5000/api/rec", lang: "japan" };
+// const config = { url: "http://localhost:5000/api/rec", lang: "japan" };
 const defaultOcr = new DefaultOcr();
 
 const _OcrModelContextProvider: ConnectedComponentType<

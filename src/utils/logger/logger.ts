@@ -63,11 +63,13 @@ class Logger {
     if (ignorePrint.find((ingoreType) => ingoreType === type)) {
       return;
     }
-    console.log(`[${type}]\t${msg}`);
+    console.log(`[${type}]\t${msg}`, data);
   }
 
   // 上传计时数据和基本performance数据
-  upload() {}
+  upload() {
+    console.log(this.performance);
+  }
 }
 
 export const logger = new Logger();

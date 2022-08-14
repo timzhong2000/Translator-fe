@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 
 const _FullScreen: FC<{
   fullScreen: boolean;

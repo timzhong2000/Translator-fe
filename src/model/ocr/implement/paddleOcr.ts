@@ -16,6 +16,7 @@ export class _PaddleOcr extends OcrBase {
     return new _PaddleOcr(config);
   }
 
+  // eslint-disable-next-line
   public destroy() {}
 
   protected async _recognize(pic: Blob | File): Promise<OcrResult[]> {

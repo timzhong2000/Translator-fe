@@ -20,7 +20,6 @@ import { createOpencvFilter } from "@/utils/preprocessor/opencvFilter";
 import { TtransError } from "@/utils/error";
 import { storeContext } from "@/context";
 import { createConnector } from "@/context/connector";
-import { useAsync } from "react-async-hook";
 import { CutArea, FilterConfig } from "@/types/globalConfig";
 
 const connector = createConnector(

@@ -1,4 +1,4 @@
-import { OcrImage } from "@/utils/preprocessor/OcrClient";
+import { OcrImage } from "@/utils/preprocessor/OcrImage";
 import cv,{ Mat } from "opencv-ts";
 import { ModelBase } from "../base";
 import { Resolution } from "../stream";

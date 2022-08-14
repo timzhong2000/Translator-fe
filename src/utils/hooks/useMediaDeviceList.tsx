@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAsync } from "react-async-hook";
-import { fromEvent, Observable } from "rxjs";
+import { fromEvent } from "rxjs";
 
 const getDevices = async () => {
   const devices = await navigator.mediaDevices.enumerateDevices();

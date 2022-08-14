@@ -9,9 +9,9 @@ import { SelectorType, ConnectorType, Component } from "./types";
  */
 export function createConnector<
   PT,
-  ST extends Object,
+  ST extends object,
   CT extends ST,
-  AT extends Object
+  AT extends object
 >(
   context: Context<CT>,
   mapContextToProps: SelectorType<CT, ST>,

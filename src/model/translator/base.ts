@@ -2,7 +2,7 @@ import { ModelBase } from "../base";
 import { TranslateResult, TranslatorEvent } from "./types";
 
 export abstract class TranslatorBase extends ModelBase<TranslatorEvent> {
-  private _enabled: boolean = true;
+  private _enabled = true;
   get enabled() {
     return this._enabled;
   }

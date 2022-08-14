@@ -19,7 +19,7 @@ const translatorSettingConnector = createConnector(
 const _TranslatorModelContextProvider: ConnectedComponentType<
   typeof translatorSettingConnector
 > = ({ translatorConfig, children }) => {
-  const [translatorModel, _] = useState(new TranslatorClient(translatorConfig));
+  const [translatorModel] = useState(new TranslatorClient(translatorConfig));
   useEffect(() => {
     translatorModel.config = translatorConfig;
   }, [translatorConfig]);

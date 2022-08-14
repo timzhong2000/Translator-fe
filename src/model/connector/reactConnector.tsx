@@ -1,6 +1,5 @@
 import {
   Context,
-  memo,
   useContext,
   useState,
   useEffect,
@@ -31,7 +30,7 @@ export function reactConnector<
       PropsType & SelectedType & ActionsType
     >;
     const model = useContext(modelContext);
-    const [_, reRender] = useState(null);
+    const [, reRender] = useState(null);
     const selected = mapModelToProps(model);
 
     useEffect(() => {

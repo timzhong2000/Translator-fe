@@ -15,7 +15,7 @@ const streamSettingConnector = createConnector(
 const _StreamModelContextProvider: ConnectedComponentType<
   typeof streamSettingConnector
 > = ({ streamConfig, children }) => {
-  const [streamModel, _] = useState(new StreamModel(streamConfig));
+  const [streamModel] = useState(new StreamModel(streamConfig));
   useEffect(() => {
     streamModel.config = streamConfig;
   }, [streamConfig]);

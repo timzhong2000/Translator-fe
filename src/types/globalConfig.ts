@@ -1,5 +1,3 @@
-import { OcrBackend } from "@/model/ocr/types";
-
 export interface FilterConfig {
   binaryThreshold: number;
   erodeKernelSize: number;

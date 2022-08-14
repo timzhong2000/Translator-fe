@@ -1,7 +1,7 @@
 import { CutArea } from "@/types/globalConfig";
 import { cutAreaParser } from "@/utils/common/cutAreaParser";
 import { logger, LogType } from "@/utils/logger";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { ModelBase } from "../base";
 import { StreamEmptyError, StreamNotReadyError } from "./errors";
 import {
@@ -104,7 +104,9 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
       el.appendChild(this.videoRef);
       try {
         this.videoRef.srcObject = this.stream;
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
       this._root = el;
     }
   }

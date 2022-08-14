@@ -1,4 +1,4 @@
-import { logger, LogType } from "@/utils/logger";
+import { reject } from "lodash-es";
 import { createWorker, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
 import { OcrBase } from "../base";
@@ -14,7 +14,7 @@ const defaultWorkerConfig: Partial<WorkerOptions> = {
   langPath: "/vendor/tesseract/tessdata_fast",
   workerPath: "/vendor/tesseract/worker.min.js",
   errorHandler: (err) => console.error(err),
-  logger: (ev)=>console.log(ev),
+  logger: (ev) => console.log(ev),
   gzip: false,
   cacheMethod: "none",
 };
@@ -24,8 +24,10 @@ const defaultWorkerConfig: Partial<WorkerOptions> = {
 function blobToDataURL(blob: Blob) {
   return new Promise<string>((resolve) => {
     const a = new FileReader();
-    a.onload = function (e) {
-      resolve(e.target!.result as string);
+    a.onload = (e) => {
+      e.target?.result
+        ? resolve(e.target.result as string)
+        : reject("raed file error");
     };
     a.readAsDataURL(blob);
   });
@@ -95,7 +97,7 @@ class _TesseractOcr extends OcrBase {
   private static removeStopWords(text: string) {
     text = text.replaceAll(/\s|\d/g, "");
     text = text.replaceAll("。", "; ");
-    text = text.replaceAll(/[|\[\]「\n]/g, "");
+    text = text.replaceAll(/[|[\]「\n]/g, "");
     return text;
   }
 }

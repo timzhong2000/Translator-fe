@@ -6,11 +6,11 @@ import { eventFilter } from "./utils";
 export function useModel<CT extends ModelBase<ET>, ST, ET>(
   modelContext: Context<CT>,
   selector: (model: CT) => ST,
-  listenEvents: ET[] | Set<ET>,
+  listenEvents: ET[] | Set<ET>
 ) {
   const model = useContext(modelContext);
   const result = selector(model);
-  const [_, rerender] = useState({});
+  const [, rerender] = useState({});
   useEffect(() => {
     const subscription = model.eventBus
       .pipe(eventFilter(listenEvents), debounceTime(100))

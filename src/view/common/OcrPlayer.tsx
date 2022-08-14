@@ -44,7 +44,7 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
     e.stopPropagation();
   };
   try {
-    const { stream: _, resolution } = streamModel; // 调用stream getter检查流状态，如果异常会抛出对应错误
+    const { resolution } = streamModel; // 调用stream getter检查流状态，如果异常会抛出对应错误
     const onResizeStart = (e: React.TouchEvent | React.MouseEvent) => {
       if (isResizing === true) return;
       if (e.nativeEvent.target === cutAreaEl.current) return;
