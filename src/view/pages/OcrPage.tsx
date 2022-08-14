@@ -3,10 +3,7 @@ import FilterSetting from "../config/FilterSetting";
 import VirtualScreen from "../common/VirtualScreen";
 import { TransResult } from "../common/TransResult";
 import { useStreamModel } from "@/context/hook";
-import {
-  StreamModelEvent,
-  StreamStatus,
-} from "@/model";
+import { StreamModelEvent, StreamStatus } from "@/model";
 import MediaDevicesSetting from "../config/MediaDevicesSetting";
 import { itemIn } from "@/utils/common/enumTool";
 

@@ -1,8 +1,4 @@
-import {
-  ConnectedComponentType,
-  OcrBase,
-  createTesseractOcr,
-} from "@/model";
+import { ConnectedComponentType, OcrBase, createTesseractOcr } from "@/model";
 import { DefaultOcr } from "@/model";
 import { createConnector } from "@/context/connector";
 import { useState, useEffect, createContext } from "react";

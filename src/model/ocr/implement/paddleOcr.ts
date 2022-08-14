@@ -36,5 +36,5 @@ export class _PaddleOcr extends OcrBase {
   }
 }
 
-export type PaddleOcr = typeof _PaddleOcr
+export type PaddleOcr = typeof _PaddleOcr;
 export const createPaddleOcr = _PaddleOcr.create;

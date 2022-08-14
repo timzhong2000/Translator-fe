@@ -6,9 +6,7 @@ const VirtualScreen: React.FC<{
   onClick?: MouseEventHandler;
   onDoubleClick?: MouseEventHandler;
 }> = (props) => {
-  const streamModel = useStreamModel([
-    StreamModelEvent.ON_RESOLUTION_CHANGED,
-  ]);
+  const streamModel = useStreamModel([StreamModelEvent.ON_RESOLUTION_CHANGED]);
   return (
     <div
       ref={(el) => el && streamModel.setRoot(el)}

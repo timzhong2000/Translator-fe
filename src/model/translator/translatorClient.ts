@@ -1,7 +1,12 @@
 import axios from "axios";
 import { logger, LogType } from "@/utils/logger";
 import { TranslatorBase } from "./base";
-import { TranslateResult, TranslateLevel, TranslatorEvent, TranslatorConfig } from "./types";
+import {
+  TranslateResult,
+  TranslateLevel,
+  TranslatorEvent,
+  TranslatorConfig,
+} from "./types";
 
 export enum CacheStatus {
   MISS,
@@ -19,9 +24,7 @@ export class TranslatorClient extends TranslatorBase {
     this.eventBus.next(TranslatorEvent.ON_SETTING_CHANGE);
   }
 
-  constructor(
-    private _config: TranslatorConfig,
-  ) {
+  constructor(private _config: TranslatorConfig) {
     super();
   }
 
@@ -57,7 +60,9 @@ export class TranslatorClient extends TranslatorBase {
   }
 
   hasKey() {
-    return typeof this.config.secretKey === "string" && this.config.secretKey !== "";
+    return (
+      typeof this.config.secretKey === "string" && this.config.secretKey !== ""
+    );
   }
 
   private getUrl(srcText: string) {

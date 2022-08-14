@@ -1,12 +1,16 @@
 import { storeContext } from "@/context/store";
 import { useTranslation } from "react-i18next";
-import {
-  ConnectedComponentType,
-  createConnector,
-} from "@/context/connector";
+import { ConnectedComponentType, createConnector } from "@/context/connector";
 import { FilterConfig } from "@/types/globalConfig";
 import { useState } from "react";
-import { Grid, FormControlLabel, Checkbox, Typography, Slider, TextField } from "@mui/material";
+import {
+  Grid,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  Slider,
+  TextField,
+} from "@mui/material";
 
 const connector = createConnector(
   storeContext,
@@ -128,7 +132,7 @@ const FilterSetting: ConnectedComponentType<typeof connector> = ({
             }
           />
         </Grid>
-        <Test/>
+        <Test />
       </Grid>
     </div>
   );

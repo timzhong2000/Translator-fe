@@ -130,15 +130,15 @@ const errorHandler = (err: Error) => {
   }
 };
 
-export const fromMediaDevice = (config: StreamConfig)=>{
+export const fromMediaDevice = (config: StreamConfig) => {
   const sub = new Subject<MediaStream | Error>();
   MediaStreamSubscriber.createSubscriber({
     ...config,
     enabled: true,
-  }).then((subscriber) =>
-    subscriber.subscribe((stream) => sub.next(stream))
-  ).catch(err=>{
-    sub.next(err);
-  });
+  })
+    .then((subscriber) => subscriber.subscribe((stream) => sub.next(stream)))
+    .catch((err) => {
+      sub.next(err);
+    });
   return sub.asObservable();
-}
+};

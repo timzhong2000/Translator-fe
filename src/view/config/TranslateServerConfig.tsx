@@ -1,12 +1,9 @@
-import Grid from "@mui/material/Grid";
+import { Grid } from "@mui/material";
 
 import { storeContext } from "@/context/store";
 import { useTranslation } from "react-i18next";
 import LazyInput from "../common/LazyInput";
-import {
-  ConnectedComponentType,
-  createConnector,
-} from "@/context/connector";
+import { ConnectedComponentType, createConnector } from "@/context/connector";
 import { TranslatorConfig } from "@/model";
 
 const connector = createConnector(

@@ -50,9 +50,7 @@ function createProgram(gl: WebGLRenderingContext, shaders: WebGLShader[]) {
 /**
  * 滤镜转GLSL着色器
  */
-export function filter2GLSL(
-  filters: Filter[]
-) {
+export function filter2GLSL(filters: Filter[]) {
   const fragmentShader = getFragmentShaderTemplate();
   let mainFunction =
     "void main() \n{\nvec4 color = texture2D(u_image, v_texCoord);\n";
@@ -181,7 +179,7 @@ export function renderCanvas(
   const normalize = false; // don't normalize the data
   const stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
   const offset = 0; // start at the beginning of the buffer
-  
+
   // 绑定绝对顶点坐标缓冲区
   gl.enableVertexAttribArray(positionLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);

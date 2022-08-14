@@ -9,7 +9,7 @@ const streamSettingConnector = createConnector(
   storeContext,
   ({ streamConfig }) => ({
     streamConfig,
-  }),
+  })
 );
 
 const _StreamModelContextProvider: ConnectedComponentType<

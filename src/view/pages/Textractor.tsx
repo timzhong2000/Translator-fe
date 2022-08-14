@@ -1,6 +1,5 @@
 import useTextractor from "@/utils/hooks/useTextractor";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import { Stack, Box } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import LazyInput from "../common/LazyInput";
 import TranslateBlock from "../common/TranslateBlock";

@@ -1,7 +1,7 @@
 /**
  * 包装文案key的prefix
- * @param prefix 
- * @returns 
+ * @param prefix
+ * @returns
  */
 export function tagWithPrefix(prefix: string) {
   return function _tag(key: string, message: string) {

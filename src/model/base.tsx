@@ -4,4 +4,3 @@ import { Subject } from "rxjs";
 export class ModelBase<T> {
   eventBus: Subject<T> = new Subject<T>();
 }
-

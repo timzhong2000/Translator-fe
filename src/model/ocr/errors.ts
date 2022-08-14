@@ -1,7 +1,7 @@
 import { tagWithPrefix, TtransError } from "@/utils/error";
 import { OcrStage } from "./types";
 
-const tag = tagWithPrefix("ocr.error.")
+const tag = tagWithPrefix("ocr.error.");
 
 @tag("default", "ocr默认错误")
 export class OcrBaseError extends TtransError {}

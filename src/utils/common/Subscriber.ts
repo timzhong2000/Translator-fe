@@ -2,7 +2,7 @@
 
 export type SubscriberFn<T> = (data: T) => void;
 declare class Subscriber<T> {
-  broadcast(data: T): void 
+  broadcast(data: T): void;
   subscribe(fn: SubscriberFn<T>): void;
   unSubscribe(fn: SubscriberFn<T>): boolean;
   destroy(): void;
@@ -14,7 +14,7 @@ export class SubscriberBase<T> implements Subscriber<T> {
 
   subscribe(fn: SubscriberFn<T>): void {
     this.subscriberList.push(fn);
-    if(this.cache) fn(this.cache);
+    if (this.cache) fn(this.cache);
   }
 
   unSubscribe(fn: SubscriberFn<T>): boolean {

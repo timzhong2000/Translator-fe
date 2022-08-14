@@ -15,7 +15,7 @@ export enum LogType {
   MEMORY_HEAP_USED = "memory_heap_used",
   /* translator */
   TRANSLATOR_LOCAL_CACHE = "translator_local_cache", // 0未命中 1命中 2写缓存成功
-  TRANSLATOR_ERROR = "translator_error"
+  TRANSLATOR_ERROR = "translator_error",
 }
 
 export type PerformanceData = { [key in LogType]: (number | string)[] };

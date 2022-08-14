@@ -1,4 +1,11 @@
-import { Grid, FormControlLabel, Checkbox, TextField, MenuItem, Button } from "@mui/material";
+import {
+  Grid,
+  FormControlLabel,
+  Checkbox,
+  TextField,
+  MenuItem,
+  Button,
+} from "@mui/material";
 import { Fragment } from "react";
 
 import { useTranslation } from "react-i18next";
@@ -7,9 +14,7 @@ import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
 import { ConnectedComponentType, createConnector } from "@/context/connector";
 import { StreamConfig, StreamModelEvent, StreamStatus } from "@/model";
 import { useStreamModel } from "@/context/hook";
-import {
-  fromMediaDevice,
-} from "@/utils/common/MediaStreamSubscriber";
+import { fromMediaDevice } from "@/utils/common/MediaStreamSubscriber";
 import { itemIn, itemNotIn } from "@/utils/common/enumTool";
 
 const connector = createConnector(

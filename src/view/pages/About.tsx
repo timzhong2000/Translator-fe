@@ -28,7 +28,9 @@ const About = () => {
         允许手动调整图像预处理参数，达到更好的OCR效果，在翻译器页面也会展示参数调整面板。
       </p>
       <p>
-        <strong>目前没有开发出自适应预处理算法，暂时采用人工调整的方法</strong> 正常情况下（指没有打开反色），<strong>跟着以下几点可以得到一个比较好的预处理效果</strong>。
+        <strong>目前没有开发出自适应预处理算法，暂时采用人工调整的方法</strong>{" "}
+        正常情况下（指没有打开反色），
+        <strong>跟着以下几点可以得到一个比较好的预处理效果</strong>。
         <ol>
           <li>背景大部分为黑色，文字难以辨认，需要适当调低二值化阈值。</li>
           <li>全部为白色，没有黑色的文字，需要适当调高二值化阈值</li>
@@ -36,14 +38,22 @@ const About = () => {
             文字笔画太粗导致重叠，需要调高erode迭代次数，同时提高dilate迭代次数，实现开操作。也可以同时适当降低二值化阈值，有可能有更好的效果。
           </li>
         </ol>
-        总之，预处理的目的是尽可能<strong>让背景变成白色，让文字变成黑色而且笔画尽可能细</strong>，这样可以让OCR速度更快，效果更好。
+        总之，预处理的目的是尽可能
+        <strong>让背景变成白色，让文字变成黑色而且笔画尽可能细</strong>
+        ，这样可以让OCR速度更快，效果更好。
       </p>
-      <h1>
-        本项目开源，欢迎技术交流
-      </h1>
+      <h1>本项目开源，欢迎技术交流</h1>
       <p>目前属于毛坯房状态，更好看的UI和视频上手教程正在准备过程中。</p>
-      <p><Link href="https://github.com/Tim-Zhong-2000/Translator-fe">前端仓库</Link></p>
-      <p><Link href="https://github.com/Tim-Zhong-2000/TranslateMS">后端仓库</Link></p>
+      <p>
+        <Link href="https://github.com/Tim-Zhong-2000/Translator-fe">
+          前端仓库
+        </Link>
+      </p>
+      <p>
+        <Link href="https://github.com/Tim-Zhong-2000/TranslateMS">
+          后端仓库
+        </Link>
+      </p>
     </Box>
   );
 };

@@ -22,7 +22,7 @@ const useMediaDeviceList = () => {
     const subscription = fromDeviceChange.subscribe(reset);
     return () => subscription.unsubscribe();
   }, []);
-  return devices ?? {videoDevices: [], audioDevices: []};
+  return devices ?? { videoDevices: [], audioDevices: [] };
 };
 
 export default useMediaDeviceList;

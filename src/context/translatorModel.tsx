@@ -1,7 +1,4 @@
-import {
-  ConnectedComponentType,
-  TranslatorClient,
-} from "@/model";
+import { ConnectedComponentType, TranslatorClient } from "@/model";
 
 import { createConnector } from "@/context/connector";
 import { createContext, useEffect, useState } from "react";
@@ -13,7 +10,7 @@ const translatorSettingConnector = createConnector(
   storeContext,
   ({ translatorConfig }) => ({
     translatorConfig,
-  }),
+  })
 );
 
 const _TranslatorModelContextProvider: ConnectedComponentType<

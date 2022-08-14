@@ -23,5 +23,3 @@ export interface CutArea {
   y2: number;
   interval: number;
 }
-
-

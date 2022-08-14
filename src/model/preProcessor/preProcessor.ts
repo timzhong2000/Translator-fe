@@ -1,5 +1,5 @@
 import { OcrImage } from "@/utils/preprocessor/OcrImage";
-import cv,{ Mat } from "opencv-ts";
+import cv, { Mat } from "opencv-ts";
 import { ModelBase } from "../base";
 import { Resolution } from "../stream";
 import { CanvasOffScreenError, OpenCVUninitializedError } from "./errors";
@@ -74,7 +74,7 @@ export class PreProcessorModel extends ModelBase<PreProcessorEvent> {
     const inputMat = cv.imread(inputEl);
     const outputMat = fn(cv, inputMat);
     cv.imshow(this.outputCanvasEl, outputMat);
-    inputMat===outputMat && inputMat.delete(); // 防止double delete
+    inputMat === outputMat && inputMat.delete(); // 防止double delete
     outputMat.delete();
     return OcrImage.canvasToBlob(this.outputCanvasEl);
   }

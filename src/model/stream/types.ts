@@ -20,7 +20,6 @@ export interface Resolution {
   y: number;
 }
 
-
 export enum StreamStatus {
   NOT_READY, // 没有启动录制
   LOADING, // 加载中

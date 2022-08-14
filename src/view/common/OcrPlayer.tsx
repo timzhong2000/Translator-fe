@@ -159,7 +159,11 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
             <div style={{ position: "absolute", top: 0, right: 0 }}>
               <Button onClick={requestFullscreen}>
                 <Tooltip title={t("common.fullscreen") as string}>
-                  <FullscreenIcon sx={{ padding: 0 }} fontSize="large" color="info"/>
+                  <FullscreenIcon
+                    sx={{ padding: 0 }}
+                    fontSize="large"
+                    color="info"
+                  />
                 </Tooltip>
               </Button>
             </div>

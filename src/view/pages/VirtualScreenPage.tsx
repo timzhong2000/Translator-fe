@@ -5,7 +5,7 @@ import { itemIn } from "@/utils/common/enumTool";
 import { useStreamModel } from "@/context";
 import MediaDevicesSetting from "../config/MediaDevicesSetting";
 import { FC, useState } from "react";
-import { FullScreen } from "@/utils/common/Fullscreen";
+import { FullScreen } from "@/utils/common/FullScreen";
 import { Button, Tooltip } from "@mui/material";
 import { t } from "i18next";
 import StopRecord from "../config/StopRecord";

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import ClipboardButton from "./ClipboardButton";
 
 const TranslateBlock: FC<{ src: string; dest: string }> = ({ src, dest }) => {

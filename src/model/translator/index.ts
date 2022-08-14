@@ -1,3 +1,3 @@
 export * from "./base";
 export * from "./translatorClient";
-export * from "./types"
+export * from "./types";

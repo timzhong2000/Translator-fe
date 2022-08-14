@@ -1,3 +1,3 @@
-export * from "./types"
-export * from "./connect"
-export * from "./merge"
+export * from "./types";
+export * from "./connect";
+// export * from "./merge"
