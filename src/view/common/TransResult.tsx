@@ -53,7 +53,7 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
       } catch (err) {
         err instanceof TtransError && console.log(err.key);
       }
-    }, 1000);
+    }, 700);
     return () => clearInterval(interval);
   }, [filterConfig, cutArea]);
 
