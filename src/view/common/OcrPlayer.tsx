@@ -10,7 +10,7 @@ import { useStreamModel } from "@/context/hook";
 import { StreamModelEvent } from "@/model";
 import { TtransError } from "@/utils/error";
 import { Button, Tooltip, Box } from "@mui/material";
-import { FullScreen } from "@/utils/common/fullscreen";
+import { FullScreen } from "@/utils/common/FullScreen";
 
 const defaultOpacity = 0.3;
 
