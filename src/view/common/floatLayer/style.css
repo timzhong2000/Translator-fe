@@ -1,0 +1,120 @@
+.layer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  backdrop-filter: blur(3px);
+}
+
+
+.layer .hub {
+  position: absolute;
+}
+
+.layer .toolbar {
+  height: 22px;
+  cursor: move;
+  background: #1976d2;
+  user-select: none;
+  color: white;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.toolbar .toolbar-item {
+  width: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+.tiny {
+  display: none;
+}
+
+.layer:hover .tiny {
+  display: block;
+}
+
+.layer .component-container {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 以下resizer样式 */
+.layer .point {
+  position: absolute;
+}
+
+.layer .point::after {
+  content: " ";
+  width: 7px;
+  height: 7px;
+  background-color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* transition: width 33ms, height 33ms, background-color 33ms; */
+  pointer-events: all;
+}
+
+.layer .point::before {
+  content: " ";
+  width: 9px;
+  height: 9px;
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background-color: #1976d2;
+  pointer-events: all;
+}
+
+.layer .left {
+  cursor: ew-resize;
+  left: 0;
+  top: 50%;
+}
+
+.layer .left-top {
+  cursor: nwse-resize;
+  left: 0;
+  top: 0;
+}
+
+.layer .top {
+  cursor: ns-resize;
+  left: 50%;
+  top: 0;
+}
+
+.layer .right-top {
+  cursor: nesw-resize;
+  left: 100%;
+  top: 0;
+}
+
+.layer .right {
+  cursor: ew-resize;
+  right: 0;
+  top: 50%;
+}
+
+.layer .right-bottom {
+  cursor: nwse-resize;
+  right: 0;
+  bottom: 0;
+}
+
+.layer .bottom {
+  cursor: ns-resize;
+  left: 50%;
+  bottom: 0;
+}
+
+.layer .left-bottom {
+  cursor: nesw-resize;
+  left: 0;
+  bottom: 0;
+}

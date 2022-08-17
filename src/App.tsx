@@ -17,6 +17,7 @@ import {
   PreProcessorModelProvider,
 } from "./context";
 import { OcrTest } from "./view/pages/OcrTest";
+import { Test } from "./view/pages/FlowLayerTest";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                   <Route path="ocrtest" element={<OcrTest />} />
                   <Route path="vscreen" element={<VirtualScreenPage />} />
                   <Route path="textractor" element={<TextractorPage />} />
+                  <Route path="testlayer" element={<Test />} />
                 </Routes>
               </PreProcessorModelProvider>
             </StreamModelContextProvider>
