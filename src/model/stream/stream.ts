@@ -36,8 +36,8 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
     setTimeout(() => {
       const actualVideoSetting = newStream.getVideoTracks()[0].getSettings();
       this.setResolution({
-        x: actualVideoSetting.width ?? this.resolution.x,
-        y: actualVideoSetting.height ?? this.resolution.y,
+        x: actualVideoSetting.width ?? this.fitResolution.x,
+        y: actualVideoSetting.height ?? this.fitResolution.y,
       });
     }, 500); // 500ms是一个相对比较安全的延迟
     this.startStreamWatchDog();
@@ -73,24 +73,32 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
   }
 
   /// resolution
+  // 视频原始分辨率
   private _resolution: Resolution = { x: 1, y: 1 };
-  get resolution() {
-    return this._resolution;
+  // 按照最大缩放比例显示，用于全屏定位
+  get ratio() {
+    return Math.max(
+      this._resolution.x / screen.width,
+      this._resolution.y / screen.height
+    );
   }
-  setResolution(resolution: Resolution) {
-    resolution = this.fitRatio(resolution);
-    this._resolution = resolution;
-    this.videoRef.style.width = `${resolution.x}px`;
-    this.videoRef.style.height = `${resolution.y}px`;
-    this.eventBus.next(StreamModelEvent.ON_RESOLUTION_CHANGED);
-  }
-  fitRatio(resolution: Resolution) {
+  // 适应窗口横向宽度的分辨率
+  get fitResolution() {
     return {
-      x: resolution.x / window.devicePixelRatio,
-      y: resolution.y / window.devicePixelRatio,
+      x: this._resolution.x / this.ratio,
+      y: this._resolution.y / this.ratio,
     };
   }
 
+  /**
+   * @param resolution 视频流原始分辨率
+   */
+  setResolution(resolution: Resolution) {
+    this._resolution = resolution; // 视频原始分辨率
+    this.videoRef.style.width = `${this.fitResolution.x}px`;
+    this.videoRef.style.height = `${this.fitResolution.y}px`;
+    this.eventBus.next(StreamModelEvent.ON_RESOLUTION_CHANGED);
+  }
   /// root
   private _root?: HTMLDivElement;
   get root() {
@@ -136,21 +144,21 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
   capture(cutArea: CutArea) {
     const endTimer = logger.timing(LogType.CAPTURE_VIDEO_FRAME);
     const areaConfig = cutAreaParser(cutArea);
-    this.offscreenCanvas.width = areaConfig.width * window.devicePixelRatio;
-    this.offscreenCanvas.height = areaConfig.height * window.devicePixelRatio;
+    this.offscreenCanvas.width = areaConfig.width * this.ratio;
+    this.offscreenCanvas.height = areaConfig.height * this.ratio;
     const ctx = this.offscreenCanvas.getContext(
       "2d"
     ) as CanvasRenderingContext2D;
     ctx.drawImage(
       this.videoRef,
-      areaConfig.startX * window.devicePixelRatio,
-      areaConfig.startY * window.devicePixelRatio,
-      areaConfig.width * window.devicePixelRatio,
-      areaConfig.height * window.devicePixelRatio,
+      areaConfig.startX * this.ratio,
+      areaConfig.startY * this.ratio,
+      areaConfig.width * this.ratio,
+      areaConfig.height * this.ratio,
       0,
       0,
-      areaConfig.width * window.devicePixelRatio,
-      areaConfig.height * window.devicePixelRatio
+      areaConfig.width * this.ratio,
+      areaConfig.height * this.ratio
     );
     endTimer();
     return this.offscreenCanvas;
