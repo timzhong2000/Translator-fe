@@ -44,7 +44,10 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
     e.stopPropagation();
   };
   try {
-    const { resolution } = streamModel; // 调用stream getter检查流状态，如果异常会抛出对应错误
+    const { fitResolution:{
+      x: width,
+      y: height
+    } } = streamModel; // 调用stream getter检查流状态，如果异常会抛出对应错误
     const onResizeStart = (e: React.TouchEvent | React.MouseEvent) => {
       if (isResizing === true) return;
       if (e.nativeEvent.target === cutAreaEl.current) return;
@@ -130,8 +133,8 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
           className="ocr-player"
           style={{
             position: "relative",
-            width: resolution.x,
-            height: resolution.y,
+            width,
+            height,
             cursor: "crosshair",
           }}
           onMouseMove={isResizing ? onResize : undefined}
