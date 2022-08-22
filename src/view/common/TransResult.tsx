@@ -13,6 +13,7 @@ import {
 import {
   ConnectedComponentType,
   OcrModelEvent,
+  OcrStage,
   TranslateResult,
   TranslatorEvent,
 } from "@/model";
@@ -39,6 +40,11 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      if (
+        ocrModel.ocrStage !== OcrStage.IDLE &&
+        ocrModel.ocrStage !== OcrStage.READY || !ocrModel.enabled
+      )
+        return;
       try {
         const pic = await preProcessorModel.process(
           streamModel.capture(cutArea),
@@ -47,13 +53,13 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
         const result = await ocrModel.recognize(pic);
         const src = ocrModel.toString(result);
         if (src.length > 0) {
-          setSrc(src);
+          setSrc(src+result[0].confidence);
           setResult(await translatorModel.translate(src));
         }
       } catch (err) {
         err instanceof TtransError && console.log(err.key);
       }
-    }, 700);
+    }, 500);
     return () => clearInterval(interval);
   }, [filterConfig, cutArea]);
 
@@ -86,6 +92,14 @@ const _TransResult: ConnectedComponentType<typeof connector> = ({
         width: "1000px",
         backdropFilter: "blur(6px) brightness(110%)",
         zIndex: 1,
+      }}
+      onDragStart={() => {
+        translatorModel.setEnabled(false);
+        ocrModel.setEnabled(false);
+      }}
+      onDragEnd={() => {
+        translatorModel.setEnabled(true);
+        ocrModel.setEnabled(true);
       }}
     >
       <TranslateBlock src={src} dest={dest}></TranslateBlock>
