@@ -13,6 +13,9 @@ export default defineConfig({
       brotliSize: true,
     }),
   ],
+  server:{
+    host: "0.0.0.0"
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
