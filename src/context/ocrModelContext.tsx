@@ -25,6 +25,7 @@ const _OcrModelContextProvider: ConnectedComponentType<
     );
     return () => ocr.destroy();
   }, [ocrConfig]);
+
   return (
     <ocrModelContext.Provider value={ocr}>{children}</ocrModelContext.Provider>
   );

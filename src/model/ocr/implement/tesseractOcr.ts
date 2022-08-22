@@ -14,7 +14,7 @@ const defaultWorkerConfig: Partial<WorkerOptions> = {
   langPath: "/vendor/tesseract/tessdata_fast",
   workerPath: "/vendor/tesseract/worker.min.js",
   errorHandler: (err) => console.error(err),
-  logger: (ev) => console.log(ev),
+  // logger: (ev) => console.log(ev),
   gzip: false,
   cacheMethod: "none",
 };
@@ -45,30 +45,42 @@ export type TesseractStatus =
 
 class _TesseractOcr extends OcrBase {
   private worker?: Tesseract.Worker;
+  restartInterval: NodeJS.Timer;
 
-  constructor(protected config: TesseractOcrConfig, init: Promise<any>) {
+  constructor(private config: TesseractOcrConfig, init: Promise<any>) {
     super(init);
     init.then((worker) => (this.worker = worker));
     (window as any).tess = this;
+    this.restartInterval = setInterval(()=>this.restart(), 1000 * 60);
   }
 
   static async create(config: TesseractOcrConfig) {
     return new _TesseractOcr(
       config,
-      (async () => {
-        const worker = createWorker({
-          ...defaultWorkerConfig,
-          ...config.workerConfig,
-        });
-        await worker.load();
-        await worker.loadLanguage(config.language);
-        await worker.initialize(config.language);
-        return worker;
-      })()
+      _TesseractOcr.createWorker(config)
     );
   }
 
+  static async createWorker(config: TesseractOcrConfig){
+    const worker = createWorker({
+      ...defaultWorkerConfig,
+      ...config.workerConfig,
+    });
+    await worker.load();
+    await worker.loadLanguage(config.language);
+    await worker.initialize(config.language);
+    return worker;
+  }
+
+  public async restart(){
+    this.setOcrStage(OcrStage.BUSY);
+    this.worker?.terminate();
+    this.worker = await _TesseractOcr.createWorker(this.config)
+    this.setOcrStage(OcrStage.IDLE);
+  }
+
   public destroy() {
+    clearInterval(this.restartInterval);
     this.worker?.terminate();
   }
 
@@ -76,14 +88,18 @@ class _TesseractOcr extends OcrBase {
     if (!this.worker) throw new UninitializedError();
     this.setOcrStage(OcrStage.BUSY);
     try {
+      const file = new File([pic], "pic.png");
+      const res = await this.worker.recognize(file);
+      console.log(res.data.confidence);
       const {
-        data: { text: text },
-      } = await this.worker.recognize(await blobToDataURL(pic));
+        jobId,
+        data: { text, confidence },
+      } = res;
       return [
         {
           area: Array(4).fill({ x: 0, y: 0 }),
-          text: _TesseractOcr.removeStopWords(text),
-          confidence: 1,
+          text: confidence > 75 ? _TesseractOcr.removeStopWords(text): "",
+          confidence: confidence,
         },
       ];
     } catch (err) {
