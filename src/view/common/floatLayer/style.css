@@ -6,6 +6,11 @@
   backdrop-filter: blur(3px);
 }
 
+.layer .resizer {
+  position: absolute;
+  cursor: move;
+  border: #1976d2 dashed 1px;
+}
 
 .layer .hub {
   position: absolute;
@@ -13,7 +18,6 @@
 
 .layer .toolbar {
   height: 22px;
-  cursor: move;
   background: #1976d2;
   user-select: none;
   color: white;

@@ -1,7 +1,6 @@
 import { Component } from "../../../model/connector";
 
-export interface FloatLayerContainerProps extends Style {
-}
+export interface FloatLayerContainerProps extends Style {}
 
 // 基于左上角定位, 单位为px
 export interface Style {
@@ -24,3 +23,7 @@ export interface FloatLayerMeta {
   dragable: boolean;
   Element: Component<{}>;
 }
+
+export type MapType = {
+  [key: string]: FloatLayerContainerProps & { isActive: boolean };
+};
