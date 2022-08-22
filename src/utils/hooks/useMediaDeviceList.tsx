@@ -14,15 +14,27 @@ const getDevices = async () => {
   };
 };
 
-const fromDeviceChange = fromEvent(navigator.mediaDevices, "devicechange");
+const fromDeviceChange = fromEvent(
+  window.navigator.mediaDevices,
+  "devicechange"
+);
 
 const useMediaDeviceList = () => {
-  const { result: devices, reset } = useAsync(getDevices, []);
+  const { result: devices, reset, loading } = useAsync(getDevices, []);
   useEffect(() => {
     const subscription = fromDeviceChange.subscribe(reset);
     return () => subscription.unsubscribe();
   }, []);
-  return devices ?? { videoDevices: [], audioDevices: [] };
+  return {
+    videoDevices: devices?.videoDevices ?? [],
+    audioDevices: devices?.audioDevices ?? [],
+    loading,
+    forceUpdate: reset,
+  };
+};
+
+export const getDisplayLabel = (dev: MediaDeviceInfo) => {
+  return `${dev.label || "default"}(${dev.deviceId.slice(0, 5)})`;
 };
 
 export default useMediaDeviceList;

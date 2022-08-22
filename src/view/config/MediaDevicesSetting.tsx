@@ -10,7 +10,9 @@ import { Fragment } from "react";
 
 import { useTranslation } from "react-i18next";
 import { storeContext } from "@/context/store";
-import useMediaDeviceList from "@/utils/hooks/useMediaDeviceList";
+import useMediaDeviceList, {
+  getDisplayLabel,
+} from "@/utils/hooks/useMediaDeviceList";
 import { ConnectedComponentType, createConnector } from "@/context/connector";
 import { StreamConfig, StreamModelEvent, StreamStatus } from "@/model";
 import { useStreamModel } from "@/context/hook";
@@ -41,14 +43,6 @@ const connector = createConnector(
     };
   }
 );
-
-function getIdByLabel(list: MediaDeviceInfo[], label?: string) {
-  return list.find((dev) => dev.label === label)?.deviceId;
-}
-
-function getLabelById(list: MediaDeviceInfo[], id?: string) {
-  return list.find((dev) => dev.deviceId === id)?.label ?? list[0]?.label ?? "";
-}
 
 const buttonTitle: { [key in StreamStatus]: string } = {
   [StreamStatus.ACTIVE]: "setting.media.stopRecord",
@@ -86,9 +80,12 @@ const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
     StreamModelEvent.ON_LOADING_CHANGED,
   ]);
   const { t } = useTranslation();
-  const { videoDevices, audioDevices } = useMediaDeviceList();
-  const selectedVideoDeviceLabel = getLabelById(videoDevices, videoDeviceId);
-  const selectedAudioDeviceLabel = getLabelById(audioDevices, audioDeviceId);
+  const {
+    videoDevices,
+    audioDevices,
+    loading: isdeviceListLoading,
+    forceUpdate: forceUpdateDeviceList,
+  } = useMediaDeviceList();
   const status = streamModel.getStatus();
   const isFormEditable = editable(status);
   const currentSourceLabel = `${t("setting.media.currentSource", {
@@ -102,6 +99,27 @@ const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
     else streamModel.setStreamAsync(fromMediaDevice(streamConfig));
   };
 
+  if (isdeviceListLoading) return <div>正在加载设备列表</div>;
+
+  if (videoDevices.length === 0 && audioDevices.length === 0) {
+    return (
+      <div>
+        没有权限读取视频和音频设备, 请先
+        <button
+          onClick={() => {
+            navigator.mediaDevices
+              .getUserMedia({ video: true, audio: true })
+              .then((val) => {
+                val.getTracks().forEach((track) => track.stop());
+                forceUpdateDeviceList();
+              });
+          }}
+        >
+          授权
+        </button>
+      </div>
+    );
+  }
   return (
     <div>
       <Grid container spacing={3} my={3}>
@@ -138,15 +156,13 @@ const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
                 label={t("setting.media.videoDevice") as string}
                 disabled={!isFormEditable}
                 required
-                value={selectedVideoDeviceLabel}
+                value={videoDeviceId}
                 sx={{ width: "100%" }}
-                onChange={(e) =>
-                  setVideoDeviceId(getIdByLabel(videoDevices, e.target.value))
-                }
+                onChange={(e) => setVideoDeviceId(e.target.value)}
               >
                 {videoDevices.map((dev) => (
-                  <MenuItem key={dev.label} value={dev.label}>
-                    {dev.label}
+                  <MenuItem key={dev.deviceId} value={dev.deviceId}>
+                    {getDisplayLabel(dev)}
                   </MenuItem>
                 ))}
               </TextField>
@@ -158,15 +174,13 @@ const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
                 label={t("setting.media.audioDevice") as string}
                 disabled={!isFormEditable}
                 required
-                value={selectedAudioDeviceLabel}
+                value={audioDeviceId}
                 sx={{ width: "100%" }}
-                onChange={(e) =>
-                  setAudioDeviceId(getIdByLabel(audioDevices, e.target.value))
-                }
+                onChange={(e) => setAudioDeviceId(e.target.value)}
               >
                 {audioDevices.map((dev) => (
-                  <MenuItem key={dev.label} value={dev.label}>
-                    {dev.label}
+                  <MenuItem key={dev.deviceId} value={dev.deviceId}>
+                    {getDisplayLabel(dev)}
                   </MenuItem>
                 ))}
               </TextField>
