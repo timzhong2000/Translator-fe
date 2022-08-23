@@ -20,16 +20,16 @@ const fromDeviceChange = fromEvent(
 );
 
 const useMediaDeviceList = () => {
-  const { result: devices, reset, loading } = useAsync(getDevices, []);
+  const { result: devices, execute, loading } = useAsync(getDevices, []);
   useEffect(() => {
-    const subscription = fromDeviceChange.subscribe(reset);
+    const subscription = fromDeviceChange.subscribe(() => execute());
     return () => subscription.unsubscribe();
   }, []);
   return {
     videoDevices: devices?.videoDevices ?? [],
     audioDevices: devices?.audioDevices ?? [],
     loading,
-    forceUpdate: reset,
+    forceUpdate: () => execute(),
   };
 };
 
