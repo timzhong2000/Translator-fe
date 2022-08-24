@@ -19,7 +19,7 @@ export class _PaddleOcr extends OcrBase {
   // eslint-disable-next-line
   public destroy() {}
 
-  protected async _recognize(pic: Blob | File): Promise<OcrResult[]> {
+  protected async _recognize(pic: Blob | File): Promise<OcrResult> {
     const form = new FormData();
     form.append("pic", pic);
     const result = (

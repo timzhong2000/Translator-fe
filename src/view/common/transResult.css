@@ -1,0 +1,17 @@
+.text-border {
+  text-shadow: -2px -2px 3px white, -2px 2px 3px white, 2px -2px 3px white,
+    2px 2px 3px white;
+}
+
+.ocr-container:hover .text {
+  color: #1976d2;
+}
+
+.ocr-container .confidence {
+  display: none;
+}
+
+.ocr-container:hover .confidence {
+  display: inline;
+  color: #1976d2;
+}

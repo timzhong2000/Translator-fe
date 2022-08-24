@@ -3,7 +3,9 @@ export interface Point {
   y: number;
 }
 
-export interface OcrResult {
+export type OcrResult = OcrResultItem[];
+
+export interface OcrResultItem {
   area: Point[]; // 长度为4
   text: string;
   confidence: number; // 0-1

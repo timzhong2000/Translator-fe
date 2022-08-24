@@ -1,9 +1,8 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import DragableElement from "@/view/common/DragableElement";
 import { useTranslation } from "react-i18next";
-import TranslateBlock from "./TranslateBlock";
 import {
   useOcrModel,
   usePreProcessorModel,
@@ -13,6 +12,7 @@ import {
 import {
   ConnectedComponentType,
   OcrModelEvent,
+  OcrResult,
   OcrStage,
   TranslateResult,
   TranslatorEvent,
@@ -22,6 +22,8 @@ import { TtransError } from "@/utils/error";
 import { storeContext } from "@/context";
 import { createConnector } from "@/context/connector";
 import { CutArea, FilterConfig } from "@/types/globalConfig";
+import ClipboardButton from "./ClipboardButton";
+import "./transResult.css";
 
 const connector = createConnector(
   storeContext,
@@ -37,12 +39,14 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
 
   const [src, setSrc] = useState("");
   const [result, setResult] = useState<TranslateResult>();
+  const [ocrResult, setOcrResult] = useState<OcrResult>([]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
       if (
-        ocrModel.ocrStage !== OcrStage.IDLE &&
-        ocrModel.ocrStage !== OcrStage.READY || !ocrModel.enabled
+        (ocrModel.ocrStage !== OcrStage.IDLE &&
+          ocrModel.ocrStage !== OcrStage.READY) ||
+        !ocrModel.enabled
       )
         return;
       try {
@@ -50,10 +54,11 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
           streamModel.capture(cutArea),
           createOpencvFilter(filterConfig)
         );
-        const result = await ocrModel.recognize(pic);
-        const src = ocrModel.toString(result);
+        const ocrResult = await ocrModel.recognize(pic);
+        setOcrResult(ocrResult);
+        const src = ocrModel.toString(ocrResult);
         if (src.length > 0) {
-          setSrc(src+result[0].confidence);
+          setSrc(src);
           setResult(await translatorModel.translate(src));
         }
       } catch (err) {
@@ -66,7 +71,7 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
   const dest = translatorModel.enabled
     ? result?.dest ?? "正在加载..."
     : "翻译已暂停";
-  return { src, dest };
+  return { src, dest, ocrResult };
 };
 
 const _TransResult: ConnectedComponentType<typeof connector> = ({
@@ -84,7 +89,7 @@ const _TransResult: ConnectedComponentType<typeof connector> = ({
   ]);
 
   const { t } = useTranslation();
-  const { src, dest } = useOcrTranslate(cutArea, filterConfig);
+  const { src, dest, ocrResult } = useOcrTranslate(cutArea, filterConfig);
   return (
     <DragableElement
       style={{
@@ -102,7 +107,37 @@ const _TransResult: ConnectedComponentType<typeof connector> = ({
         ocrModel.setEnabled(true);
       }}
     >
-      <TranslateBlock src={src} dest={dest}></TranslateBlock>
+      <div>
+        <Box fontSize={32} fontWeight={600} py={0.5} textAlign="center">
+          {ocrResult.map((part) => (
+            <span className="text-border ocr-container">
+              <span
+                className="text"
+                style={{
+                  textDecoration:
+                    part.confidence < 85 ? "underline wavy red" : "",
+                }}
+              >
+                {part.text}
+              </span>
+              <span className="confidence">
+                ({part.confidence.toFixed(0)}%)
+              </span>
+            </span>
+          ))}
+          {src ? <ClipboardButton text={src} /> : null}
+        </Box>
+        <Box
+          fontSize={32}
+          fontWeight={600}
+          py={0.5}
+          textAlign="center"
+          className="text-border"
+        >
+          {dest ?? ""}
+          {dest ? <ClipboardButton text={dest} /> : null}
+        </Box>
+      </div>
       {/* {error && <Button onClick={() => set()}>重试翻译</Button>} */}
       <Button
         onClick={() => translatorModel.setEnabled(!translatorModel.enabled)}

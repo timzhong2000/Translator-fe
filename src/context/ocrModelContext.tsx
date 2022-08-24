@@ -21,7 +21,10 @@ const _OcrModelContextProvider: ConnectedComponentType<
   useEffect(() => {
     // createPaddleOcr(config).then((paddle) => setOcr(paddle));
     createTesseractOcr({ workerConfig: {}, language: "jpn" }).then(
-      (tesseract) => setOcr(tesseract)
+      (tesseract) => {
+        setOcr(tesseract);
+        // (window as any).ocr = tesseract;
+      }
     );
     return () => ocr.destroy();
   }, [ocrConfig]);

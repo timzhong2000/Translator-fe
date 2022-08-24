@@ -25,7 +25,7 @@ export abstract class OcrBase extends ModelBase<OcrModelEvent> {
   }
 
   // 抽象方法
-  protected abstract _recognize(pic: Blob | File): Promise<OcrResult[]>;
+  protected abstract _recognize(pic: Blob | File): Promise<OcrResult>;
   public abstract destroy(): void;
 
   // 组件生命周期
@@ -40,7 +40,7 @@ export abstract class OcrBase extends ModelBase<OcrModelEvent> {
   }
 
   // 组件外部方法
-  async recognize(pic: Blob | File): Promise<OcrResult[]> {
+  async recognize(pic: Blob | File): Promise<OcrResult> {
     if (this.ocrStage === OcrStage.INIT) throw new UninitializedError();
     if (!this.enabled) throw new DisabledError();
     if (this.ocrStage === OcrStage.READY || this.ocrStage === OcrStage.IDLE) {
@@ -49,7 +49,7 @@ export abstract class OcrBase extends ModelBase<OcrModelEvent> {
     throw new StageError(this.ocrStage);
   }
 
-  toString(results: OcrResult[]): string {
+  toString(results: OcrResult): string {
     return results.map((res) => res.text).join("");
   }
 

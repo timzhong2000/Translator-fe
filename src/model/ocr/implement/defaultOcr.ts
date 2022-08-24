@@ -15,7 +15,7 @@ export class DefaultOcr extends OcrBase {
   public destroy(): void {}
 
   // eslint-disable-next-line
-  protected async _recognize(_: Blob): Promise<OcrResult[]> {
+  protected async _recognize(_: Blob): Promise<OcrResult> {
     throw new UninitializedError();
   }
 }
