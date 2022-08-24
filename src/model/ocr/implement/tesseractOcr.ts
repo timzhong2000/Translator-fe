@@ -1,4 +1,3 @@
-import { reject } from "lodash-es";
 import { createWorker, OEM, PSM, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
 import { OcrBase } from "../base";
@@ -18,20 +17,6 @@ const defaultWorkerConfig: Partial<WorkerOptions> = {
   gzip: false,
   cacheMethod: "none",
 };
-
-// tesseract输入blob有问题
-// wip: 解决tesseract的blob输入问题
-function blobToDataURL(blob: Blob) {
-  return new Promise<string>((resolve) => {
-    const a = new FileReader();
-    a.onload = (e) => {
-      e.target?.result
-        ? resolve(e.target.result as string)
-        : reject("raed file error");
-    };
-    a.readAsDataURL(blob);
-  });
-}
 
 export type TesseractStatus =
   | "loading tesseract core"
@@ -100,12 +85,11 @@ class _TesseractOcr extends OcrBase {
       const res = await this.worker.recognize(file);
       // console.log(res.data);
       const {
-        jobId,
-        data: { text, confidence },
+        data: { symbols, confidence },
       } = res;
       console.timeEnd("test");
       if (confidence < 70) return [];
-      return res.data.symbols.map((symbol) => ({
+      return symbols.map((symbol) => ({
         area: [
           { x: symbol.bbox.x0, y: symbol.bbox.y0 },
           { x: symbol.bbox.x1, y: symbol.bbox.y0 },

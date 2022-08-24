@@ -109,8 +109,8 @@ const _TransResult: ConnectedComponentType<typeof connector> = ({
     >
       <div>
         <Box fontSize={32} fontWeight={600} py={0.5} textAlign="center">
-          {ocrResult.map((part) => (
-            <span className="text-border ocr-container">
+          {ocrResult.map((part, index) => (
+            <span className="text-border ocr-container" key={index}>
               <span
                 className="text"
                 style={{
