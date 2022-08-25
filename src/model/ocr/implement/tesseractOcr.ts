@@ -10,7 +10,7 @@ export interface TesseractOcrConfig {
 
 const defaultWorkerConfig: Partial<WorkerOptions> = {
   corePath: "/vendor/tesseract/tesseract-core.wasm.js",
-  langPath: "/vendor/tesseract/tessdata_fast",
+  langPath: "/vendor/tesseract/tessdata",
   workerPath: "/vendor/tesseract/worker.min.js",
   errorHandler: (err) => console.error(err),
   // logger: (ev) => console.log(ev),

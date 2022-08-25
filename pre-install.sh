@@ -3,6 +3,10 @@ Tesseract_JS_Version=2.1.5
 Tesseract_WASM_Version=2.2.0
 OpenCV_Version=4.5.5
 
+if [ ! -d "public" ]; then 
+mkdir ./public
+fi
+
 if [ ! -d "public/vendor" ]; then 
 mkdir public/vendor
 fi
@@ -13,23 +17,31 @@ if [ ! -d "tesseract" ]; then
 mkdir tesseract
 fi
 
-if [ ! -d "tesseract/tessdata_fast" ]; then 
+if [ ! -d "tesseract/tessdata" ]; then 
 echo "\33[32mDownloading tessdata \33[0m"
-mkdir tesseract/tessdata_fast
+mkdir tesseract/tessdata
 git clone $Tessdata_GIT tesseract/tmp
-mv tesseract/tmp/*.traineddata tesseract/tessdata_fast
+mv tesseract/tmp/*.traineddata tesseract/tessdata
 rm -rf tesseract/tmp
 else 
 echo "\33[32mtessdata already exist. skip download. \33[0m"
 fi
 
 echo "\33[32mDownloading Tesseract.js \33[0m"
-rm tesseract/*
+if [ -f "tesseract/worker.min.js" ]; then
+echo "\33[32mtesseract worker alraedy exist. skip download. \33[0m"
+else
 wget -P tesseract/ https://unpkg.com/tesseract.js@v$Tesseract_JS_Version/dist/worker.min.js -q --show-progress 
+fi
+
+if [ -f "tesseract/tesseract-core.wasm.js" ]; then
+echo "\33[32mtesseract wasm core alraedy exist. skip download. \33[0m"
+else
 wget -P tesseract/ https://unpkg.com/tesseract.js-core@v$Tesseract_WASM_Version/tesseract-core.wasm.js -q --show-progress 
+fi
 
 if [ -f "tesseract/worker.min.js" ] && [ -f "tesseract/tesseract-core.wasm.js" ]; then
-echo "\33[32mDownload Tesseract.js success \33[0m"
+echo "\33[32mPrepare Tesseract.js success \33[0m"
 else
 echo "\33[31mError occur when downloading Tesseract.js \33[0m"
 fi
