@@ -2,20 +2,25 @@ import { createWorker, OEM, PSM, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
 import { OcrBase } from "../base";
 import { OcrLangType, OcrResult, OcrStage } from "../types";
+import { simd } from "wasm-feature-detect";
 
 export interface TesseractOcrConfig {
   workerConfig: Partial<WorkerOptions>;
   language: OcrLangType;
 }
 
-const defaultWorkerConfig: Partial<WorkerOptions> = {
-  corePath: "/vendor/tesseract/tesseract-core.wasm.js",
-  langPath: "/vendor/tesseract/tessdata",
-  workerPath: "/vendor/tesseract/worker.min.js",
-  errorHandler: (err) => console.error(err),
-  // logger: (ev) => console.log(ev),
-  gzip: false,
-  cacheMethod: "none",
+const createDefaultWorkerConfig = (enableSimd: boolean) => {
+  return {
+    corePath: `/vendor/tesseract/tesseract-core${
+      enableSimd ? "-simd" : ""
+    }.wasm.js`,
+    langPath: "/vendor/tesseract/tessdata",
+    workerPath: "/vendor/tesseract/worker.min.js",
+    errorHandler: (err) => console.error(err),
+    // logger: (ev) => console.log(ev),
+    gzip: false,
+    cacheMethod: "none",
+  } as Partial<WorkerOptions>;
 };
 
 export type TesseractStatus =
@@ -45,7 +50,7 @@ class _TesseractOcr extends OcrBase {
 
   static async createWorker(config: TesseractOcrConfig) {
     const worker = createWorker({
-      ...defaultWorkerConfig,
+      ...createDefaultWorkerConfig(await simd()),
       ...config.workerConfig,
     });
     await worker.load();
