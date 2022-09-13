@@ -1,5 +1,5 @@
 import { Grid, TextField, MenuItem } from "@mui/material";
-import { storeContext } from "@/context/store";
+import { storeContext } from "@/model/store/store";
 import ISO963_1 from "@/types/ISO963";
 import { useTranslation } from "react-i18next";
 import { ConnectedComponentType, createConnector } from "@/context/connector";

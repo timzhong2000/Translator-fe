@@ -9,7 +9,7 @@ import {
 import { Fragment } from "react";
 
 import { useTranslation } from "react-i18next";
-import { storeContext } from "@/context/store";
+import { storeContext } from "@/model/store/store";
 import useMediaDeviceList, {
   getDisplayLabel,
 } from "@/utils/hooks/useMediaDeviceList";

@@ -1,7 +1,7 @@
 import { OcrBackend, StreamConfig, TranslatorConfig, OcrConfig } from "@/model";
 import { throttle } from "lodash-es";
 import { createContext, useEffect, useState } from "react";
-import { CutArea, FilterConfig } from "../types/globalConfig";
+import { CutArea, FilterConfig } from "../../types/globalConfig";
 
 const defaultFilterConfig: FilterConfig = {
   binaryThreshold: 50,

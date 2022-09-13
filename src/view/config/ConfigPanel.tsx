@@ -7,7 +7,7 @@ import FilterSetting from "./FilterSetting";
 import MediaDevicesSetting from "./MediaDevicesSetting";
 import TranslateServerConfig from "./TranslateServerConfig";
 
-import { storeContext } from "@/context/store";
+import { storeContext } from "@/model/store/store";
 import { useTranslation } from "react-i18next";
 import OcrSetting from "./OcrSetting";
 import { ConnectedComponentType, createConnector } from "@/context/connector";

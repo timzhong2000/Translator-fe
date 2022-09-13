@@ -2,7 +2,7 @@ import { ConnectedComponentType, TranslatorClient } from "@/model";
 
 import { createConnector } from "@/context/connector";
 import { createContext, useEffect, useState } from "react";
-import { storeContext } from "./store";
+import { storeContext } from "../model/store/store";
 
 export const translatorModelContext = createContext({} as TranslatorClient);
 

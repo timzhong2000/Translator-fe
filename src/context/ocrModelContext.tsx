@@ -2,7 +2,7 @@ import { ConnectedComponentType, OcrBase, createTesseractOcr } from "@/model";
 import { DefaultOcr } from "@/model";
 import { createConnector } from "@/context/connector";
 import { useState, useEffect, createContext } from "react";
-import { storeContext } from "./store";
+import { storeContext } from "../model/store/store";
 
 export const ocrModelContext = createContext({} as OcrBase);
 

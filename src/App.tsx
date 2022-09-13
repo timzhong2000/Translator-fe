@@ -9,7 +9,7 @@ import OcrPage from "@/view/pages/OcrPage";
 import VirtualScreenPage from "@/view/pages/VirtualScreenPage";
 import TextractorPage from "./view/pages/Textractor";
 
-import { StoreContextProvider } from "@/context/store";
+import { StoreContextProvider } from "@/model/store/store";
 import {
   OcrModelContextProvider,
   TranslatorModelContextProvider,

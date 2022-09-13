@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import { storeContext } from "@/context/store";
+import { storeContext } from "@/model/store/store";
 import { areaToStyle } from "@/utils/common/cutAreaParser";
 import { useTranslation } from "react-i18next";
 import PreProcessCanvas from "./PreProcessCanvas";

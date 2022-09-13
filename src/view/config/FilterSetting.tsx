@@ -1,4 +1,4 @@
-import { storeContext } from "@/context/store";
+import { storeContext } from "@/model/store/store";
 import { useTranslation } from "react-i18next";
 import { ConnectedComponentType, createConnector } from "@/context/connector";
 import { FilterConfig } from "@/types/globalConfig";

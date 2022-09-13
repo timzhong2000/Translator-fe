@@ -1,7 +1,7 @@
 import { StreamModel, ConnectedComponentType } from "@/model";
 import { createConnector } from "@/context/connector";
 import { createContext, useState, useEffect } from "react";
-import { storeContext } from "./store";
+import { storeContext } from "../model/store/store";
 
 export const streamModelContext = createContext({} as StreamModel);
 
