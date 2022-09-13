@@ -8,13 +8,6 @@ export interface FilterConfig {
   zoom: number;
 }
 
-export interface StreamMeta {
-  video: {
-    height: number;
-    width: number;
-  };
-}
-
 export interface CutArea {
   enabled: boolean;
   x1: number;

@@ -1,25 +1,13 @@
-import { ConnectedComponentType, TranslatorClient } from "@/model";
+import { TranslatorClient } from "@/model";
+import { observer } from "mobx-react-lite";
 
-import { createConnector } from "@/context/connector";
-import { createContext, useEffect, useState } from "react";
-import { storeContext } from "../model/store/store";
-
+import { createContext, FC } from "react";
+import { core } from "../model/core";
 export const translatorModelContext = createContext({} as TranslatorClient);
 
-const translatorSettingConnector = createConnector(
-  storeContext,
-  ({ translatorConfig }) => ({
-    translatorConfig,
-  })
-);
-
-const _TranslatorModelContextProvider: ConnectedComponentType<
-  typeof translatorSettingConnector
-> = ({ translatorConfig, children }) => {
-  const [translatorModel] = useState(new TranslatorClient(translatorConfig));
-  useEffect(() => {
-    translatorModel.config = translatorConfig;
-  }, [translatorConfig]);
+const _TranslatorModelContextProvider: FC = ({ children }) => {
+  const translatorModel = new TranslatorClient(core.config.translatorConfig);
+  translatorModel.config = core.config.translatorConfig;
   return (
     <translatorModelContext.Provider value={translatorModel}>
       {children}
@@ -27,6 +15,4 @@ const _TranslatorModelContextProvider: ConnectedComponentType<
   );
 };
 
-export const TranslatorModelContextProvider = translatorSettingConnector(
-  _TranslatorModelContextProvider
-);
+export const TranslatorModelContextProvider = observer(_TranslatorModelContextProvider);

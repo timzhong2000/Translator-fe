@@ -1,37 +1,18 @@
 import { Grid, TextField, MenuItem } from "@mui/material";
-import { storeContext } from "@/model/store/store";
 import ISO963_1 from "@/types/ISO963";
 import { useTranslation } from "react-i18next";
-import { ConnectedComponentType, createConnector } from "@/context/connector";
-import { TranslatorConfig } from "@/model";
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
+import { FC } from "react";
 
-const connector = createConnector(
-  storeContext,
-  ({ translatorConfig, setTranslatorConfig }) => ({
-    translatorConfig,
-    setTranslatorConfig,
-  }),
-  ({ translatorConfig, setTranslatorConfig }) => {
-    const partialSet = (val: Partial<TranslatorConfig>) => {
-      setTranslatorConfig({
-        ...translatorConfig,
-        ...val,
-      });
-    };
-    const { provider, srcLang, destLang } = translatorConfig;
-    return {
-      provider,
-      srcLang,
-      destLang,
-      setSrcLang: (srcLang: ISO963_1) => partialSet({ srcLang }),
-      setDestLang: (destLang: ISO963_1) => partialSet({ destLang }),
-      setProvider: (provider: string) => partialSet({ provider }),
-    };
-  }
-);
-const TranslateConfig: ConnectedComponentType<typeof connector> = (props) => {
-  const { provider, srcLang, destLang, setSrcLang, setDestLang, setProvider } =
-    props;
+const TranslateConfig: FC = () => {
+  const {
+    translatorConfig: { provider, srcLang, destLang },
+    setSrcLang,
+    setDestLang,
+    setProvider,
+  } = core.config;
+
   const { t } = useTranslation();
 
   const langList: ISO963_1[] = ["zh_CN", "zh_TW", "ja", "en"];
@@ -99,4 +80,4 @@ const TranslateConfig: ConnectedComponentType<typeof connector> = (props) => {
   );
 };
 
-export default connector(TranslateConfig);
+export default observer(TranslateConfig);

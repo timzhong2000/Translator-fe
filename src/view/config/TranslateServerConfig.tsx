@@ -1,37 +1,17 @@
 import { Grid } from "@mui/material";
 
-import { storeContext } from "@/model/store/store";
 import { useTranslation } from "react-i18next";
 import LazyInput from "../common/LazyInput";
-import { ConnectedComponentType, createConnector } from "@/context/connector";
-import { TranslatorConfig } from "@/model";
+import { FC } from "react";
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
-const connector = createConnector(
-  storeContext,
-  ({ translatorConfig }) => ({
-    translatorConfig,
-  }),
-  ({ translatorConfig, setTranslatorConfig }) => {
-    const partialSet = (val: Partial<TranslatorConfig>) => {
-      setTranslatorConfig({
-        ...translatorConfig,
-        ...val,
-      });
-    };
-    return {
-      setUrl: (url: string) => partialSet({ url }),
-      setSecretKey: (secretKey: string) => partialSet({ secretKey }),
-    };
-  }
-);
-const TranslateServerConfig: ConnectedComponentType<typeof connector> = (
-  props
-) => {
+const TranslateServerConfig: FC = () => {
   const {
     translatorConfig: { url, secretKey },
-    setUrl,
+    setTrnaslatorBackendUrl,
     setSecretKey,
-  } = props;
+  } = core.config;
 
   const { t } = useTranslation();
 
@@ -48,7 +28,7 @@ const TranslateServerConfig: ConnectedComponentType<typeof connector> = (
                 ? t("setting.translator.pleaseFillTranslatorServerUrl")
                 : ""
             }
-            onSave={(url) => setUrl(url)}
+            onSave={(url) => setTrnaslatorBackendUrl(url)}
           />
         </Grid>
         <Grid item sm={12} md={6} xl={2}>
@@ -63,4 +43,4 @@ const TranslateServerConfig: ConnectedComponentType<typeof connector> = (
   );
 };
 
-export default connector(TranslateServerConfig);
+export default observer(TranslateServerConfig);

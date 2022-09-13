@@ -6,7 +6,7 @@ import { ModelBase } from "../base";
 import { StreamEmptyError, StreamNotReadyError } from "./errors";
 import {
   Resolution,
-  StreamConfig,
+  StreamSourceConfig,
   StreamModelEvent,
   StreamStatus,
 } from "./types";
@@ -117,7 +117,7 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
   }
 
   constructor(
-    public config: StreamConfig,
+    public config: StreamSourceConfig,
     root?: HTMLDivElement,
     initStream?: MediaStream
   ) {

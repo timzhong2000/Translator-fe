@@ -5,7 +5,7 @@ export enum StreamModelEvent {
   ON_STREAM_WATCHDOG_TRIGGER, // 视图无需监听, 这个事件触发前会发送一个ON_RESOLUTION_CHANGED
 }
 
-export interface StreamConfig extends Partial<MediaStreamConstraints> {
+export interface StreamSourceConfig extends Partial<MediaStreamConstraints> {
   enabled: boolean;
   fromScreen: boolean;
   video: MediaTrackConstraints;

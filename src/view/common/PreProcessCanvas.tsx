@@ -1,21 +1,12 @@
 import { FC, useEffect } from "react";
 import { usePreProcessorModel } from "@/context/hook";
 import { PreProcessorEvent } from "@/model";
-import { CutArea } from "@/types/globalConfig";
 import { cutAreaParser } from "@/utils/common/cutAreaParser";
-import { storeContext } from "@/context";
-import { createConnector } from "@/context/connector";
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
-const connector = createConnector(
-  storeContext,
-  ({ cutArea, filterConfig }) => ({ cutArea, filterConfig }),
-  () => ({})
-);
-
-const PreProcessCanvas: FC<{
-  cutArea: CutArea;
-}> = (props) => {
-  const { cutArea } = props;
+const PreProcessCanvas: FC = () => {
+  const { cutAreaConfig: cutArea } = core.config;
   const preProcessorModel = usePreProcessorModel([
     PreProcessorEvent.ON_SIZE_CHANGED,
   ]);
@@ -28,4 +19,4 @@ const PreProcessCanvas: FC<{
   return <div ref={(el) => el && preProcessorModel.setRoot(el)}></div>;
 };
 
-export default connector(PreProcessCanvas);
+export default observer(PreProcessCanvas);

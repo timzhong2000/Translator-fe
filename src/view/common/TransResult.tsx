@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import DragableElement from "@/view/common/DragableElement";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,6 @@ import {
   useTranslatorModel,
 } from "@/context/hook";
 import {
-  ConnectedComponentType,
   OcrModelEvent,
   OcrResult,
   OcrStage,
@@ -19,17 +18,11 @@ import {
 } from "@/model";
 import { createOpencvFilter } from "@/utils/preprocessor/opencvFilter";
 import { TtransError } from "@/utils/error";
-import { storeContext } from "@/context";
-import { createConnector } from "@/context/connector";
 import { CutArea, FilterConfig } from "@/types/globalConfig";
 import ClipboardButton from "./ClipboardButton";
 import "./transResult.css";
-
-const connector = createConnector(
-  storeContext,
-  ({ cutArea, filterConfig }) => ({ cutArea, filterConfig }),
-  () => ({})
-);
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
 const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
   const preProcessorModel = usePreProcessorModel();
@@ -74,10 +67,8 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
   return { src, dest, ocrResult };
 };
 
-const _TransResult: ConnectedComponentType<typeof connector> = ({
-  cutArea,
-  filterConfig,
-}) => {
+const _TransResult: FC = () => {
+  const { cutAreaConfig: cutArea, filterConfig } = core.config;
   const translatorModel = useTranslatorModel([
     TranslatorEvent.ON_SETTING_CHANGE,
     TranslatorEvent.ON_ENABLED,
@@ -162,4 +153,4 @@ const _TransResult: ConnectedComponentType<typeof connector> = ({
   );
 };
 
-export const TransResult = connector(_TransResult);
+export const TransResult = observer(_TransResult);

@@ -1,24 +1,14 @@
-import { StreamModel, ConnectedComponentType } from "@/model";
-import { createConnector } from "@/context/connector";
-import { createContext, useState, useEffect } from "react";
-import { storeContext } from "../model/store/store";
+import { StreamModel } from "@/model";
+import { createContext, FC } from "react";
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
 export const streamModelContext = createContext({} as StreamModel);
 
-const streamSettingConnector = createConnector(
-  storeContext,
-  ({ streamConfig }) => ({
-    streamConfig,
-  })
-);
-
-const _StreamModelContextProvider: ConnectedComponentType<
-  typeof streamSettingConnector
-> = ({ streamConfig, children }) => {
-  const [streamModel] = useState(new StreamModel(streamConfig));
-  useEffect(() => {
-    streamModel.config = streamConfig;
-  }, [streamConfig]);
+const _StreamModelContextProvider: FC = ({ children }) => {
+  const streamModel = new StreamModel(core.config.streamSourceConfig);
+  // re-config when core config change by mobx
+  streamModel.config = core.config.streamSourceConfig;
   return (
     <streamModelContext.Provider value={streamModel}>
       {children}
@@ -26,6 +16,4 @@ const _StreamModelContextProvider: ConnectedComponentType<
   );
 };
 
-export const StreamModelContextProvider = streamSettingConnector(
-  _StreamModelContextProvider
-);
+export const StreamModelContextProvider = observer(_StreamModelContextProvider);

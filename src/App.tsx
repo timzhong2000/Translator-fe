@@ -9,7 +9,6 @@ import OcrPage from "@/view/pages/OcrPage";
 import VirtualScreenPage from "@/view/pages/VirtualScreenPage";
 import TextractorPage from "./view/pages/Textractor";
 
-import { StoreContextProvider } from "@/model/store/store";
 import {
   OcrModelContextProvider,
   TranslatorModelContextProvider,
@@ -21,25 +20,23 @@ import { OcrTest } from "./view/pages/OcrTest";
 function App() {
   return (
     <Navbar>
-      <StoreContextProvider>
-        <OcrModelContextProvider>
-          <TranslatorModelContextProvider>
-            <StreamModelContextProvider>
-              <PreProcessorModelProvider>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="about" element={<About />} />
-                  <Route path="trans" element={<OcrPage />} />
-                  <Route path="setting" element={<ConfigPanel />} />
-                  <Route path="ocrtest" element={<OcrTest />} />
-                  <Route path="vscreen" element={<VirtualScreenPage />} />
-                  <Route path="textractor" element={<TextractorPage />} />
-                </Routes>
-              </PreProcessorModelProvider>
-            </StreamModelContextProvider>
-          </TranslatorModelContextProvider>
-        </OcrModelContextProvider>
-      </StoreContextProvider>
+      <OcrModelContextProvider>
+        <TranslatorModelContextProvider>
+          <StreamModelContextProvider>
+            <PreProcessorModelProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="trans" element={<OcrPage />} />
+                <Route path="setting" element={<ConfigPanel />} />
+                <Route path="ocrtest" element={<OcrTest />} />
+                <Route path="vscreen" element={<VirtualScreenPage />} />
+                <Route path="textractor" element={<TextractorPage />} />
+              </Routes>
+            </PreProcessorModelProvider>
+          </StreamModelContextProvider>
+        </TranslatorModelContextProvider>
+      </OcrModelContextProvider>
     </Navbar>
   );
 }

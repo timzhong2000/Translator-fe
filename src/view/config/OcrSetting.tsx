@@ -1,27 +1,16 @@
 import { Grid, TextField, MenuItem } from "@mui/material";
-import { storeContext } from "@/model/store/store";
 import { useTranslation } from "react-i18next";
-import { ConnectedComponentType, createConnector } from "@/context/connector";
-import { OcrConfig, OcrLangType } from "@/model";
+import { OcrLangType } from "@/model";
+import { FC } from "react";
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
-const connector = createConnector(
-  storeContext,
-  ({ ocrConfig }) => ({ ocrConfig }),
-  ({ ocrConfig, setOcrConfig }) => {
-    const partialSet = (val: Partial<OcrConfig>) => {
-      setOcrConfig({
-        ...ocrConfig,
-        ...val,
-      });
-    };
-    return {
-      setLang: (lang: OcrLangType) => partialSet({ lang }),
-    };
-  }
-);
+const OcrSetting: FC = () => {
+  const {
+    ocrConfig: { lang },
+    setOcrLang,
+  } = core.config;
 
-const OcrSetting: ConnectedComponentType<typeof connector> = (props) => {
-  const { ocrConfig, setLang } = props;
   const { t } = useTranslation();
   const langList: OcrLangType[] = ["chi_sim", "chi_tra", "eng", "jpn"];
 
@@ -33,9 +22,9 @@ const OcrSetting: ConnectedComponentType<typeof connector> = (props) => {
             select
             label={t("setting.ocr.lang")}
             required
-            value={ocrConfig.lang}
+            value={lang}
             sx={{ width: "100%" }}
-            onChange={(e) => void setLang(e.target.value as OcrLangType)}
+            onChange={(e) => void setOcrLang(e.target.value as OcrLangType)}
           >
             {langList.map((lang) => (
               <MenuItem key={lang} value={lang}>
@@ -49,4 +38,4 @@ const OcrSetting: ConnectedComponentType<typeof connector> = (props) => {
   );
 };
 
-export default connector(OcrSetting);
+export default observer(OcrSetting);

@@ -7,18 +7,12 @@ import FilterSetting from "./FilterSetting";
 import MediaDevicesSetting from "./MediaDevicesSetting";
 import TranslateServerConfig from "./TranslateServerConfig";
 
-import { storeContext } from "@/model/store/store";
+import { core } from "@/model/core";
 import { useTranslation } from "react-i18next";
 import OcrSetting from "./OcrSetting";
-import { ConnectedComponentType, createConnector } from "@/context/connector";
+import { observer } from "mobx-react-lite";
 
-const connector = createConnector(
-  storeContext,
-  ({ reset }) => ({ reset }),
-  () => ({})
-);
-
-const ConfigPanel: ConnectedComponentType<typeof connector> = ({ reset }) => {
+const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);
   const { t } = useTranslation();
 
@@ -56,10 +50,12 @@ const ConfigPanel: ConnectedComponentType<typeof connector> = ({ reset }) => {
         </Box>
       ) : null}
       <Box my={5} mx={1}>
-        <Button onClick={() => reset()}>{t("setting.reset")}</Button>
+        <Button onClick={() => core.config.reset()}>
+          {t("setting.reset")}
+        </Button>
       </Box>
     </div>
   );
 };
 
-export default connector(ConfigPanel);
+export default observer(ConfigPanel);

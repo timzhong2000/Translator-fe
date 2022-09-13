@@ -6,43 +6,18 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import { Fragment } from "react";
+import { FC, Fragment } from "react";
 
 import { useTranslation } from "react-i18next";
-import { storeContext } from "@/model/store/store";
 import useMediaDeviceList, {
   getDisplayLabel,
 } from "@/utils/hooks/useMediaDeviceList";
-import { ConnectedComponentType, createConnector } from "@/context/connector";
-import { StreamConfig, StreamModelEvent, StreamStatus } from "@/model";
+import { StreamModelEvent, StreamStatus } from "@/model";
 import { useStreamModel } from "@/context/hook";
 import { fromMediaDevice } from "@/utils/common/MediaStreamSubscriber";
 import { itemIn, itemNotIn } from "@/utils/common/enumTool";
-
-const connector = createConnector(
-  storeContext,
-  ({ streamConfig }) => ({
-    streamConfig,
-  }),
-  ({ streamConfig, setStreamConfig }) => {
-    const partialSet = (val: Partial<StreamConfig>) => {
-      setStreamConfig({
-        ...streamConfig,
-        ...val,
-      });
-    };
-    return {
-      streamConfig,
-      toggleFromScreen: () =>
-        partialSet({ fromScreen: !streamConfig.fromScreen }),
-      toggleAudioEnabled: () => partialSet({ audio: !streamConfig.audio }),
-      setAudioDeviceId: (audioDeviceId?: string) =>
-        partialSet({ audioDeviceId }),
-      setVideoDeviceId: (videoDeviceId?: string) =>
-        partialSet({ videoDeviceId }),
-    };
-  }
-);
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
 const buttonTitle: { [key in StreamStatus]: string } = {
   [StreamStatus.ACTIVE]: "setting.media.stopRecord",
@@ -64,17 +39,15 @@ const isStreamOpened = itemIn([StreamStatus.ACTIVE, StreamStatus.LOADING]);
 
 const isButtomEnabled = itemNotIn([StreamStatus.LOADING]);
 
-const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
-  props
-) => {
+const MediaDevicesSetting: FC = () => {
   const {
-    streamConfig,
+    streamSourceConfig: { videoDeviceId, audioDeviceId, fromScreen, audio },
     toggleFromScreen,
     setAudioDeviceId,
     toggleAudioEnabled,
     setVideoDeviceId,
-  } = props;
-  const { videoDeviceId, audioDeviceId, fromScreen, audio } = streamConfig;
+  } = core.config;
+
   const streamModel = useStreamModel([
     StreamModelEvent.ON_STREAM_CHANGED,
     StreamModelEvent.ON_LOADING_CHANGED,
@@ -96,7 +69,10 @@ const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
 
   const onclick = () => {
     if (isStreamOpened(status)) streamModel.reset();
-    else streamModel.setStreamAsync(fromMediaDevice(streamConfig));
+    else
+      streamModel.setStreamAsync(
+        fromMediaDevice(core.config.streamSourceConfig)
+      );
   };
 
   if (isdeviceListLoading) return <div>正在加载设备列表</div>;
@@ -198,4 +174,5 @@ const MediaDevicesSetting: ConnectedComponentType<typeof connector> = (
     </div>
   );
 };
-export default connector(MediaDevicesSetting);
+
+export default observer(MediaDevicesSetting);

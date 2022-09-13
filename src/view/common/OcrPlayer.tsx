@@ -1,28 +1,23 @@
-import React, { useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import { storeContext } from "@/model/store/store";
 import { areaToStyle } from "@/utils/common/cutAreaParser";
 import { useTranslation } from "react-i18next";
 import PreProcessCanvas from "./PreProcessCanvas";
 import { useIsDataChange } from "../../utils/hooks/useIsDataChange";
-import { ConnectedComponentType, createConnector } from "@/context/connector";
 import { useStreamModel } from "@/context/hook";
 import { StreamModelEvent } from "@/model";
 import { TtransError } from "@/utils/error";
 import { Button, Tooltip, Box } from "@mui/material";
 import { FullScreen } from "@/utils/common/FullScreen";
+import { observer } from "mobx-react-lite";
+import { core } from "@/model/core";
 
 const defaultOpacity = 0.3;
 
-const connector = createConnector(
-  storeContext,
-  ({ cutArea, filterConfig }) => ({ cutArea, filterConfig }),
-  ({ setCutArea }) => ({ setCutArea })
-);
-
-const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
+const OcrPlayer: FC = (props) => {
   const containerEl = useRef<HTMLDivElement>(null);
-  const { cutArea, filterConfig, setCutArea } = props;
+  const { cutAreaConfig, filterConfig, patchCutArea } = core.config;
+
   const streamModel = useStreamModel([
     StreamModelEvent.ON_STREAM_CHANGED,
     StreamModelEvent.ON_RESOLUTION_CHANGED,
@@ -69,8 +64,8 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
         x: clientX,
         y: clientY,
       };
-      setCutArea({
-        ...cutArea,
+
+      patchCutArea({
         x1: offsetX,
         y1: offsetY,
         x2: offsetX,
@@ -91,10 +86,9 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
           clientY = e.nativeEvent.touches[0].clientY;
         }
         requestAnimationFrame(() => {
-          setCutArea({
-            ...cutArea,
-            x2: cutArea.x1 + (clientX - startAbsolutePos.current.x),
-            y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
+          patchCutArea({
+            x2: cutAreaConfig.x1 + (clientX - startAbsolutePos.current.x),
+            y2: cutAreaConfig.y1 + (clientY - startAbsolutePos.current.y),
           });
         });
       }
@@ -112,10 +106,9 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
         clientY = e.nativeEvent.touches[0].clientY;
       }
       setIsResizing(false);
-      setCutArea({
-        ...cutArea,
-        x2: cutArea.x1 + (clientX - startAbsolutePos.current.x),
-        y2: cutArea.y1 + (clientY - startAbsolutePos.current.y),
+      patchCutArea({
+        x2: cutAreaConfig.x1 + (clientX - startAbsolutePos.current.x),
+        y2: cutAreaConfig.y1 + (clientY - startAbsolutePos.current.y),
       });
     };
 
@@ -144,7 +137,7 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
             className="cut-area"
             style={{
               position: "absolute",
-              ...areaToStyle(cutArea),
+              ...areaToStyle(cutAreaConfig),
               borderStyle: shouldShowBorder ? "solid" : "none",
               borderColor: "red",
               borderWidth: "2px",
@@ -179,4 +172,4 @@ const OcrPlayer: ConnectedComponentType<typeof connector> = (props) => {
   }
 };
 
-export default connector(OcrPlayer);
+export default observer(OcrPlayer);

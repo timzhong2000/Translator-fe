@@ -1,4 +1,4 @@
-import { StreamConfig } from "@/model";
+import { StreamSourceConfig } from "@/model";
 import { Subject } from "rxjs";
 import { SubscriberBase } from "./Subscriber";
 
@@ -25,7 +25,7 @@ export class MediaStreamSubscriber extends SubscriberBase<MediaStream> {
     super.destroy();
   }
 
-  static createSubscriber(config: StreamConfig) {
+  static createSubscriber(config: StreamSourceConfig) {
     if (!config.enabled) {
       return Promise.reject("mediastream disabled");
     }
@@ -130,7 +130,7 @@ const errorHandler = (err: Error) => {
   }
 };
 
-export const fromMediaDevice = (config: StreamConfig) => {
+export const fromMediaDevice = (config: StreamSourceConfig) => {
   const sub = new Subject<MediaStream | Error>();
   MediaStreamSubscriber.createSubscriber({
     ...config,
