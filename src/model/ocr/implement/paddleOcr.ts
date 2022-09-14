@@ -1,19 +1,16 @@
 import axios from "axios";
 import { OcrBase } from "../base";
-import { OcrResult, Point } from "../types";
+import { OcrEngine, OcrResult, PaddleOcrConfig, Point } from "../types";
 
-export interface PaddleOcrConfig {
-  url: string;
-  lang: string;
-}
+export class PaddleOcr extends OcrBase {
+  readonly type = OcrEngine.PaddleOcrBackend;
 
-export class _PaddleOcr extends OcrBase {
   constructor(protected config: PaddleOcrConfig) {
     super();
   }
 
   static async create(config: PaddleOcrConfig) {
-    return new _PaddleOcr(config);
+    return new PaddleOcr(config);
   }
 
   // eslint-disable-next-line
@@ -36,5 +33,4 @@ export class _PaddleOcr extends OcrBase {
   }
 }
 
-export type PaddleOcr = typeof _PaddleOcr;
-export const createPaddleOcr = _PaddleOcr.create;
+export const createPaddleOcr = PaddleOcr.create;

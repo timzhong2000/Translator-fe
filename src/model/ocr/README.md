@@ -1,8 +1,8 @@
 # Ocr Model
 
-## 公开方法
+## 公共方法
 
-```ts
+``` ts
 // 组件外部方法
 interface {
   /* 识别图片 */
@@ -13,13 +13,6 @@ interface {
 
   /* 返回当前步骤的状态的文案key */
   getStageString: () => string;
-}
-```
-
-## Event
-``` ts
-export enum OcrEvent {
-  ON_STAGE_CHANGE,   // 组件生命周期改变时触发
 }
 ```
 

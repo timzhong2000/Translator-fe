@@ -15,4 +15,6 @@ const _TranslatorModelContextProvider: FC = ({ children }) => {
   );
 };
 
-export const TranslatorModelContextProvider = observer(_TranslatorModelContextProvider);
+export const TranslatorModelContextProvider = observer(
+  _TranslatorModelContextProvider
+);

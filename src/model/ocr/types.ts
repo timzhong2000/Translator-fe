@@ -12,7 +12,7 @@ export interface OcrResultItem {
 }
 
 /**
- * modal生命周期
+ * model 生命周期
  */
 export enum OcrStage {
   INIT = "ocr.common.init", // 初始化中
@@ -22,20 +22,36 @@ export enum OcrStage {
   FATAL = "ocr.common.fatal", // 加载时失败
 }
 
-export enum OcrBackend {
+export enum OcrEngine {
+  DefaultOcr = "default_ocr",
   PaddleOcrBackend = "paddle_ocr_backend",
   TesseractFrontend = "tesseract_frontend",
 }
 
-export enum OcrModelEvent {
-  ON_STAGE_CHANGE,
-  ON_ENABLED,
-  ON_DISABLED,
+export type OcrLangType = "jpn" | "eng" | "chi_sim" | "chi_tra" | "japan";
+
+export type OcrConfig = PaddleOcrConfig | TesseractOcrConfig;
+
+export interface TesseractOcrConfig {
+  type: OcrEngine.TesseractFrontend;
+  workerConfig: Partial<WorkerOptions>;
+  lang: OcrLangType;
 }
 
-export type OcrLangType = "jpn" | "eng" | "chi_sim" | "chi_tra" | "japan";
-export interface OcrConfig {
-  url?: string;
-  type: OcrBackend;
-  lang: OcrLangType;
+export interface PaddleOcrConfig {
+  type: OcrEngine.PaddleOcrBackend;
+  url: string;
+  lang: string;
+}
+
+export function isPaddleOcrConfig(
+  config: OcrConfig
+): config is PaddleOcrConfig {
+  return config.type === OcrEngine.PaddleOcrBackend;
+}
+
+export function isTesseractOcrConfig(
+  config: OcrConfig
+): config is TesseractOcrConfig {
+  return config.type === OcrEngine.TesseractFrontend;
 }

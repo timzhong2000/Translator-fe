@@ -1,14 +1,13 @@
 import { UninitializedError } from "../errors";
 import { OcrBase } from "../base";
-import { OcrResult, OcrStage } from "../types";
+import { OcrEngine, OcrResult, OcrStage } from "../types";
 
 export class DefaultOcr extends OcrBase {
+  readonly type = OcrEngine.DefaultOcr;
+
   constructor() {
     super();
-  }
-
-  get ocrStage() {
-    return OcrStage.INIT;
+    this.setOcrStage(OcrStage.INIT);
   }
 
   // eslint-disable-next-line

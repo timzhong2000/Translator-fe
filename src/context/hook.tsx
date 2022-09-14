@@ -1,10 +1,10 @@
 import { TranslatorEvent } from "../model/translator";
-import { OcrModelEvent, PreProcessorEvent, StreamModelEvent } from "@/model";
-import { ocrModelContext } from "./ocrModelContext";
+import { PreProcessorEvent, StreamModelEvent } from "@/model";
 import { preProcessorModelContext } from "./preProcessorModel";
 import { streamModelContext } from "./streamModelContext";
 import { translatorModelContext } from "./translatorModel";
 import { useModel } from "@/model/connector/hooks";
+import { core } from "@/model/core";
 
 export function useTranslatorModel(
   listenEvents: TranslatorEvent[] | Set<TranslatorEvent> = []
@@ -12,10 +12,8 @@ export function useTranslatorModel(
   return useModel(translatorModelContext, (model) => model, listenEvents);
 }
 
-export function useOcrModel(
-  listenEvents: OcrModelEvent[] | Set<OcrModelEvent> = []
-) {
-  return useModel(ocrModelContext, (model) => model, listenEvents);
+export function useOcrModel() {
+  return core.ocr;
 }
 
 export function useStreamModel(

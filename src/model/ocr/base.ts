@@ -1,43 +1,41 @@
-import { ModelBase } from "@/model/base";
+import { action, makeObservable, observable } from "mobx";
 import { DisabledError, StageError, UninitializedError } from "./errors";
-import { OcrModelEvent, OcrResult, OcrStage } from "./types";
+import { OcrEngine, OcrResult, OcrStage } from "./types";
 
-export abstract class OcrBase extends ModelBase<OcrModelEvent> {
-  private _enabled = true;
-  get enabled() {
-    return this._enabled;
-  }
-  setEnabled(enabled: boolean) {
-    this._enabled = enabled;
-    this.eventBus.next(
-      enabled ? OcrModelEvent.ON_ENABLED : OcrModelEvent.ON_DISABLED
-    );
-  }
+export abstract class OcrBase {
+  abstract type: OcrEngine;
+
+  public enabled = true;
+  // 组件生命周期
+  public ocrStage: OcrStage = OcrStage.INIT;
 
   /**
    * @param init 加载函数，OcrBase等待init被resolve后进入Ready状态
    */
   constructor(init: Promise<any> = Promise.resolve()) {
-    super();
+    makeObservable(this, {
+      enabled: observable,
+      ocrStage: observable,
+      recognize: action,
+      destroy: action,
+    });
     init
       .then(() => this.setOcrStage(OcrStage.READY))
       .catch(() => this.setOcrStage(OcrStage.FATAL));
   }
 
+  // actions
+  setOcrStage(stage: OcrStage) {
+    this.ocrStage = stage;
+  }
+
+  setEnabled(enabled: boolean) {
+    this.enabled = enabled;
+  }
+
   // 抽象方法
   protected abstract _recognize(pic: Blob | File): Promise<OcrResult>;
   public abstract destroy(): void;
-
-  // 组件生命周期
-  /* 不要这个私有变量，否则不会触发变更事件。必须实现三种基础的OCR加载状态 */
-  private _ocrStage: OcrStage = OcrStage.INIT;
-  get ocrStage() {
-    return this._ocrStage;
-  }
-  setOcrStage(stage: OcrStage) {
-    this._ocrStage = stage;
-    this.eventBus.next(OcrModelEvent.ON_STAGE_CHANGE);
-  }
 
   // 组件外部方法
   async recognize(pic: Blob | File): Promise<OcrResult> {

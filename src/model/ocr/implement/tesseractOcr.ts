@@ -1,13 +1,8 @@
 import { createWorker, OEM, PSM, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
 import { OcrBase } from "../base";
-import { OcrLangType, OcrResult, OcrStage } from "../types";
+import { OcrEngine, OcrResult, OcrStage, TesseractOcrConfig } from "../types";
 import { simd } from "wasm-feature-detect";
-
-export interface TesseractOcrConfig {
-  workerConfig: Partial<WorkerOptions>;
-  language: OcrLangType;
-}
 
 const createDefaultWorkerConfig = (enableSimd: boolean) => {
   return {
@@ -33,7 +28,9 @@ export type TesseractStatus =
   | "recognizing text"
   | "idle";
 
-class _TesseractOcr extends OcrBase {
+class TesseractOcr extends OcrBase {
+  readonly type = OcrEngine.TesseractFrontend;
+
   private worker?: Tesseract.Worker;
   restartInterval: NodeJS.Timer;
 
@@ -45,7 +42,7 @@ class _TesseractOcr extends OcrBase {
   }
 
   static async create(config: TesseractOcrConfig) {
-    return new _TesseractOcr(config, _TesseractOcr.createWorker(config));
+    return new TesseractOcr(config, TesseractOcr.createWorker(config));
   }
 
   static async createWorker(config: TesseractOcrConfig) {
@@ -54,8 +51,8 @@ class _TesseractOcr extends OcrBase {
       ...config.workerConfig,
     });
     await worker.load();
-    await worker.loadLanguage(config.language);
-    await worker.initialize(config.language);
+    await worker.loadLanguage(config.lang);
+    await worker.initialize(config.lang);
     await worker.setParameters({
       tessedit_ocr_engine_mode: OEM.TESSERACT_ONLY,
       tessedit_pageseg_mode: PSM.AUTO,
@@ -72,7 +69,7 @@ class _TesseractOcr extends OcrBase {
   public async restart() {
     this.setOcrStage(OcrStage.BUSY);
     this.worker?.terminate();
-    this.worker = await _TesseractOcr.createWorker(this.config);
+    this.worker = await TesseractOcr.createWorker(this.config);
     this.setOcrStage(OcrStage.IDLE);
   }
 
@@ -88,7 +85,6 @@ class _TesseractOcr extends OcrBase {
       console.time("test");
       const file = new File([pic], "pic.png");
       const res = await this.worker.recognize(file);
-      // console.log(res.data);
       const {
         data: { symbols, confidence },
       } = res;
@@ -101,7 +97,7 @@ class _TesseractOcr extends OcrBase {
           { x: symbol.bbox.x1, y: symbol.bbox.y1 },
           { x: symbol.bbox.x0, y: symbol.bbox.y1 },
         ],
-        text: _TesseractOcr.removeStopWords(symbol.text),
+        text: TesseractOcr.removeStopWords(symbol.text),
         confidence: symbol.confidence,
       }));
     } catch (err) {
@@ -113,17 +109,17 @@ class _TesseractOcr extends OcrBase {
   }
 
   toString(results: OcrResult): string {
-    return _TesseractOcr.removeStopWords(
+    return TesseractOcr.removeStopWords(
       results.map((res) => res.text).join("")
     );
   }
 
   static replaceRule = [/\s|\d/g, "。", /[-|[\]「\n]/g];
+
   private static removeStopWords(text: string) {
     this.replaceRule.forEach((rule) => (text = text.replaceAll(rule, "")));
     return text;
   }
 }
 
-export type TesseractOcr = typeof _TesseractOcr;
-export const createTesseractOcr = _TesseractOcr.create;
+export const createTesseractOcr = TesseractOcr.create;
