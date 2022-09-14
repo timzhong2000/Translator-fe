@@ -1,6 +1,7 @@
 import { ExhaustiveCheckError } from "@/utils/common/error";
 import { action, makeObservable, observable, reaction } from "mobx";
 import { Config } from "../config";
+import { defaultTranslatorConfig } from "../config/defaultConfig";
 import {
   createPaddleOcr,
   createTesseractOcr,
@@ -9,15 +10,29 @@ import {
   OcrConfig,
   OcrEngine,
 } from "../ocr";
+import {
+  TranslatorBase,
+  TranslatorClient,
+  TranslatorConfig,
+} from "../translator";
+import { PauseTranslator } from "../translator/pauseTranslator";
 
 export class TCore {
   config: Config = new Config();
+
+  /* observable start */
   ocr: OcrBase = new DefaultOcr();
+  translator: TranslatorBase = new PauseTranslator(
+    this.config.translatorConfig
+  );
+  /* observable end */
 
   constructor() {
     makeObservable(this, {
       ocr: observable,
-      setOcr: action,
+      translator: observable,
+      switchOcrEngine: action,
+      switchTranslator: action,
     });
 
     // 单例不需要回收
@@ -26,26 +41,40 @@ export class TCore {
       () => this.switchOcrEngine(this.config.ocrConfig),
       { fireImmediately: true }
     );
-  }
 
-  setOcr(ocr: OcrBase) {
-    this.ocr = ocr;
+    reaction(
+      () => this.config.translatorConfig,
+      () => this.switchTranslator(this.config.translatorConfig),
+      { fireImmediately: true }
+    );
   }
 
   async switchOcrEngine(config: OcrConfig) {
     const type = config.type;
-
     switch (type) {
       case OcrEngine.PaddleOcrBackend:
-        this.setOcr(await createPaddleOcr(config));
+        this.ocr = await createPaddleOcr(config);
         break;
       case OcrEngine.TesseractFrontend:
-        this.setOcr(await createTesseractOcr(config));
+        this.ocr = await createTesseractOcr(config);
         break;
       default: {
         const exhaustiveCheck: never = type;
         throw new ExhaustiveCheckError(exhaustiveCheck);
       }
+    }
+  }
+
+  switchTranslator(config: TranslatorConfig) {
+    if (!config.enabled) {
+      this.translator = new PauseTranslator(config);
+      return;
+    }
+
+    if (this.translator instanceof TranslatorClient) {
+      this.translator.setConfig(config);
+    } else {
+      this.translator = new TranslatorClient(config);
     }
   }
 }

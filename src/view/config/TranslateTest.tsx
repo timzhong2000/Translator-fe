@@ -2,15 +2,15 @@ import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import LazyInput from "../common/LazyInput";
-import { useTranslatorModel } from "@/context/hook";
 import { useAsync } from "react-async-hook";
-import { TranslatorEvent } from "@/model";
 import { Grid, TextField } from "@mui/material";
+import { core } from "@/model/core";
+import { observer } from "mobx-react-lite";
 
 const testSrcText = "こんにちは";
 const TranslateTest = () => {
   const [srcText, setSrcText] = useState(testSrcText);
-  const translator = useTranslatorModel([TranslatorEvent.ON_SETTING_CHANGE]);
+  const translator = core.translator;
   const { result, loading } = useAsync(
     (srcText: string) => translator.translate(srcText),
     [srcText]
@@ -42,4 +42,4 @@ const TranslateTest = () => {
   );
 };
 
-export default TranslateTest;
+export default observer(TranslateTest);

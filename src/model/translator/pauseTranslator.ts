@@ -1,10 +1,5 @@
 import { TranslatorBase } from "./base";
-import {
-  TranslateResult,
-  TranslateLevel,
-  TranslatorEvent,
-  TranslatorConfig,
-} from "./types";
+import { TranslateResult, TranslateLevel, TranslatorConfig } from "./types";
 
 export class PauseTranslator extends TranslatorBase {
   get config() {
@@ -13,7 +8,6 @@ export class PauseTranslator extends TranslatorBase {
 
   set config(config) {
     this._config = config;
-    this.eventBus.next(TranslatorEvent.ON_SETTING_CHANGE);
   }
 
   constructor(private _config: TranslatorConfig) {

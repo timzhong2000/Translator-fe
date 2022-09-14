@@ -1,8 +1,15 @@
 import { CutArea, FilterConfig } from "@/types/globalConfig";
 import ISO963_1 from "@/types/ISO963";
+import { ExhaustiveCheckError } from "@/utils/common/error";
 import { cloneDeep, merge } from "lodash-es";
 import { makeAutoObservable } from "mobx";
-import { OcrConfig, OcrLangType } from "../ocr";
+import {
+  isPaddleOcrConfig,
+  isTesseractOcrConfig,
+  OcrConfig,
+  OcrEngine,
+  OcrLangType,
+} from "../ocr";
 import { StreamSourceConfig } from "../stream";
 import {
   defaultFilterConfig,
@@ -148,8 +155,34 @@ export class Config {
   };
 
   /* OCR */
-  patchOcrConfig = (config: Partial<OcrConfig>) => {
-    this[ConfigScope.OCR] = { ...this[ConfigScope.OCR], ...config };
+  setOcrConfig = (config: OcrConfig) => {
+    this[ConfigScope.OCR] = config;
+  };
+
+  // 必须保证当前类型一致才可以patch，失败时返回false
+  patchOcrConfig = (config: Pick<OcrConfig, "type"> & Partial<OcrConfig>) => {
+    const type = this[ConfigScope.OCR].type;
+    switch (type) {
+      case OcrEngine.PaddleOcrBackend:
+        if (isPaddleOcrConfig(config)) {
+          this[ConfigScope.OCR] = { ...this[ConfigScope.OCR], ...config };
+          return true;
+        }
+        break;
+      case OcrEngine.TesseractFrontend:
+        if (isTesseractOcrConfig(config)) {
+          this[ConfigScope.OCR] = { ...this[ConfigScope.OCR], ...config };
+          return true;
+        }
+        break;
+      default: {
+        const exhaustiveCheck: never = type;
+        throw new ExhaustiveCheckError(exhaustiveCheck);
+      }
+    }
+    console.warn(
+      `[patchOcrConfig] warning: cannot patch type (${config.type}) to current type(${type})`
+    );
   };
 
   setOcrLang = (lang: OcrLangType) => {

@@ -1,5 +1,5 @@
 import { FilterConfig, CutArea } from "@/types/globalConfig";
-import { OcrEngine, TesseractOcrConfig } from "../ocr";
+import { OcrConfig, OcrEngine, TesseractOcrConfig } from "../ocr";
 import { StreamSourceConfig } from "../stream";
 import { TranslatorConfig } from "../translator";
 
@@ -14,6 +14,7 @@ export const defaultFilterConfig: FilterConfig = {
 };
 
 export const defaultTranslatorConfig: TranslatorConfig = {
+  enabled: true,
   url: "http://localhost:3002",
   secretKey: "",
   provider: "baidu",
@@ -43,8 +44,8 @@ export const defaultCutAreaConfig: CutArea = {
   interval: 1000,
 };
 
-export const defaultOcrConfig: TesseractOcrConfig = {
+export const defaultOcrConfig: OcrConfig = {
   type: OcrEngine.TesseractFrontend,
   workerConfig: {},
   lang: "jpn",
-};
+} as TesseractOcrConfig;

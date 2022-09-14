@@ -9,7 +9,7 @@ import {
   useStreamModel,
   useTranslatorModel,
 } from "@/context/hook";
-import { OcrResult, OcrStage, TranslateResult, TranslatorEvent } from "@/model";
+import { OcrResult, OcrStage, TranslateResult } from "@/model";
 import { createOpencvFilter } from "@/utils/preprocessor/opencvFilter";
 import { TtransError } from "@/utils/error";
 import { CutArea, FilterConfig } from "@/types/globalConfig";
@@ -63,11 +63,7 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
 
 const _TransResult: FC = () => {
   const { cutAreaConfig: cutArea, filterConfig } = core.config;
-  const translatorModel = useTranslatorModel([
-    TranslatorEvent.ON_SETTING_CHANGE,
-    TranslatorEvent.ON_ENABLED,
-    TranslatorEvent.ON_DISABLED,
-  ]);
+  const translatorModel = useTranslatorModel();
   const ocrModel = useOcrModel();
 
   const { t } = useTranslation();

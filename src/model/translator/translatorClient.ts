@@ -1,12 +1,7 @@
 import axios from "axios";
 import { logger, LogType } from "@/utils/logger";
 import { TranslatorBase } from "./base";
-import {
-  TranslateResult,
-  TranslateLevel,
-  TranslatorEvent,
-  TranslatorConfig,
-} from "./types";
+import { TranslateResult, TranslateLevel, TranslatorConfig } from "./types";
 
 export enum CacheStatus {
   MISS,
@@ -15,16 +10,7 @@ export enum CacheStatus {
 }
 
 export class TranslatorClient extends TranslatorBase {
-  get config() {
-    return this._config;
-  }
-
-  set config(config) {
-    this._config = config;
-    this.eventBus.next(TranslatorEvent.ON_SETTING_CHANGE);
-  }
-
-  constructor(private _config: TranslatorConfig) {
+  constructor(private config: TranslatorConfig) {
     super();
   }
 
@@ -32,15 +18,13 @@ export class TranslatorClient extends TranslatorBase {
     logger.record(LogType.TRANSLATOR_LOCAL_CACHE, status);
   }
 
-  async _translate(srcText: string) {
+  protected async _translate(srcText: string) {
     const cache = this.getCache(srcText);
     if (cache) {
       this.record(CacheStatus.HIT);
-      this.eventBus.next(TranslatorEvent.ON_CACHE_HIT);
       return JSON.parse(cache) as TranslateResult;
     }
     this.record(CacheStatus.MISS);
-    this.eventBus.next(TranslatorEvent.ON_CACHE_MISS);
     try {
       const res = await axios.get<{ payload: TranslateResult }>(
         this.getUrl(encodeURIComponent(srcText))
@@ -48,21 +32,11 @@ export class TranslatorClient extends TranslatorBase {
       const payload = res.data.payload;
       if (payload.success) {
         this.putCache(payload);
-        this.eventBus.next(TranslatorEvent.ON_REMOTE_SUCCESS);
-      } else {
-        this.eventBus.next(TranslatorEvent.ON_REMOTE_ERROR);
       }
       return payload;
     } catch (err) {
-      this.eventBus.next(TranslatorEvent.ON_REMOTE_ERROR);
       return this.getFailResponse(srcText);
     }
-  }
-
-  hasKey() {
-    return (
-      typeof this.config.secretKey === "string" && this.config.secretKey !== ""
-    );
   }
 
   private getUrl(srcText: string) {
@@ -99,5 +73,15 @@ export class TranslatorClient extends TranslatorBase {
         name: "",
       },
     };
+  }
+
+  setConfig(config: TranslatorConfig) {
+    this.config = config;
+  }
+
+  hasKey() {
+    return (
+      typeof this.config.secretKey === "string" && this.config.secretKey !== ""
+    );
   }
 }

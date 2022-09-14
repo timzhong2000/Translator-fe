@@ -1,21 +1,28 @@
-import { ModelBase } from "../base";
+import { action, makeObservable, observable } from "mobx";
 import { TranslatorDisabledError } from "./errors";
-import { TranslateResult, TranslatorEvent } from "./types";
+import { TranslateResult } from "./types";
 
-export abstract class TranslatorBase extends ModelBase<TranslatorEvent> {
-  private _enabled = true;
-  get enabled() {
-    return this._enabled;
+export abstract class TranslatorBase {
+  /* observables start */
+  enabled = true;
+  /* observables end */
+
+  constructor() {
+    makeObservable(this, {
+      enabled: observable,
+      setEnabled: action,
+    });
   }
+
+  /* actions start */
   setEnabled(enabled: boolean) {
-    this._enabled = enabled;
-    this.eventBus.next(
-      enabled ? TranslatorEvent.ON_ENABLED : TranslatorEvent.ON_DISABLED
-    );
+    this.enabled = enabled;
   }
+  /* actions end */
+
   translate(srcText: string): Promise<TranslateResult> {
     if (!this.enabled) throw new TranslatorDisabledError();
     return this._translate(srcText);
   }
-  abstract _translate(srcText: string): Promise<TranslateResult>;
+  protected abstract _translate(srcText: string): Promise<TranslateResult>;
 }
