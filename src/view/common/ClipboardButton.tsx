@@ -14,12 +14,9 @@ const ClipboardButton = forwardRef<HTMLButtonElement, { text: string }>(
     const copy = (e: React.MouseEvent) => {
       e.stopPropagation();
       writeText(props.text)
-        .then(() => {
-          setDisplaySuccess(true);
-          setTimeout(() => {
-            setDisplaySuccess(false);
-          }, 1000);
-        })
+        .then(() => setDisplaySuccess(true))
+        .then(() => new Promise<void>((res) => setTimeout(() => res(), 1000)))
+        .then(() => setDisplaySuccess(false))
         .catch((err) => {
           console.log(err);
         });
