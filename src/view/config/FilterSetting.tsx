@@ -1,4 +1,3 @@
-import { core } from "@/model/core";
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
 import {
@@ -10,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import { useConfig } from "@/context";
 
 const FilterSetting: FC = () => {
   return (
@@ -47,7 +47,7 @@ const DilateIterationsInput = observer(() => {
   const {
     filterConfig: { dilateIterations },
     setDilateIterations,
-  } = core.config;
+  } = useConfig();
 
   return (
     <TextField
@@ -66,7 +66,7 @@ const ErodeIterationsInput = observer(() => {
   const {
     filterConfig: { erodeIterations },
     setErodeIterations,
-  } = core.config;
+  } = useConfig();
 
   return (
     <TextField
@@ -84,7 +84,7 @@ const DilateKernelSizeInput = observer(() => {
   const {
     filterConfig: { dilateKernelSize },
     setDilateKernelSize,
-  } = core.config;
+  } = useConfig();
 
   return (
     <TextField
@@ -103,7 +103,7 @@ const ErodeKernalSizeInput = observer(() => {
   const {
     filterConfig: { erodeKernelSize },
     setErodeKernelSize,
-  } = core.config;
+  } = useConfig();
 
   return (
     <TextField
@@ -121,7 +121,7 @@ const InverseCheckBox = observer(() => {
   const {
     filterConfig: { inverse },
     toggleInverse,
-  } = core.config;
+  } = useConfig();
 
   return (
     <FormControlLabel
@@ -137,7 +137,7 @@ const BinaryThresholdSlider = observer(() => {
   const {
     filterConfig: { binaryThreshold },
     setBinaryThreshold,
-  } = core.config;
+  } = useConfig();
 
   return (
     <>
@@ -164,7 +164,7 @@ const ZoomSlider = observer(() => {
   const {
     setZoom,
     filterConfig: { zoom },
-  } = core.config;
+  } = useConfig();
 
   return (
     <>

@@ -4,7 +4,9 @@ import { FC, useEffect, useState } from "react";
 import DragableElement from "@/view/common/DragableElement";
 import { useTranslation } from "react-i18next";
 import {
+  useConfig,
   useOcrModel,
+  usePreProcessorModel,
   useStreamModel,
   useTranslatorModel,
 } from "@/context/hook";
@@ -14,11 +16,10 @@ import { TtransError } from "@/utils/error";
 import { CutArea, FilterConfig } from "@/types/globalConfig";
 import ClipboardButton from "./ClipboardButton";
 import "./transResult.css";
-import { core } from "@/model/core";
 import { observer } from "mobx-react-lite";
 
 const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
-  const preProcessorModel = core.preProcessor;
+  const preProcessorModel = usePreProcessorModel();
   const translatorModel = useTranslatorModel();
   const streamModel = useStreamModel();
   const ocrModel = useOcrModel();
@@ -61,7 +62,7 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
 };
 
 const _TransResult: FC = () => {
-  const { cutAreaConfig: cutArea, filterConfig } = core.config;
+  const { cutAreaConfig: cutArea, filterConfig } = useConfig();
   const translatorModel = useTranslatorModel();
   const ocrModel = useOcrModel();
 

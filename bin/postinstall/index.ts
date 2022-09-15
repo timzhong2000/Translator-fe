@@ -5,13 +5,11 @@
 
 import { access, mkdir, writeFile } from "fs/promises";
 import chalk from "chalk";
-import { exec, execSync } from "child_process";
+import { exec } from "child_process";
 import path from "path";
 import { existsSync } from "fs";
 import packageJson from "../../package.json";
-import { Stream } from "node:stream";
 import axios from "axios";
-import { AxiosResponse } from "axios";
 import { checkTypeVersion, createIfNotExist, toText, writeToFile } from "./utils";
 
 /* config */

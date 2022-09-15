@@ -2,14 +2,14 @@ import { Grid, TextField, MenuItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { OcrLangType } from "@/model";
 import { FC } from "react";
-import { core } from "@/model/core";
 import { observer } from "mobx-react-lite";
+import { useConfig } from "@/context";
 
 const OcrSetting: FC = () => {
   const {
     ocrConfig: { lang },
     setOcrLang,
-  } = core.config;
+  } = useConfig();
 
   const { t } = useTranslation();
   const langList: OcrLangType[] = ["chi_sim", "chi_tra", "eng", "jpn"];

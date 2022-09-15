@@ -1,11 +1,11 @@
 import { FC, useEffect } from "react";
 import { cutAreaParser } from "@/utils/common/cutAreaParser";
-import { core } from "@/model/core";
 import { observer } from "mobx-react-lite";
+import { useConfig, usePreProcessorModel } from "@/context";
 
 const PreProcessCanvas: FC = () => {
-  const { cutAreaConfig: cutArea } = core.config;
-  const preProcessorModel = core.preProcessor;
+  const { cutAreaConfig: cutArea } = useConfig();
+  const preProcessorModel = usePreProcessorModel();
 
   useEffect(() => {
     const area = cutAreaParser(cutArea);

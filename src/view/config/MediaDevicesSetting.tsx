@@ -13,10 +13,9 @@ import useMediaDeviceList, {
   getDisplayLabel,
 } from "@/utils/hooks/useMediaDeviceList";
 import { StreamModelEvent, StreamStatus } from "@/model";
-import { useStreamModel } from "@/context/hook";
+import { useConfig, useStreamModel } from "@/context/hook";
 import { fromMediaDevice } from "@/utils/common/MediaStreamSubscriber";
 import { itemIn, itemNotIn } from "@/utils/common/enumTool";
-import { core } from "@/model/core";
 import { observer } from "mobx-react-lite";
 
 const buttonTitle: { [key in StreamStatus]: string } = {
@@ -41,12 +40,15 @@ const isButtomEnabled = itemNotIn([StreamStatus.LOADING]);
 
 const MediaDevicesSetting: FC = () => {
   const {
-    streamSourceConfig: { videoDeviceId, audioDeviceId, fromScreen, audio },
+    streamSourceConfig,
     toggleFromScreen,
     setAudioDeviceId,
     toggleAudioEnabled,
     setVideoDeviceId,
-  } = core.config;
+  } = useConfig();
+
+  const { videoDeviceId, audioDeviceId, fromScreen, audio } =
+    streamSourceConfig;
 
   const streamModel = useStreamModel([
     StreamModelEvent.ON_STREAM_CHANGED,
@@ -69,10 +71,7 @@ const MediaDevicesSetting: FC = () => {
 
   const onclick = () => {
     if (isStreamOpened(status)) streamModel.reset();
-    else
-      streamModel.setStreamAsync(
-        fromMediaDevice(core.config.streamSourceConfig)
-      );
+    else streamModel.setStreamAsync(fromMediaDevice(streamSourceConfig));
   };
 
   if (isdeviceListLoading) return <div>正在加载设备列表</div>;

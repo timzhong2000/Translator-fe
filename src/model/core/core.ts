@@ -1,5 +1,5 @@
 import { ExhaustiveCheckError } from "@/utils/common/error";
-import { action, makeObservable, observable, reaction } from "mobx";
+import { action, makeObservable, observable, reaction, toJS } from "mobx";
 import { config, Config } from "../config";
 import {
   createPaddleOcr,
@@ -34,19 +34,19 @@ export class TCore {
       translator: observable,
       preProcessor: observable,
       switchOcrEngine: action,
-      switchTranslator: action,
+      updateTranslator: action,
     });
 
     // 单例不需要回收
     reaction(
-      () => this.config.ocrConfig,
+      () => toJS(this.config.ocrConfig),
       () => this.switchOcrEngine(this.config.ocrConfig),
       { fireImmediately: true }
     );
 
     reaction(
-      () => this.config.translatorConfig,
-      () => this.switchTranslator(this.config.translatorConfig),
+      () => toJS(this.config.translatorConfig),
+      () => this.updateTranslator(this.config.translatorConfig),
       { fireImmediately: true }
     );
   }
@@ -67,7 +67,7 @@ export class TCore {
     }
   }
 
-  switchTranslator(config: TranslatorConfig) {
+  updateTranslator(config: TranslatorConfig) {
     if (!config.enabled) {
       this.translator = new PauseTranslator(config);
       return;

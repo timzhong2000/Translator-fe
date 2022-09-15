@@ -1,9 +1,9 @@
 import { Grid, TextField, MenuItem } from "@mui/material";
 import ISO963_1 from "@/types/ISO963";
 import { useTranslation } from "react-i18next";
-import { core } from "@/model/core";
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
+import { useConfig } from "@/context";
 
 const TranslateConfig: FC = () => {
   const {
@@ -11,7 +11,7 @@ const TranslateConfig: FC = () => {
     setSrcLang,
     setDestLang,
     setProvider,
-  } = core.config;
+  } = useConfig();
 
   const { t } = useTranslation();
 

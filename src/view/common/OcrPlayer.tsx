@@ -4,19 +4,18 @@ import { areaToStyle } from "@/utils/common/cutAreaParser";
 import { useTranslation } from "react-i18next";
 import PreProcessCanvas from "./PreProcessCanvas";
 import { useIsDataChange } from "../../utils/hooks/useIsDataChange";
-import { useStreamModel } from "@/context/hook";
+import { useConfig, useStreamModel } from "@/context/hook";
 import { StreamModelEvent } from "@/model";
 import { TtransError } from "@/utils/error";
 import { Button, Tooltip, Box } from "@mui/material";
 import { FullScreen } from "@/utils/common/FullScreen";
 import { observer } from "mobx-react-lite";
-import { core } from "@/model/core";
 
 const defaultOpacity = 0.3;
 
 const OcrPlayer: FC = (props) => {
   const containerEl = useRef<HTMLDivElement>(null);
-  const { cutAreaConfig, filterConfig, patchCutArea } = core.config;
+  const { cutAreaConfig, filterConfig, patchCutArea } = useConfig();
 
   const streamModel = useStreamModel([
     StreamModelEvent.ON_STREAM_CHANGED,
