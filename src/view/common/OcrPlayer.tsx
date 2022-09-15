@@ -24,13 +24,15 @@ const OcrPlayer: FC = (props) => {
   const { t } = useTranslation();
   const [isResizing, setIsResizing] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const isResizeingChanged = useIsDataChange(3000)(isResizing);
-  const filterConfigChanged = useIsDataChange(6000)(filterConfig);
+  const isResizeingChanged = useIsDataChange(3000)([isResizing]);
+  const filterConfigChanged = useIsDataChange(6000)(
+    Object.values(filterConfig)
+  ); // 监听整个filterConfig变化
   const startAbsolutePos = useRef({ x: 0, y: 0 });
   const cutAreaEl = useRef<HTMLDivElement>(null);
   const shouldShowBorder =
     isResizing || isResizeingChanged || filterConfigChanged;
-  /* preview 模式下，预处理结果完全不透明显示在页面上，非preview模式下，预处理结果变透明*/
+  /* preview 模式下，预处理结果完全不透明显示在页面上，非preview模式下，预处理结果变透明 */
   const isPreviewMode = isResizeingChanged || filterConfigChanged;
 
   const requestFullscreen: React.MouseEventHandler<HTMLButtonElement> = (e) => {
