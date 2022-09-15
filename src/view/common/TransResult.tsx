@@ -5,7 +5,6 @@ import DragableElement from "@/view/common/DragableElement";
 import { useTranslation } from "react-i18next";
 import {
   useOcrModel,
-  usePreProcessorModel,
   useStreamModel,
   useTranslatorModel,
 } from "@/context/hook";
@@ -19,7 +18,7 @@ import { core } from "@/model/core";
 import { observer } from "mobx-react-lite";
 
 const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
-  const preProcessorModel = usePreProcessorModel();
+  const preProcessorModel = core.preProcessor;
   const translatorModel = useTranslatorModel();
   const streamModel = useStreamModel();
   const ocrModel = useOcrModel();

@@ -3,9 +3,6 @@ import { useRef, useState } from "react";
 
 export const OcrTest = () => {
   const imgEl = useRef<HTMLImageElement>(null);
-  // const preProcessorModel = usePreProcessorModel([
-  //   PreProcessorEvent.ON_SIZE_CHANGED,
-  // ]);
   const ocrModel = useOcrModel();
   const [result, setResult] = useState("");
   const openimg = async (e: React.ChangeEvent<HTMLInputElement>) => {

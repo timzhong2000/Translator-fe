@@ -1,7 +1,6 @@
 import { ExhaustiveCheckError } from "@/utils/common/error";
 import { action, makeObservable, observable, reaction } from "mobx";
-import { Config } from "../config";
-import { defaultTranslatorConfig } from "../config/defaultConfig";
+import { config, Config } from "../config";
 import {
   createPaddleOcr,
   createTesseractOcr,
@@ -10,6 +9,7 @@ import {
   OcrConfig,
   OcrEngine,
 } from "../ocr";
+import { PreProcessorModel } from "../preProcessor";
 import {
   TranslatorBase,
   TranslatorClient,
@@ -18,19 +18,21 @@ import {
 import { PauseTranslator } from "../translator/pauseTranslator";
 
 export class TCore {
-  config: Config = new Config();
+  config: Config = config;
 
   /* observable start */
   ocr: OcrBase = new DefaultOcr();
   translator: TranslatorBase = new PauseTranslator(
     this.config.translatorConfig
   );
+  preProcessor: PreProcessorModel = new PreProcessorModel();
   /* observable end */
 
   constructor() {
     makeObservable(this, {
       ocr: observable,
       translator: observable,
+      preProcessor: observable,
       switchOcrEngine: action,
       switchTranslator: action,
     });

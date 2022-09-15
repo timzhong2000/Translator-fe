@@ -18,6 +18,19 @@ const ConfigPanel = () => {
 
   return (
     <div>
+      <button
+        onClick={() => {
+          import("@techstark/opencv-js")
+            .then((m) => {
+              console.log(m);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }}
+      >
+        1
+      </button>
       <Box mt={2} mx={1}>
         <Button variant="outlined" onClick={() => setAdvanceMode(!advanceMode)}>
           {advanceMode ? t("setting.quit") : t("setting.enter")}{" "}

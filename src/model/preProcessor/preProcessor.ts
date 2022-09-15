@@ -1,20 +1,13 @@
 import { OcrImage } from "@/utils/preprocessor/OcrImage";
-import cv, { Mat } from "opencv-ts";
-import { ModelBase } from "../base";
+import { makeObservable } from "mobx";
 import { Resolution } from "../stream";
-import { CanvasOffScreenError, OpenCVUninitializedError } from "./errors";
-import { PreProcessorEvent } from "./types";
-import { OpenCV } from "./types";
+import { CanvasOffScreenError } from "./errors";
+import { Mat, OpenCV } from "@/types/opencv";
+import { OpenCVLoader } from "@/utils/common/loadOpencv";
 
-export class PreProcessorModel extends ModelBase<PreProcessorEvent> {
-  outputCanvasEl = document.createElement("canvas");
-
-  /// root
+export class PreProcessorModel {
+  protected outputCanvasEl = document.createElement("canvas");
   private _root?: HTMLDivElement;
-
-  get root() {
-    return this._root;
-  }
 
   setRoot(el: HTMLDivElement) {
     if (el === this._root) return; // 防止重渲染
@@ -29,32 +22,15 @@ export class PreProcessorModel extends ModelBase<PreProcessorEvent> {
     }
   }
 
-  private _cv?: OpenCV;
-
-  get cv() {
-    if (!this._cv) throw new OpenCVUninitializedError();
-    return this._cv;
-  }
-
   constructor(root?: HTMLDivElement) {
-    super();
-    // import("opencv-ts")
-    //   .then((module) => {
-    //     this._cv = module.default;
-    //     this.eventBus.next(PreProcessorEvent.ON_OPENCV_LOADED);
-    //   })
-    //   .catch((_) => {
-    //     this.eventBus.next(PreProcessorEvent.ON_OPENCV_ERROR);
-    //   });
-    this._cv = cv;
-    this.eventBus.next(PreProcessorEvent.ON_OPENCV_LOADED);
+    makeObservable(this, {});
     root && this.setRoot(root);
+    // this.getOpenCV(); // preload
   }
 
   changeSize(size: Resolution) {
     this.outputCanvasEl.style.width = `${size.x}px`;
     this.outputCanvasEl.style.height = `${size.y}px`;
-    this.eventBus.next(PreProcessorEvent.ON_SIZE_CHANGED);
   }
 
   /**
@@ -63,14 +39,14 @@ export class PreProcessorModel extends ModelBase<PreProcessorEvent> {
    * @param fn 实现处理逻辑，返回一个mat，注意fn中新建的mat都必须自己回收，否则会内存泄露
    * @returns
    */
-  process(
+  async process(
     inputEl: string | HTMLCanvasElement | HTMLImageElement,
     fn: (cv: OpenCV, mat: Mat) => Mat
   ): Promise<Blob> {
     if (!this.outputCanvasEl.parentElement) {
       throw new CanvasOffScreenError();
     }
-    const cv = this.cv;
+    await OpenCVLoader.waitUntilReady();
     const inputMat = cv.imread(inputEl);
     const outputMat = fn(cv, inputMat);
     cv.imshow(this.outputCanvasEl, outputMat);

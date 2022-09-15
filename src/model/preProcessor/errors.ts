@@ -10,3 +10,6 @@ export class OpenCVUninitializedError extends PreProcessorError {}
 
 @tag("canvas_off_screen", "canvas离屏无法进行缓冲区读取")
 export class CanvasOffScreenError extends PreProcessorError {}
+
+@tag("opencv_load_failed", "opencv加载失败")
+export class OpenCVLoadFailedError extends PreProcessorError {}
