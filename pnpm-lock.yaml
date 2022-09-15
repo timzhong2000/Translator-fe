@@ -7,6 +7,7 @@ specifiers:
   '@mui/icons-material': ^5.10.3
   '@mui/material': ^5.10.5
   '@react-spring/web': ^9.5.4
+  '@techstark/opencv-js': 4.5.5-release.2
   '@types/lodash-es': ^4.17.6
   '@types/md5': ^2.3.2
   '@types/node': ^18.7.17
@@ -18,6 +19,7 @@ specifiers:
   '@use-gesture/react': ^10.2.19
   '@vitejs/plugin-react': 2.1.0
   axios: ^0.27.2
+  chalk: ^5.0.1
   clipboard-polyfill: ^3.0.3
   eslint: ^8.23.1
   eslint-config-prettier: ^8.5.0
@@ -32,7 +34,6 @@ specifiers:
   mobx-react-lite: ^3.4.0
   normalize.css: ^8.0.1
   npm-check-updates: ^16.1.2
-  opencv-ts: 1.3.6
   prettier: ^2.7.1
   react: ^17.0.2
   react-async-hook: ^4.0.0
@@ -43,7 +44,7 @@ specifiers:
   rollup: ^2.79.0
   rollup-plugin-visualizer: ^5.8.1
   rxjs: ^7.5.6
-  tesseract.js: ^3.0.2
+  tesseract.js: 3.0.1
   ts-node: ^10.9.1
   typescript: 4.8.3
   vite: 3.1.0
@@ -56,6 +57,7 @@ dependencies:
   '@mui/icons-material': 5.10.3_454da8871639ee82bc479f393e6736db
   '@mui/material': 5.10.5_4e17e3b2423b0681f17785e80748d674
   '@react-spring/web': 9.5.4_react-dom@17.0.2+react@17.0.2
+  '@techstark/opencv-js': 4.5.5-release.2
   '@use-gesture/react': 10.2.19_react@17.0.2
   axios: 0.27.2
   clipboard-polyfill: 3.0.3
@@ -67,14 +69,13 @@ dependencies:
   mobx: 6.6.2
   mobx-react-lite: 3.4.0_31cc789a980aadfd24bd07de9d934503
   normalize.css: 8.0.1
-  opencv-ts: 1.3.6
   react: 17.0.2
   react-async-hook: 4.0.0_react@17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-i18next: 11.15.5_2c37a602a29bb6bd53f3de707a8cfcc5
   react-router-dom: 6.3.0_react-dom@17.0.2+react@17.0.2
   rxjs: 7.5.6
-  tesseract.js: 3.0.2_eslint@8.23.1
+  tesseract.js: 3.0.1_eslint@8.23.1
   wasm-feature-detect: 1.2.11
 
 devDependencies:
@@ -87,6 +88,7 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 5.37.0_d685d2b5ce593055662a5186c22faa62
   '@typescript-eslint/parser': 5.37.0_eslint@8.23.1+typescript@4.8.3
   '@vitejs/plugin-react': 2.1.0_vite@3.1.0
+  chalk: 5.0.1
   eslint: 8.23.1
   eslint-config-prettier: 8.5.0_eslint@8.23.1
   eslint-plugin-prettier: 4.2.1_10031123a4ba460724551faeeb988eb5
@@ -924,6 +926,14 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
+  /@techstark/opencv-js/4.5.5-release.2:
+    resolution: {integrity: sha512-494IqI2gdqpSIoMxKcKVgwHH/tTpeMkhnDshvYGPNRhJLy/7DITuidVF2MKox6G3FQpaDBnYDGjCaNYZ9WM2wA==}
+    dependencies:
+      mirada: 0.0.15
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -1376,6 +1386,10 @@ packages:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
 
+  /base64-js/1.5.1:
+    resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
+
   /bmp-js/0.1.0:
     resolution: {integrity: sha512-vHdS19CnY3hwiNdkaqk93DvjVLfbEcI8mys4UjuWrlX1haDmroo8o4xCzh4wD6DGV6HxRCyauwhHRqMTfERtjw==}
     dev: false
@@ -1427,6 +1441,13 @@ packages:
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
     dev: true
+
+  /buffer/5.7.1:
+    resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
+    dependencies:
+      base64-js: 1.5.1
+      ieee754: 1.2.1
+    dev: false
 
   /builtins/5.0.1:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
@@ -1655,6 +1676,14 @@ packages:
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
+
+  /cross-fetch/3.1.5:
+    resolution: {integrity: sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==}
+    dependencies:
+      node-fetch: 2.6.7
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -2709,6 +2738,10 @@ packages:
       safari-14-idb-fix: 3.0.0
     dev: false
 
+  /ieee754/1.2.1:
+    resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
+    dev: false
+
   /ignore-walk/5.0.1:
     resolution: {integrity: sha512-yemi4pMf51WKT7khInJqAvsIGzoqYXblnsz0ql8tM+yi1EKYTY1evX4NAbJrLL/Aanr2HyZeluqU+Oi7MGHokw==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
@@ -3254,6 +3287,21 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /mirada/0.0.15:
+    resolution: {integrity: sha512-mbm4c+wjBVcmUzHRLv/TfOAq+iy03D24KwGxx8H+NSXkD5EOZV9zFWbVxTvZCc9XwR0FIUhryU/kQm12SMSQ3g==}
+    dependencies:
+      buffer: 5.7.1
+      cross-fetch: 3.1.5
+      file-type: 12.4.2
+      misc-utils-of-mine-generic: 0.2.43
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /misc-utils-of-mine-generic/0.2.43:
+    resolution: {integrity: sha512-R2jpKgpw5bpUa3HcZppusgAC6IzsYDOA1YgPXGQcgGUm2Zz7j/kCJors4HezVN4jLA0dkIzpoXNM+EbX/wb31Q==}
+    dev: false
+
   /mkdirp/1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
@@ -3561,12 +3609,6 @@ packages:
   /opencollective-postinstall/2.0.3:
     resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
     hasBin: true
-    dev: false
-
-  /opencv-ts/1.3.6:
-    resolution: {integrity: sha512-8iG+ujpzsvc5W7vP0WH0TFUOODZFulp7SBzy2Av2xXmHrHVKw7HWKyutLxmstAkNa7nD6BgnDrEVxTsI/mDkeQ==}
-    dependencies:
-      typescript: 4.8.3
     dev: false
 
   /optionator/0.9.1:
@@ -4381,8 +4423,8 @@ packages:
     resolution: {integrity: sha512-2fD76ka9nO/C616R0fq+M9Zu91DA3vEfyozp0jlxaJOBmpfeprtgRP3cqVweZh2darE1kK/DazoxZ65g7WU99Q==}
     dev: false
 
-  /tesseract.js/3.0.2_eslint@8.23.1:
-    resolution: {integrity: sha512-pCJErD08bl5tD7Tswu5BhN041RxAUPdXqoNVrfICghhKEneXI5f+8/59MNvLQWUY/FJrbXEen3j6J6N+PN0I8w==}
+  /tesseract.js/3.0.1_eslint@8.23.1:
+    resolution: {integrity: sha512-con5zIP5tbRYlyhOTzEVGbam/8YBqaKB5f8ItuxvmC+UJJvEo28fwGANfpUNnERx6Mo1TZ3IHicy07ulrHCymQ==}
     requiresBuild: true
     dependencies:
       babel-eslint: 10.1.0_eslint@8.23.1
@@ -4504,6 +4546,7 @@ packages:
     resolution: {integrity: sha512-goMHfm00nWPa8UvR/CPSvykqf6dVV8x/dp0c5mFTMTIu0u0FlGWRioyy7Nn0PGAdHxpJZnuO/ut+PpQ8UiHAig==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /unbox-primitive/1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
