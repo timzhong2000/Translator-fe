@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useAsync } from "react-async-hook";
-import { fromEvent } from "rxjs";
 
 const getDevices = async () => {
   const devices = await navigator.mediaDevices.enumerateDevices();
@@ -14,16 +13,19 @@ const getDevices = async () => {
   };
 };
 
-const fromDeviceChange = fromEvent(
-  window.navigator.mediaDevices,
-  "devicechange"
-);
-
 const useMediaDeviceList = () => {
   const { result: devices, execute, loading } = useAsync(getDevices, []);
   useEffect(() => {
-    const subscription = fromDeviceChange.subscribe(() => execute());
-    return () => subscription.unsubscribe();
+    const onDevicechange = () => execute();
+    window.navigator.mediaDevices.addEventListener(
+      "devicechange",
+      onDevicechange
+    );
+    return () =>
+      navigator.mediaDevices.removeEventListener(
+        "devicechange",
+        onDevicechange
+      );
   }, []);
   return {
     videoDevices: devices?.videoDevices ?? [],

@@ -43,7 +43,6 @@ specifiers:
   react-router-dom: ^6.3.0
   rollup: ^2.79.0
   rollup-plugin-visualizer: ^5.8.1
-  rxjs: ^7.5.6
   tesseract.js: 3.0.1
   ts-node: ^10.9.1
   typescript: 4.8.3
@@ -74,7 +73,6 @@ dependencies:
   react-dom: 17.0.2_react@17.0.2
   react-i18next: 11.15.5_2c37a602a29bb6bd53f3de707a8cfcc5
   react-router-dom: 6.3.0_react-dom@17.0.2+react@17.0.2
-  rxjs: 7.5.6
   tesseract.js: 3.0.1_eslint@8.23.1
   wasm-feature-detect: 1.2.11
 
@@ -4131,12 +4129,6 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /rxjs/7.5.6:
-    resolution: {integrity: sha512-dnyv2/YsXhnm461G+R/Pe5bWP41Nm6LBXEYWI6eiFP4fiwx6WRI/CD0zbdVAudd9xwLEF2IDcKXLHit0FYjUzw==}
-    dependencies:
-      tslib: 2.4.0
-    dev: false
-
   /safari-14-idb-fix/3.0.0:
     resolution: {integrity: sha512-eBNFLob4PMq8JA1dGyFn6G97q3/WzNtFK4RnzT1fnLq+9RyrGknzYiM/9B12MnKAxuj1IXr7UKYtTNtjyKMBog==}
     dev: false
@@ -4499,10 +4491,6 @@ packages:
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
-
-  /tslib/2.4.0:
-    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
-    dev: false
 
   /tsutils/3.21.0_typescript@4.8.3:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
