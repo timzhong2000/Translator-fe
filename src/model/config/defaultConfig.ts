@@ -1,6 +1,6 @@
 import { FilterConfig, CutArea } from "@/types/globalConfig";
 import { OcrConfig, OcrEngine, TesseractOcrConfig } from "../ocr";
-import { StreamSourceConfig } from "../stream";
+import { StreamSourceConfig } from "@/types/streamSource";
 import { TranslatorConfig } from "../translator";
 
 export const defaultFilterConfig: FilterConfig = {

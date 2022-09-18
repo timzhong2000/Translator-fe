@@ -65,9 +65,19 @@ const _TransResult: FC = () => {
   const { cutAreaConfig: cutArea, filterConfig } = useConfig();
   const translatorModel = useTranslatorModel();
   const ocrModel = useOcrModel();
-
   const { t } = useTranslation();
   const { src, dest, ocrResult } = useOcrTranslate(cutArea, filterConfig);
+
+  const pause = () => {
+    translatorModel.setEnabled(false);
+    ocrModel.setEnabled(false);
+  };
+
+  const start = () => {
+    translatorModel.setEnabled(true);
+    ocrModel.setEnabled(true);
+  };
+
   return (
     <DragableElement
       style={{
@@ -76,14 +86,8 @@ const _TransResult: FC = () => {
         backdropFilter: "blur(6px) brightness(110%)",
         zIndex: 1,
       }}
-      onDragStart={() => {
-        translatorModel.setEnabled(false);
-        ocrModel.setEnabled(false);
-      }}
-      onDragEnd={() => {
-        translatorModel.setEnabled(true);
-        ocrModel.setEnabled(true);
-      }}
+      onDragStart={() => ocrModel.setEnabled(false)}
+      onDragEnd={() => ocrModel.setEnabled(true)}
     >
       <div>
         <Box fontSize={32} fontWeight={600} py={0.5} textAlign="center">
@@ -117,24 +121,10 @@ const _TransResult: FC = () => {
         </Box>
       </div>
       {/* {error && <Button onClick={() => set()}>重试翻译</Button>} */}
-      <Button
-        onClick={() => translatorModel.setEnabled(!translatorModel.enabled)}
-      >
+      <Button onClick={() => (translatorModel.enabled ? pause() : start())}>
         {translatorModel.enabled
           ? t("translator.pauseTranslating")
           : t("translator.startTranslating")}
-      </Button>
-      <Button
-        onClick={() => {
-          if (ocrModel.enabled) {
-            translatorModel.setEnabled(false);
-            ocrModel.setEnabled(false);
-          } else {
-            ocrModel.setEnabled(true);
-          }
-        }}
-      >
-        {ocrModel.enabled ? t("translator.pauseOcr") : t("translator.startOcr")}
       </Button>
     </DragableElement>
   );

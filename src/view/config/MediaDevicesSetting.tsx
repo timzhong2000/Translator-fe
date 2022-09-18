@@ -12,28 +12,21 @@ import { useTranslation } from "react-i18next";
 import useMediaDeviceList, {
   getDisplayLabel,
 } from "@/utils/hooks/useMediaDeviceList";
-import { StreamModelEvent, StreamStatus } from "@/model";
 import { useConfig, useStreamModel } from "@/context/hook";
-import { fromMediaDevice } from "@/utils/common/MediaStreamSubscriber";
 import { itemIn, itemNotIn } from "@/utils/common/enumTool";
 import { observer } from "mobx-react-lite";
+import { createMediaStreamByConfig } from "@/model/stream/utils";
+import { StreamStatus } from "@/types/streamSource";
 
 const buttonTitle: { [key in StreamStatus]: string } = {
   [StreamStatus.ACTIVE]: "setting.media.stopRecord",
-  [StreamStatus.EMPTY]: "setting.media.restartRecord",
   [StreamStatus.INACTIVE]: "setting.media.restartRecord",
   [StreamStatus.LOADING]: "setting.media.startingRecord",
-  [StreamStatus.NOT_READY]: "setting.media.startRecord",
-  [StreamStatus.TIMEOUT]: "error.timeout",
+  [StreamStatus.INIT]: "setting.media.startRecord",
   [StreamStatus.UNKNOWN]: "error.unknown",
 };
 
-const editable = itemIn([
-  StreamStatus.INACTIVE,
-  StreamStatus.NOT_READY,
-  StreamStatus.EMPTY,
-]);
-
+const editable = itemIn([StreamStatus.INACTIVE, StreamStatus.INIT]);
 const isStreamOpened = itemIn([StreamStatus.ACTIVE, StreamStatus.LOADING]);
 
 const isButtomEnabled = itemNotIn([StreamStatus.LOADING]);
@@ -47,13 +40,7 @@ const MediaDevicesSetting: FC = () => {
     setVideoDeviceId,
   } = useConfig();
 
-  const { videoDeviceId, audioDeviceId, fromScreen, audio } =
-    streamSourceConfig;
-
-  const streamModel = useStreamModel([
-    StreamModelEvent.ON_STREAM_CHANGED,
-    StreamModelEvent.ON_LOADING_CHANGED,
-  ]);
+  const streamModel = useStreamModel();
   const { t } = useTranslation();
   const {
     videoDevices,
@@ -61,17 +48,19 @@ const MediaDevicesSetting: FC = () => {
     loading: isdeviceListLoading,
     forceUpdate: forceUpdateDeviceList,
   } = useMediaDeviceList();
-  const status = streamModel.getStatus();
+  const status = streamModel.status;
   const isFormEditable = editable(status);
+
   const currentSourceLabel = `${t("setting.media.currentSource", {
-    source: fromScreen
+    source: streamSourceConfig.fromScreen
       ? t("setting.media.screen")
       : t("setting.media.captureCard"),
   })}`;
 
   const onclick = () => {
-    if (isStreamOpened(status)) streamModel.reset();
-    else streamModel.setStreamAsync(fromMediaDevice(streamSourceConfig));
+    if (isStreamOpened(status)) streamModel.resetStream();
+    else
+      streamModel.setStreamAsync(createMediaStreamByConfig(streamSourceConfig));
   };
 
   if (isdeviceListLoading) return <div>正在加载设备列表</div>;
@@ -103,21 +92,21 @@ const MediaDevicesSetting: FC = () => {
             label={currentSourceLabel}
             control={
               <Checkbox
-                checked={fromScreen}
+                checked={streamSourceConfig.fromScreen}
                 disabled={!isFormEditable}
                 onClick={() => toggleFromScreen()}
               />
             }
           ></FormControlLabel>
         </Grid>
-        {fromScreen ? null : (
+        {streamSourceConfig.fromScreen ? null : (
           <Fragment>
             <Grid item sm={12} md={6} xl={2} mt={1}>
               <FormControlLabel
                 label={t("setting.media.enableAudio") as string}
                 control={
                   <Checkbox
-                    checked={audio}
+                    checked={streamSourceConfig.audio}
                     disabled={!isFormEditable}
                     onClick={() => toggleAudioEnabled()}
                   />
@@ -131,7 +120,7 @@ const MediaDevicesSetting: FC = () => {
                 label={t("setting.media.videoDevice") as string}
                 disabled={!isFormEditable}
                 required
-                value={videoDeviceId}
+                value={streamSourceConfig.videoDeviceId}
                 sx={{ width: "100%" }}
                 onChange={(e) => setVideoDeviceId(e.target.value)}
               >
@@ -149,7 +138,7 @@ const MediaDevicesSetting: FC = () => {
                 label={t("setting.media.audioDevice") as string}
                 disabled={!isFormEditable}
                 required
-                value={audioDeviceId}
+                value={streamSourceConfig.audioDeviceId}
                 sx={{ width: "100%" }}
                 onChange={(e) => setAudioDeviceId(e.target.value)}
               >

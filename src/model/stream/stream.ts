@@ -1,137 +1,149 @@
 import { CutArea } from "@/types/globalConfig";
+import { Resolution, StreamStatus } from "@/types/streamSource";
 import { cutAreaParser } from "@/utils/common/cutAreaParser";
 import { logger, LogType } from "@/utils/logger";
-import { Observable } from "rxjs";
-import { ModelBase } from "../base";
-import { StreamEmptyError, StreamNotReadyError } from "./errors";
-import {
-  Resolution,
-  StreamSourceConfig,
-  StreamModelEvent,
-  StreamStatus,
-} from "./types";
+import { makeAutoObservable } from "mobx";
+import { StreamInitError } from "./errors";
 
 /**
- * 职责：不处理读取流逻辑，只负责把流设置到video上
+ * 管理流的获取以及流到video element的绑定
  */
-export class StreamModel extends ModelBase<StreamModelEvent> {
-  /// videoRef
+export class StreamModel {
+  offscreenCanvas = document.createElement("canvas"); // 用于截图
   videoRef = document.createElement("video");
-
-  /// stream
+  resolution: Resolution = { x: 1, y: 1 };
   private _stream?: MediaStream;
+  private _isLoading = false;
+  private _root?: HTMLDivElement;
+  private _streamActive = false;
 
-  /* stream不存在时抛出错误，一般不需要读取stream */
-  get stream() {
-    if (!this._stream) throw new StreamNotReadyError();
-    if (this._stream.getTracks().length === 0) throw new StreamEmptyError();
-    return this._stream;
+  constructor() {
+    makeAutoObservable(this);
+    this._initVideoElement();
   }
 
+  get status(): StreamStatus {
+    const isLoading = this._isLoading;
+    const isStreamExist = this._stream instanceof MediaStream;
+    const isStreamActive = this._streamActive;
+    if (isLoading) return StreamStatus.LOADING; // 正在等待系统返回流
+    if (!isStreamExist) return StreamStatus.INIT; // 还没有设置流
+    else return isStreamActive ? StreamStatus.ACTIVE : StreamStatus.INACTIVE;
+  }
+
+  private _initVideoElement() {
+    this.videoRef.autoplay = true;
+  }
+
+  /**
+   * 设置视频流并且绑定到video element
+   * @param newStream
+   */
   setStream(newStream: MediaStream) {
     this._stream = newStream;
     this.videoRef.srcObject = newStream;
-    this.eventBus.next(StreamModelEvent.ON_STREAM_CHANGED);
     // 如果设备分辨率与设定期望分辨率不符合，浏览器会自动回退分辨率，需要用实际视频元信息进行配置矫正
+    this._fixResolution(newStream);
+    // 管理流生命周期
+    this._startStreamWatchDog(newStream);
+  }
+
+  /**
+   * 同步流信息到mobx管理的观测变量上，监控流状态更新，处理无法捕获事件的情况
+   * 比如点击了浏览器的停止录制按钮，或者视频设备被拔出
+   */
+  private _startStreamWatchDog(newStream: MediaStream) {
+    this._setStreamActive(true);
+    const onInactive = () => {
+      this._setStreamActive(false);
+      newStream.removeEventListener("inactive", onInactive);
+    };
+    newStream.addEventListener("inactive", onInactive);
+  }
+
+  private _setIsLoading(isLoading: boolean) {
+    this._isLoading = isLoading;
+  }
+
+  private _setStreamActive(active: boolean) {
+    this._streamActive = active;
+  }
+
+  /**
+   * 异步初始化流，
+   * @param mediaStreamPromise
+   */
+  async setStreamAsync(mediaStreamPromise: Promise<MediaStream>) {
+    try {
+      this._setIsLoading(true);
+      const stream = await mediaStreamPromise;
+      this.setStream(stream);
+    } catch (err) {
+      throw err instanceof Error ? err : new StreamInitError();
+    } finally {
+      this._setIsLoading(false);
+    }
+  }
+
+  /* 写入root时会移除root所有child并且添加一个video */
+  mount(root: HTMLDivElement | undefined) {
+    if (root === this.videoRef.parentElement) return; // 防止重渲染
+    if (root) {
+      this.unmount();
+      root.appendChild(this.videoRef);
+      if (!this._stream) {
+        console.error("set stream to video element error: stream not exist");
+      }
+      this._root = root;
+    }
+  }
+
+  unmount() {
+    if (!this._root) return;
+    const actualRoot = this.videoRef.parentElement;
+    if (actualRoot !== this._root) {
+      console.warn("卸载video时检测到video的父节点与mount时的父节点不相同");
+    }
+    actualRoot?.removeChild(this.videoRef);
+    this._root = undefined;
+  }
+
+  private _fixResolution(stream: MediaStream) {
     setTimeout(() => {
-      const actualVideoSetting = newStream.getVideoTracks()[0].getSettings();
-      this.setResolution({
+      const videoTracks = stream.getVideoTracks();
+      // 可能用户手速比较快，500ms内关闭了流，需要处理没有流的情况
+      if (videoTracks.length < 1) return;
+      const actualVideoSetting = videoTracks[0].getSettings();
+      this._setResolution({
         x: actualVideoSetting.width ?? this.resolution.x,
         y: actualVideoSetting.height ?? this.resolution.y,
       });
     }, 500); // 500ms是一个相对比较安全的延迟
-    this.startStreamWatchDog();
   }
 
-  // 处理视频流被用户在浏览器外关闭的情况
-  startStreamWatchDog() {
-    const interval = setInterval(() => {
-      const updateStatus = () => {
-        clearInterval(interval);
-        this.eventBus.next(StreamModelEvent.ON_STREAM_CHANGED);
-        this.eventBus.next(StreamModelEvent.ON_STREAM_WATCHDOG_TRIGGER);
-      };
-
-      try {
-        !this.stream.active && updateStatus();
-      } catch (err) {
-        updateStatus();
-      }
-    }, 500);
-  }
-
-  isLoading = false;
-  async setStreamAsync(newStreamObservable: Observable<MediaStream | Error>) {
-    this.isLoading = true;
-    this.eventBus.next(StreamModelEvent.ON_LOADING_CHANGED);
-    const subscription = newStreamObservable.subscribe((stream) => {
-      stream instanceof MediaStream && this.setStream(stream);
-      this.isLoading = false;
-      subscription.unsubscribe();
-      this.eventBus.next(StreamModelEvent.ON_LOADING_CHANGED);
-    });
-  }
-
-  /// resolution
-  private _resolution: Resolution = { x: 1, y: 1 };
-  get resolution() {
-    return this._resolution;
-  }
-  setResolution(resolution: Resolution) {
-    resolution = this.fitRatio(resolution);
-    this._resolution = resolution;
+  private _setResolution(resolution: Resolution) {
+    resolution = this._fitRatio(resolution);
+    this.resolution = resolution;
     this.videoRef.style.width = `${resolution.x}px`;
     this.videoRef.style.height = `${resolution.y}px`;
-    this.eventBus.next(StreamModelEvent.ON_RESOLUTION_CHANGED);
   }
-  fitRatio(resolution: Resolution) {
+
+  resetStream() {
+    this.videoRef.srcObject = null;
+    this._stream?.getTracks().forEach((t) => t.stop());
+    this._stream = undefined;
+  }
+
+  private _fitRatio(resolution: Resolution) {
     return {
       x: resolution.x / window.devicePixelRatio,
       y: resolution.y / window.devicePixelRatio,
     };
   }
 
-  /// root
-  private _root?: HTMLDivElement;
-  get root() {
-    return this._root;
-  }
-  /* 写入root时会移除root所有child并且添加一个video */
-  setRoot(el: HTMLDivElement | undefined) {
-    if (el === this._root) return; // 防止重渲染
-    if (el) {
-      this.unSetRoot();
-      el.appendChild(this.videoRef);
-      try {
-        this.videoRef.srcObject = this.stream;
-      } catch (err) {
-        console.log(err);
-      }
-      this._root = el;
-    }
-  }
-  unSetRoot() {
-    if (this._root) {
-      this._root.childNodes.forEach((node) => this._root?.removeChild(node));
-    }
-  }
-
-  constructor(
-    public config: StreamSourceConfig,
-    root?: HTMLDivElement,
-    initStream?: MediaStream
-  ) {
-    super();
-    initStream && this.setStream(initStream);
-    root && this.setRoot(root);
-    this.videoRef.autoplay = true;
-  }
-
   setMuted(muted: boolean) {
     this.videoRef.muted = muted;
   }
-
-  offscreenCanvas = document.createElement("canvas"); // 用于截图
 
   capture(cutArea: CutArea) {
     const endTimer = logger.timing(LogType.CAPTURE_VIDEO_FRAME);
@@ -155,26 +167,6 @@ export class StreamModel extends ModelBase<StreamModelEvent> {
     endTimer();
     return this.offscreenCanvas;
   }
-
-  getStatus() {
-    if (this.isLoading) return StreamStatus.LOADING;
-    try {
-      return this.stream.active ? StreamStatus.ACTIVE : StreamStatus.INACTIVE;
-    } catch (err) {
-      if (err instanceof StreamEmptyError) {
-        return StreamStatus.EMPTY;
-      }
-      if (err instanceof StreamNotReadyError) {
-        return StreamStatus.NOT_READY;
-      }
-      return StreamStatus.UNKNOWN;
-    }
-  }
-
-  reset() {
-    this.videoRef.srcObject = null;
-    this.stream.getTracks().forEach((t) => t.stop());
-    this._stream = undefined;
-    this.eventBus.next(StreamModelEvent.ON_STREAM_CHANGED);
-  }
 }
+
+export const streamModel = new StreamModel();

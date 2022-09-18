@@ -1,5 +1,5 @@
 import { ExhaustiveCheckError } from "@/utils/common/error";
-import { action, makeObservable, observable, reaction, toJS } from "mobx";
+import { makeAutoObservable, reaction, toJS } from "mobx";
 import { config, Config } from "../config";
 import {
   createPaddleOcr,
@@ -10,6 +10,7 @@ import {
   OcrEngine,
 } from "../ocr";
 import { PreProcessorModel } from "../preProcessor";
+import { streamModel, StreamModel } from "../stream";
 import {
   TranslatorBase,
   TranslatorClient,
@@ -19,6 +20,7 @@ import { PauseTranslator } from "../translator/pauseTranslator";
 
 export class TCore {
   config: Config = config;
+  stream: StreamModel = streamModel;
 
   /* observable start */
   ocr: OcrBase = new DefaultOcr();
@@ -29,18 +31,12 @@ export class TCore {
   /* observable end */
 
   constructor() {
-    makeObservable(this, {
-      ocr: observable,
-      translator: observable,
-      preProcessor: observable,
-      switchOcrEngine: action,
-      updateTranslator: action,
-    });
+    makeAutoObservable(this);
 
     // 单例不需要回收
     reaction(
       () => toJS(this.config.ocrConfig),
-      () => this.switchOcrEngine(this.config.ocrConfig),
+      (config) => this.switchOcrEngine(config),
       { fireImmediately: true }
     );
 
@@ -55,9 +51,11 @@ export class TCore {
     const type = config.type;
     switch (type) {
       case OcrEngine.PaddleOcrBackend:
+        this.ocr.destroy();
         this.ocr = await createPaddleOcr(config);
         break;
       case OcrEngine.TesseractFrontend:
+        this.ocr.destroy();
         this.ocr = await createTesseractOcr(config);
         break;
       default: {

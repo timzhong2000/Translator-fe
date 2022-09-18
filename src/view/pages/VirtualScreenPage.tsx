@@ -1,6 +1,5 @@
 import VirtualScreen from "../common/VirtualScreen";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import { StreamModelEvent, StreamStatus } from "@/model";
 import { itemIn } from "@/utils/common/enumTool";
 import { useStreamModel } from "@/context";
 import MediaDevicesSetting from "../config/MediaDevicesSetting";
@@ -9,14 +8,16 @@ import { FullScreen } from "@/utils/common/FullScreen";
 import { Button, Tooltip } from "@mui/material";
 import { t } from "i18next";
 import StopRecord from "../config/StopRecord";
+import { StreamStatus } from "@/types/streamSource";
+import { observer } from "mobx-react-lite";
 
 const isStreamReady = itemIn([StreamStatus.ACTIVE]);
 
 const VirtualScreenPage: FC = () => {
-  const streamModel = useStreamModel([StreamModelEvent.ON_STREAM_CHANGED]);
+  const streamModel = useStreamModel();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  if (!isStreamReady(streamModel.getStatus())) return <MediaDevicesSetting />;
+  if (!isStreamReady(streamModel.status)) return <MediaDevicesSetting />;
   return (
     <FullScreen
       fullScreen={isFullScreen}
@@ -49,4 +50,4 @@ const VirtualScreenPage: FC = () => {
   );
 };
 
-export default VirtualScreenPage;
+export default observer(VirtualScreenPage);

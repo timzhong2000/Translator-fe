@@ -13,11 +13,13 @@ export abstract class OcrBase {
    * @param init 加载函数，OcrBase等待init被resolve后进入Ready状态
    */
   constructor(init: Promise<any> = Promise.resolve()) {
-    makeObservable(this, {
+    makeObservable<OcrBase>(this, {
       enabled: observable,
       ocrStage: observable,
       recognize: action,
       destroy: action,
+      setEnabled: action,
+      setOcrStage: action,
     });
     init
       .then(() => this.setOcrStage(OcrStage.READY))

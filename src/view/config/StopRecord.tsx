@@ -7,7 +7,7 @@ const StopRecord: FC = () => {
   const { t } = useTranslation();
   const streamModel = useStreamModel();
   return (
-    <Button onClick={() => streamModel.reset()}>
+    <Button onClick={() => streamModel.resetStream()}>
       {t("setting.media.stopRecord")}
     </Button>
   );

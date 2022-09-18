@@ -1,5 +1,6 @@
 import { CutArea, FilterConfig } from "@/types/globalConfig";
 import ISO963_1 from "@/types/ISO963";
+import { StreamSourceConfig } from "@/types/streamSource";
 import { ExhaustiveCheckError } from "@/utils/common/error";
 import { cloneDeep, debounce, merge } from "lodash-es";
 import { makeAutoObservable } from "mobx";
@@ -10,7 +11,6 @@ import {
   OcrEngine,
   OcrLangType,
 } from "../ocr";
-import { StreamSourceConfig } from "../stream";
 import {
   defaultFilterConfig,
   defaultCutAreaConfig,
