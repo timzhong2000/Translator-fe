@@ -7,7 +7,7 @@ import { useIsDataChange } from "../../utils/hooks/useIsDataChange";
 import { useConfig, useStreamModel } from "@/context/hook";
 import { TtransError } from "@/utils/error";
 import { Button, Tooltip, Box } from "@mui/material";
-import { FullScreen } from "@/utils/common/FullScreen";
+import { FullScreen } from "@/view/common/FullScreen";
 import { observer } from "mobx-react-lite";
 
 const defaultOpacity = 0.3;

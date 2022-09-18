@@ -1,21 +1,47 @@
-import useTextractor from "@/utils/hooks/useTextractor";
-import { Stack, Box } from "@mui/material";
+import { Alert, AlertColor, Box, Snackbar } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import LazyInput from "../common/LazyInput";
 import TranslateBlock from "../common/TranslateBlock";
-import md5 from "md5";
 import { useTranslatorModel } from "@/context/hook";
 import { useAsync } from "react-async-hook";
+import { observer } from "mobx-react-lite";
+import { core } from "@/model/core";
+import { TextractorClient } from "@/model/textractor/TextractorClient";
+import { runInAction } from "mobx";
+
+const defaultSnackbarConfig: {
+  open: boolean;
+  message: string;
+  severity: AlertColor;
+} = {
+  open: false,
+  message: "",
+  severity: "info",
+};
 
 const TextractorPage = () => {
   const [url, setUrl] = useState("ws://localhost:1234");
-  const { text } = useTextractor(url);
-  const [list, setList] = useState<string[]>([]);
+  const textractor = core.textractor;
+  const { currText } = textractor;
+  const [snackbarConfig, setSnackbarConfig] = useState(defaultSnackbarConfig);
+
+  const handleClose = () => setSnackbarConfig(defaultSnackbarConfig);
+  const handleOpen = (message: string, severity: AlertColor = "info") =>
+    setSnackbarConfig({ open: true, message, severity });
+
+  const { open, message, severity } = snackbarConfig;
+
   useEffect(() => {
-    const newList = [...list, text];
-    if (newList.length > 10) newList.slice(1);
-    setList(newList);
-  }, [text]);
+    handleOpen(`正在连接本地 Textractor`, "info");
+    TextractorClient.create(url)
+      .then((client) =>
+        runInAction(() => {
+          core.textractor = client;
+          handleOpen(`连接本地 Textractor 成功`, "success");
+        })
+      )
+      .catch(() => handleOpen(`连接本地 Textractor 失败`, "error"));
+  }, [url]);
 
   const validPrefix = (input: string) =>
     input.startsWith("ws://") || input.startsWith("wss://");
@@ -31,11 +57,22 @@ const TextractorPage = () => {
         }
         errorFn={(input) => !validPrefix(input)}
       />
-      <Stack direction="column-reverse">
+      <ListItem src={currText} />
+      {/* <Stack direction="column-reverse">
         {list.map((item) => (
           <ListItem key={md5(item)} src={item} />
         ))}
-      </Stack>
+      </Stack> */}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity={severity}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
@@ -49,4 +86,4 @@ const ListItem = memo(({ src }: { src: string }) => {
   return <TranslateBlock src={src} dest={result ? result.dest : "正在加载"} />;
 });
 
-export default TextractorPage;
+export default observer(TextractorPage);

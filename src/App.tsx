@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import "@/utils/common/i18n";
+import "@/view/common/i18n";
 
 import Home from "@/view/pages/Home";
 import About from "@/view/pages/About";

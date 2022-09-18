@@ -11,6 +11,7 @@ import {
 } from "../ocr";
 import { PreProcessorModel } from "../preProcessor";
 import { streamModel, StreamModel } from "../stream";
+import { TextractorClient } from "../textractor/TextractorClient";
 import {
   TranslatorBase,
   TranslatorClient,
@@ -28,6 +29,7 @@ export class TCore {
     this.config.translatorConfig
   );
   preProcessor: PreProcessorModel = new PreProcessorModel();
+  textractor: TextractorClient = new TextractorClient("ws://localhost:1234");
   /* observable end */
 
   constructor() {
@@ -81,3 +83,9 @@ export class TCore {
 
 // 单例
 export const core = new TCore();
+declare global {
+  interface Window {
+    core: TCore;
+  }
+}
+window.core = core;
