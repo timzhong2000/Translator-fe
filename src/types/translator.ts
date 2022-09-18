@@ -1,4 +1,4 @@
-import ISO963_1 from "@/types/ISO963";
+import ISO963_1 from "./ISO963";
 
 export enum TranslateLevel {
   "AI",

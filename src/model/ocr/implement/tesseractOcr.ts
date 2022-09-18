@@ -1,7 +1,12 @@
 import { createWorker, OEM, PSM, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
 import { OcrBase } from "../base";
-import { OcrEngine, OcrResult, OcrStage, TesseractOcrConfig } from "../types";
+import {
+  OcrEngine,
+  OcrResult,
+  OcrStage,
+  TesseractOcrConfig,
+} from "@/types/ocr";
 import { simd } from "wasm-feature-detect";
 
 const createDefaultWorkerConfig = (enableSimd: boolean) => {

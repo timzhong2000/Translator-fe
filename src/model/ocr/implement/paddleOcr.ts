@@ -1,6 +1,6 @@
 import axios from "axios";
 import { OcrBase } from "../base";
-import { OcrEngine, OcrResult, PaddleOcrConfig, Point } from "../types";
+import { OcrEngine, OcrResult, PaddleOcrConfig, Point } from "@/types/ocr";
 
 export class PaddleOcr extends OcrBase {
   readonly type = OcrEngine.PaddleOcrBackend;

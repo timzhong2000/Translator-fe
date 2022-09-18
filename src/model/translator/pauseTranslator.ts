@@ -1,5 +1,9 @@
 import { TranslatorBase } from "./base";
-import { TranslateResult, TranslateLevel, TranslatorConfig } from "./types";
+import {
+  TranslateResult,
+  TranslateLevel,
+  TranslatorConfig,
+} from "@/types/translator";
 
 export class PauseTranslator extends TranslatorBase {
   get config() {

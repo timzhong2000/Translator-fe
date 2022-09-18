@@ -1,5 +1,5 @@
 import { tagWithPrefix, TtransError } from "@/utils/error";
-import { OcrStage } from "./types";
+import { OcrStage } from "@/types/ocr";
 
 const tag = tagWithPrefix("ocr.error.");
 

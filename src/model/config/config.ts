@@ -18,7 +18,7 @@ import {
   defaultTranslatorConfig,
   defaultStreamSourceConfig,
 } from "./defaultConfig";
-import { ConfigScope } from "./types";
+import { ConfigScope } from "@/types/config";
 
 function getConfig<T>(tag: ConfigScope, defaultValue: T, loadCache = true) {
   if (loadCache) {

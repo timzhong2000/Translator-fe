@@ -1,6 +1,6 @@
 import { UninitializedError } from "../errors";
 import { OcrBase } from "../base";
-import { OcrEngine, OcrResult, OcrStage } from "../types";
+import { OcrEngine, OcrResult, OcrStage } from "@/types/ocr";
 
 export class DefaultOcr extends OcrBase {
   readonly type = OcrEngine.DefaultOcr;

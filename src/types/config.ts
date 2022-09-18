@@ -1,7 +1,7 @@
 import { FilterConfig, CutArea } from "@/types/globalConfig";
-import { OcrConfig } from "../ocr";
-import { StreamSourceConfig } from "../stream";
-import { TranslatorConfig } from "../translator";
+import { OcrConfig } from "../model/ocr";
+import { TranslatorConfig } from "../model/translator";
+import { StreamSourceConfig } from "./streamSource";
 
 export interface GlobalConfig {
   [ConfigScope.FILTER]: FilterConfig;

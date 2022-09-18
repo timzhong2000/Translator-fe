@@ -1,3 +1,3 @@
 export * from "./preProcessor";
-export * from "./types";
+export * from "@/types/preprocessor";
 export * from "./errors";
