@@ -1,7 +1,7 @@
 import { Alert, AlertColor, SnackbarOrigin } from "@mui/material";
 import { isString } from "lodash-es";
 import { makeAutoObservable, observable, runInAction } from "mobx";
-import { Component, FC, ReactElement } from "react";
+import { FC } from "react";
 
 type ToastContent = FC;
 

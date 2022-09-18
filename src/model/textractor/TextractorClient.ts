@@ -1,9 +1,9 @@
 import { isString } from "lodash-es";
-import { makeAutoObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export class TextractorClient {
   private _ws: WebSocket | null = null;
-  currText: string = "";
+  currText = "";
 
   private onError: (ev: Event) => void = console.error;
   private onConnect: () => void = () => {
