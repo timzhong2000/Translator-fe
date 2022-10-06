@@ -1,6 +1,6 @@
 import { OcrImage } from "@/utils/preprocessor/OcrImage";
 import { makeObservable } from "mobx";
-import { Resolution } from "../stream";
+import { Resolution } from "@/types/streamSource";
 import { CanvasOffScreenError } from "./errors";
 import { Mat, OpenCV } from "@/types/opencv";
 import { OpenCVLoader } from "@/utils/common/loadOpencv";
