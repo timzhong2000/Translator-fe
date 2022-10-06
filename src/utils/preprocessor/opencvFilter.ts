@@ -1,4 +1,4 @@
-import { Mat, OpenCV } from "@/model";
+import { Mat, OpenCV } from "@/types/opencv";
 import { FilterConfig } from "@/types/globalConfig";
 import { logger, LogType } from "../logger";
 
@@ -35,7 +35,7 @@ export const createOpencvFilter = ({
     cv.resize(src, src, new cv.Size(0, 0), zoomFactor, zoomFactor);
     cv.threshold(src, src, binaryThreshold, 255, cv.THRESH_BINARY);
 
-    const erodeKernel = new cv.Mat.ones(
+    const erodeKernel = cv.Mat.ones(
       new cv.Size(erodeKernelSize, erodeKernelSize),
       cv.CV_8U
     );
@@ -50,7 +50,7 @@ export const createOpencvFilter = ({
     );
     erodeKernel.delete();
 
-    const dilateKernel = new cv.Mat.ones(
+    const dilateKernel = cv.Mat.ones(
       new cv.Size(dilateKernelSize, dilateKernelSize),
       cv.CV_8U
     );
