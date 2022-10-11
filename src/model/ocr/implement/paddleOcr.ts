@@ -1,6 +1,8 @@
 import axios from "axios";
-import { OcrBase } from "../base";
+import { OcrBase, OcrImage } from "../base";
 import { OcrEngine, OcrResult, PaddleOcrConfig, Point } from "@/types/ocr";
+import { ImageHelper } from "@timzhong2000/browser-image-helper";
+import { logger, LogType } from "@/utils/logger";
 
 export class PaddleOcr extends OcrBase {
   readonly type = OcrEngine.PaddleOcrBackend;
@@ -16,9 +18,12 @@ export class PaddleOcr extends OcrBase {
   // eslint-disable-next-line
   public destroy() {}
 
-  protected async _recognize(pic: Blob | File): Promise<OcrResult> {
+  protected async _recognize(img: OcrImage): Promise<OcrResult> {
     const form = new FormData();
-    form.append("pic", pic);
+    const endImageHelperTimer = logger.timing(LogType.TRANSFORM_IMAGE_FORMAT);
+    const image = new ImageHelper(img);
+    form.append("pic", await image.toBlob());
+    endImageHelperTimer();
     const result = (
       await axios.post<[[number, number][], [string, number]][]>(
         this.config.url,
@@ -30,6 +35,12 @@ export class PaddleOcr extends OcrBase {
       text: val[1][0],
       confidence: val[1][1],
     }));
+  }
+
+  imageToBlob(img: OcrImage) {
+    if (img instanceof ImageData) {
+      return new Blob([img.data], { type: "" });
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import { action, makeObservable, observable } from "mobx";
 import { DisabledError, StageError, UninitializedError } from "./errors";
 import { OcrEngine, OcrResult, OcrStage } from "@/types/ocr";
 
+export type OcrImage = ImageBitmapSource;
 export abstract class OcrBase {
   abstract type: OcrEngine;
 
@@ -36,11 +37,11 @@ export abstract class OcrBase {
   }
 
   // 抽象方法
-  protected abstract _recognize(pic: Blob | File): Promise<OcrResult>;
+  protected abstract _recognize(pic: OcrImage): Promise<OcrResult>;
   public abstract destroy(): void;
 
   // 组件外部方法
-  async recognize(pic: Blob | File): Promise<OcrResult> {
+  async recognize(pic: OcrImage): Promise<OcrResult> {
     if (this.ocrStage === OcrStage.INIT) throw new UninitializedError();
     if (!this.enabled) throw new DisabledError();
     if (this.ocrStage === OcrStage.READY || this.ocrStage === OcrStage.IDLE) {

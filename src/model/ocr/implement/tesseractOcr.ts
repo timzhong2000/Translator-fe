@@ -1,6 +1,6 @@
 import { createWorker, OEM, PSM, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
-import { OcrBase } from "../base";
+import { OcrBase, OcrImage } from "../base";
 import {
   OcrEngine,
   OcrResult,
@@ -8,6 +8,8 @@ import {
   TesseractOcrConfig,
 } from "@/types/ocr";
 import { simd } from "wasm-feature-detect";
+import { ImageHelper } from "@timzhong2000/browser-image-helper";
+import { logger, LogType } from "@/utils/logger";
 
 const createDefaultWorkerConfig = (enableSimd: boolean) => {
   return {
@@ -51,9 +53,13 @@ class TesseractOcr extends OcrBase {
   }
 
   static async createWorker(config: TesseractOcrConfig) {
+    const tesseractInitEnd = logger.timing(LogType.TESSERACT_START);
     const worker = createWorker({
       ...createDefaultWorkerConfig(await simd()),
       ...config.workerConfig,
+      errorHandler: (err) => {
+        logger.print(LogType.TESSERACT_CRASH, "receive error", err);
+      },
     });
     await worker.load();
     await worker.loadLanguage(config.lang);
@@ -68,6 +74,7 @@ class TesseractOcr extends OcrBase {
       tessjs_create_tsv: "0",
       tessjs_create_unlv: "0",
     });
+    tesseractInitEnd();
     return worker;
   }
 
@@ -83,17 +90,19 @@ class TesseractOcr extends OcrBase {
     this.worker?.terminate();
   }
 
-  protected async _recognize(pic: Blob | File): Promise<OcrResult> {
+  protected async _recognize(pic: OcrImage): Promise<OcrResult> {
     if (!this.worker) throw new UninitializedError();
     this.setOcrStage(OcrStage.BUSY);
     try {
-      console.time("test");
-      const file = new File([pic], "pic.png");
-      const res = await this.worker.recognize(file);
+      const endImageHelperTimer = logger.timing(LogType.TRANSFORM_IMAGE_FORMAT);
+      const imageFile = await new ImageHelper(pic).toFile("pic.png");
+      endImageHelperTimer();
+      const endTesseractProcessTimer = logger.timing(LogType.TESSERACT_PROCESS);
+      const res = await this.worker.recognize(imageFile);
+      endTesseractProcessTimer();
       const {
         data: { symbols, confidence },
       } = res;
-      console.timeEnd("test");
       if (confidence < 70) return [];
       return symbols.map((symbol) => ({
         area: [

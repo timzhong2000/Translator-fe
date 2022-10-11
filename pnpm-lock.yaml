@@ -8,9 +8,11 @@ specifiers:
   '@mui/material': ^5.10.5
   '@react-spring/web': ^9.5.4
   '@techstark/opencv-js': 4.5.5-release.2
+  '@timzhong2000/browser-image-helper': ^0.0.1
   '@types/lodash-es': ^4.17.6
   '@types/md5': ^2.3.2
   '@types/node': ^18.7.17
+  '@types/offscreencanvas': ^2019.7.0
   '@types/react': ^17.0.49
   '@types/react-dom': ^17.0.17
   '@types/rollup-plugin-visualizer': ^4.2.1
@@ -19,6 +21,7 @@ specifiers:
   '@use-gesture/react': ^10.2.19
   '@vitejs/plugin-react': 2.1.0
   axios: ^0.27.2
+  canvas-context: ^3.2.0
   chalk: ^5.0.1
   clipboard-polyfill: ^3.0.3
   eslint: ^8.23.1
@@ -57,8 +60,10 @@ dependencies:
   '@mui/material': 5.10.5_4e17e3b2423b0681f17785e80748d674
   '@react-spring/web': 9.5.4_react-dom@17.0.2+react@17.0.2
   '@techstark/opencv-js': 4.5.5-release.2
+  '@timzhong2000/browser-image-helper': 0.0.1
   '@use-gesture/react': 10.2.19_react@17.0.2
   axios: 0.27.2
+  canvas-context: 3.2.0
   clipboard-polyfill: 3.0.3
   i18next: 21.6.12
   i18next-browser-languagedetector: 6.1.5
@@ -80,6 +85,7 @@ devDependencies:
   '@types/lodash-es': 4.17.6
   '@types/md5': 2.3.2
   '@types/node': 18.7.17
+  '@types/offscreencanvas': 2019.7.0
   '@types/react': 17.0.49
   '@types/react-dom': 17.0.17
   '@types/rollup-plugin-visualizer': 4.2.1
@@ -932,6 +938,10 @@ packages:
       - encoding
     dev: false
 
+  /@timzhong2000/browser-image-helper/0.0.1:
+    resolution: {integrity: sha512-LRC9HgVM/dY5Itjb6y/DXnf2TPD3C96ngUtwths0T4qGdLgHlfaOukJdhbB+21m3ldASB70hox3Sowgd33Aguw==}
+    dev: false
+
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -992,6 +1002,10 @@ packages:
 
   /@types/node/18.7.17:
     resolution: {integrity: sha512-0UyfUnt02zIuqp7yC8RYtDkp/vo8bFaQ13KkSEvUAohPOAlnVNbj5Fi3fgPSuwzakS+EvvnnZ4x9y7i6ASaSPQ==}
+    dev: true
+
+  /@types/offscreencanvas/2019.7.0:
+    resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -1513,6 +1527,11 @@ packages:
 
   /caniuse-lite/1.0.30001399:
     resolution: {integrity: sha512-4vQ90tMKS+FkvuVWS5/QY1+d805ODxZiKFzsU8o/RsVJz49ZSRR8EjykLJbqhzdPgadbX6wB538wOzle3JniRA==}
+
+  /canvas-context/3.2.0:
+    resolution: {integrity: sha512-omHLIFfVt+bgWqbWHSeEbk3WKiXLECxUAy+uQfVk4VuHzNqY5pKwt0lHYVJC1AuKayGucUBjiqi5/xL3zXIM6A==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+    dev: false
 
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}

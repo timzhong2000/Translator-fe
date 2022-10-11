@@ -1,4 +1,3 @@
-import { OcrImage } from "@/utils/preprocessor/OcrImage";
 import { makeObservable } from "mobx";
 import { Resolution } from "@/types/streamSource";
 import { CanvasOffScreenError } from "./errors";
@@ -35,23 +34,28 @@ export class PreProcessorModel {
 
   /**
    * 处理函数
-   * @param inputEl 数据源可以是canvasElement imageElement
+   * @param image 推荐使用 ImageData，数据源也可以是 CanvasElement ImageElement VideoElement
    * @param fn 实现处理逻辑，返回一个mat，注意fn中新建的mat都必须自己回收，否则会内存泄露
    * @returns
    */
   async process(
-    inputEl: string | HTMLCanvasElement | HTMLImageElement,
+    image: ImageData | HTMLCanvasElement | HTMLImageElement | HTMLVideoElement,
     fn: (cv: OpenCV, mat: Mat) => Mat
-  ): Promise<Blob> {
+  ): Promise<HTMLCanvasElement> {
     if (!this.outputCanvasEl.parentElement) {
       throw new CanvasOffScreenError();
     }
     await OpenCVLoader.waitUntilReady();
-    const inputMat = cv.imread(inputEl);
+    let inputMat: Mat;
+    if (image instanceof ImageData) {
+      inputMat = cv.matFromImageData(image);
+    } else {
+      inputMat = cv.imread(image);
+    }
     const outputMat = fn(cv, inputMat);
     cv.imshow(this.outputCanvasEl, outputMat);
     inputMat === outputMat && inputMat.delete(); // 防止double delete
     outputMat.delete();
-    return OcrImage.canvasToBlob(this.outputCanvasEl);
+    return this.outputCanvasEl;
   }
 }

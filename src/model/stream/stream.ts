@@ -2,6 +2,7 @@ import { CutArea } from "@/types/globalConfig";
 import { Resolution, StreamStatus } from "@/types/streamSource";
 import { cutAreaParser } from "@/utils/common/cutAreaParser";
 import { logger, LogType } from "@/utils/logger";
+import { ImageHelper } from "@timzhong2000/browser-image-helper";
 import { makeAutoObservable } from "mobx";
 import { StreamInitError } from "./errors";
 
@@ -9,7 +10,6 @@ import { StreamInitError } from "./errors";
  * 管理流的获取以及流到video element的绑定
  */
 export class StreamModel {
-  offscreenCanvas = document.createElement("canvas"); // 用于截图
   videoRef = document.createElement("video");
   resolution: Resolution = { x: 1, y: 1 };
   private _stream?: MediaStream;
@@ -145,27 +145,18 @@ export class StreamModel {
     this.videoRef.muted = muted;
   }
 
-  capture(cutArea: CutArea) {
+  async capture(cutArea: CutArea): Promise<ImageData> {
     const endTimer = logger.timing(LogType.CAPTURE_VIDEO_FRAME);
-    const areaConfig = cutAreaParser(cutArea);
-    this.offscreenCanvas.width = areaConfig.width * window.devicePixelRatio;
-    this.offscreenCanvas.height = areaConfig.height * window.devicePixelRatio;
-    const ctx = this.offscreenCanvas.getContext(
-      "2d"
-    ) as CanvasRenderingContext2D;
-    ctx.drawImage(
-      this.videoRef,
-      areaConfig.startX * window.devicePixelRatio,
-      areaConfig.startY * window.devicePixelRatio,
-      areaConfig.width * window.devicePixelRatio,
-      areaConfig.height * window.devicePixelRatio,
-      0,
-      0,
-      areaConfig.width * window.devicePixelRatio,
-      areaConfig.height * window.devicePixelRatio
+    const { startX, startY, width, height } = cutAreaParser(cutArea);
+    const imageHelper = new ImageHelper(this.videoRef);
+    const capturedImage = await imageHelper.toImageData(
+      startX * window.devicePixelRatio,
+      startY * window.devicePixelRatio,
+      width * window.devicePixelRatio,
+      height * window.devicePixelRatio
     );
     endTimer();
-    return this.offscreenCanvas;
+    return capturedImage;
   }
 }
 

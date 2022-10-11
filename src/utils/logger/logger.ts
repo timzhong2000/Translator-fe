@@ -1,7 +1,6 @@
 import { LogType, PerformanceData } from "./types";
 import { ignorePrint } from "./config";
 const emptyPerformanceData: PerformanceData = {
-  [LogType.BLOB_TO_DATAURL]: [],
   [LogType.CAPTURE_VIDEO_FRAME]: [],
   [LogType.OPENCV_CRASH]: [],
   [LogType.OPENCV_PROCESS]: [],
@@ -14,6 +13,7 @@ const emptyPerformanceData: PerformanceData = {
   [LogType.MEMORY_HEAP_USED]: [],
   [LogType.TRANSLATOR_LOCAL_CACHE]: [],
   [LogType.TRANSLATOR_ERROR]: [],
+  [LogType.TRANSFORM_IMAGE_FORMAT]: [],
 };
 
 class Logger {
