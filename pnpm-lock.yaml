@@ -8,7 +8,7 @@ specifiers:
   '@mui/material': ^5.10.5
   '@react-spring/web': ^9.5.4
   '@techstark/opencv-js': 4.5.5-release.2
-  '@timzhong2000/browser-image-helper': ^0.0.1
+  '@timzhong2000/browser-image-helper': 0.3.2
   '@types/lodash-es': ^4.17.6
   '@types/md5': ^2.3.2
   '@types/node': ^18.7.17
@@ -60,7 +60,7 @@ dependencies:
   '@mui/material': 5.10.5_4e17e3b2423b0681f17785e80748d674
   '@react-spring/web': 9.5.4_react-dom@17.0.2+react@17.0.2
   '@techstark/opencv-js': 4.5.5-release.2
-  '@timzhong2000/browser-image-helper': 0.0.1
+  '@timzhong2000/browser-image-helper': 0.3.2
   '@use-gesture/react': 10.2.19_react@17.0.2
   axios: 0.27.2
   canvas-context: 3.2.0
@@ -938,8 +938,8 @@ packages:
       - encoding
     dev: false
 
-  /@timzhong2000/browser-image-helper/0.0.1:
-    resolution: {integrity: sha512-LRC9HgVM/dY5Itjb6y/DXnf2TPD3C96ngUtwths0T4qGdLgHlfaOukJdhbB+21m3ldASB70hox3Sowgd33Aguw==}
+  /@timzhong2000/browser-image-helper/0.3.2:
+    resolution: {integrity: sha512-V26wnazrnmmuWAO2Ii3yGBQXA5y/mC3jWc3oY8jdsxKESMynAnNihnT6E56VYQrxyLlfCN1cG0VkBA0ymk3PQQ==}
     dev: false
 
   /@tootallnate/once/2.0.0:

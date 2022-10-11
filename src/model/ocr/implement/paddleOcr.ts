@@ -21,8 +21,7 @@ export class PaddleOcr extends OcrBase {
   protected async _recognize(img: OcrImage): Promise<OcrResult> {
     const form = new FormData();
     const endImageHelperTimer = logger.timing(LogType.TRANSFORM_IMAGE_FORMAT);
-    const image = new ImageHelper(img);
-    form.append("pic", await image.toBlob());
+    form.append("pic", await new ImageHelper(img).toBlob());
     endImageHelperTimer();
     const result = (
       await axios.post<[[number, number][], [string, number]][]>(
@@ -35,12 +34,6 @@ export class PaddleOcr extends OcrBase {
       text: val[1][0],
       confidence: val[1][1],
     }));
-  }
-
-  imageToBlob(img: OcrImage) {
-    if (img instanceof ImageData) {
-      return new Blob([img.data], { type: "" });
-    }
   }
 }
 

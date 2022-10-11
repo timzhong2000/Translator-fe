@@ -10,6 +10,7 @@ import { StreamInitError } from "./errors";
  * 管理流的获取以及流到video element的绑定
  */
 export class StreamModel {
+  private sharedImageHelper = new ImageHelper(undefined, true);
   videoRef = document.createElement("video");
   resolution: Resolution = { x: 1, y: 1 };
   private _stream?: MediaStream;
@@ -145,18 +146,20 @@ export class StreamModel {
     this.videoRef.muted = muted;
   }
 
-  async capture(cutArea: CutArea): Promise<ImageData> {
+  async capture(cutArea: CutArea): Promise<HTMLCanvasElement> {
     const endTimer = logger.timing(LogType.CAPTURE_VIDEO_FRAME);
     const { startX, startY, width, height } = cutAreaParser(cutArea);
-    const imageHelper = new ImageHelper(this.videoRef);
-    const capturedImage = await imageHelper.toImageData(
-      startX * window.devicePixelRatio,
-      startY * window.devicePixelRatio,
-      width * window.devicePixelRatio,
-      height * window.devicePixelRatio
-    );
+    const { canvas } = this.sharedImageHelper
+      .setImage(this.videoRef)
+      .toOnscreenCanvas({
+        startX: startX * window.devicePixelRatio,
+        startY: startY * window.devicePixelRatio,
+        width: width * window.devicePixelRatio,
+        height: height * window.devicePixelRatio,
+      });
+
     endTimer();
-    return capturedImage;
+    return canvas;
   }
 }
 

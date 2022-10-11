@@ -17,7 +17,7 @@
     "@mui/material": "^5.10.5",
     "@react-spring/web": "^9.5.4",
     "@techstark/opencv-js": "4.5.5-release.2",
-    "@timzhong2000/browser-image-helper": "^0.0.1",
+    "@timzhong2000/browser-image-helper": "0.3.2",
     "@use-gesture/react": "^10.2.19",
     "axios": "^0.27.2",
     "canvas-context": "^3.2.0",

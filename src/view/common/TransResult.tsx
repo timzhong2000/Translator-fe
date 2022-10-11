@@ -37,8 +37,9 @@ const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
       )
         return;
       try {
+        const capturedImage = await streamModel.capture(cutArea);
         const pic = await preProcessorModel.process(
-          await streamModel.capture(cutArea),
+          capturedImage,
           createOpencvFilter(filterConfig)
         );
         const ocrResult = await ocrModel.recognize(pic);
