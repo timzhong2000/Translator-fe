@@ -24,7 +24,7 @@ export const createOpencvFilter = ({
   return function filter(cv: OpenCV, src: Mat) {
     const endTimer = logger.timing(LogType.OPENCV_PROCESS);
     const zoomFactor = Math.min(
-      3,
+      2,
       Math.ceil(1 / ((src.rows * src.cols) / 1000000))
     );
     cv.cvtColor(src, src, cv.COLOR_RGB2GRAY);
