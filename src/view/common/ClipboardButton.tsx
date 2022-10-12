@@ -1,10 +1,10 @@
+import { forwardRef, memo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { writeText } from "clipboard-polyfill/text";
+// Components
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import DoneIcon from "@mui/icons-material/Done";
 import { Tooltip } from "@mui/material";
-
-import { forwardRef, memo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const ClipboardButton = forwardRef<HTMLButtonElement, { text: string }>(
   (props, buttonRef) => {

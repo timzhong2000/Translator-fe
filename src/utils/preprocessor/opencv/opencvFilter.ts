@@ -1,6 +1,5 @@
-import { Mat, OpenCV } from "@/types/opencv";
-import { FilterConfig } from "@/types/globalConfig";
-import { logger, LogType } from "../logger";
+import { Mat, OpenCV, FilterConfig } from "@/types";
+import { logger, LogType } from "../../logger";
 
 export const opencvBackgroundColor = (cv: OpenCV, src: Mat) => {
   const mean = cv.mean(src) as unknown as Array<number>; // todo

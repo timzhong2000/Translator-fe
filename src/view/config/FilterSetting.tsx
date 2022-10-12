@@ -1,5 +1,6 @@
-import { useTranslation } from "react-i18next";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react-lite";
 import {
   Grid,
   FormControlLabel,
@@ -8,7 +9,6 @@ import {
   Slider,
   TextField,
 } from "@mui/material";
-import { observer } from "mobx-react-lite";
 import { useConfig } from "@/context";
 
 const FilterSetting: FC = () => {

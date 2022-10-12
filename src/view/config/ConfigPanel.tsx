@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Box, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react-lite";
 
 import TranslateConfig from "./TranslateConfig";
 import TranslateTest from "./TranslateTest";
 import FilterSetting from "./FilterSetting";
 import MediaDevicesSetting from "./MediaDevicesSetting";
 import TranslateServerConfig from "./TranslateServerConfig";
+import OcrSetting from "./OcrSetting";
 
 import { core } from "@/model/core";
-import { useTranslation } from "react-i18next";
-import OcrSetting from "./OcrSetting";
-import { observer } from "mobx-react-lite";
 
 const ConfigPanel = () => {
   const [advanceMode, setAdvanceMode] = useState(false);

@@ -1,7 +1,9 @@
-import { useStreamModel } from "@/context";
-import { Button } from "@mui/material";
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
+
+import { Button } from "@mui/material";
+
+import { useStreamModel } from "@/context";
 
 const StopRecord: FC = () => {
   const { t } = useTranslation();

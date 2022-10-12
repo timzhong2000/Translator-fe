@@ -1,6 +1,6 @@
 import axios from "axios";
 import { OcrBase, OcrImage } from "../base";
-import { OcrEngine, OcrResult, PaddleOcrConfig, Point } from "@/types/ocr";
+import { OcrEngine, OcrResult, PaddleOcrConfig, Point } from "@/types";
 import { ImageHelper } from "@timzhong2000/browser-image-helper";
 import { logger, LogType } from "@/utils/logger";
 

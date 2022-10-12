@@ -1,14 +1,16 @@
 import React, { FC, useRef, useState } from "react";
-import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import { areaToStyle } from "@/utils/common/cutAreaParser";
+import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
+// Components
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PreProcessCanvas from "./PreProcessCanvas";
-import { useIsDataChange } from "../../utils/hooks/useIsDataChange";
-import { useConfig, useStreamModel } from "@/context/hook";
-import { TtransError } from "@/utils/error";
 import { Button, Tooltip, Box } from "@mui/material";
 import { FullScreen } from "@/view/common/FullScreen";
-import { observer } from "mobx-react-lite";
+// Other Modules
+import { useIsDataChange } from "@/utils/hooks/useIsDataChange";
+import { areaToStyle } from "@/utils/common/cutAreaParser";
+import { useConfig, useStreamModel } from "@/context/hook";
+import { TtransError } from "@/utils/error";
 
 const defaultOpacity = 0.3;
 

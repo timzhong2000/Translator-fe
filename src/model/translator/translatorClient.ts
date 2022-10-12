@@ -1,11 +1,7 @@
 import axios from "axios";
 import { logger, LogType } from "@/utils/logger";
 import { TranslatorBase } from "./base";
-import {
-  TranslateResult,
-  TranslateLevel,
-  TranslatorConfig,
-} from "@/types/translator";
+import { TranslateResult, TranslateLevel, TranslatorConfig } from "@/types";
 
 export enum CacheStatus {
   MISS,

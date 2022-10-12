@@ -1,4 +1,5 @@
 import type { WorkerOptions } from "tesseract.js";
+
 export interface Point {
   x: number;
   y: number;
@@ -43,16 +44,4 @@ export interface PaddleOcrConfig {
   type: OcrEngine.PaddleOcrBackend;
   url: string;
   lang: string;
-}
-
-export function isPaddleOcrConfig(
-  config: Pick<OcrConfig, "type">
-): config is PaddleOcrConfig {
-  return config.type === OcrEngine.PaddleOcrBackend;
-}
-
-export function isTesseractOcrConfig(
-  config: Pick<OcrConfig, "type">
-): config is TesseractOcrConfig {
-  return config.type === OcrEngine.TesseractFrontend;
 }

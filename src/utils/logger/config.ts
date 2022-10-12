@@ -3,5 +3,5 @@ export const backEnd = "";
 export const ignorePrint = [
   // LogType.OPENCV_PROCESS,
   // LogType.CAPTURE_VIDEO_FRAME,
-  LogType.TRANSFORM_IMAGE_FORMAT
+  LogType.TRANSFORM_IMAGE_FORMAT,
 ];

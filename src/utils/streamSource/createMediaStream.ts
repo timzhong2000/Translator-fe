@@ -1,4 +1,4 @@
-import { StreamSourceConfig } from "@/types/streamSource";
+import { StreamSourceConfig } from "@/types";
 import {
   readFromCamera,
   readFromScreen,

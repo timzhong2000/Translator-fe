@@ -1,5 +1,4 @@
-import { CutArea } from "@/types/globalConfig";
-import { Resolution, StreamStatus } from "@/types/streamSource";
+import { CutArea, Resolution, StreamStatus } from "@/types";
 import { cutAreaParser } from "@/utils/common/cutAreaParser";
 import { logger, LogType } from "@/utils/logger";
 import { ImageHelper } from "@timzhong2000/browser-image-helper";

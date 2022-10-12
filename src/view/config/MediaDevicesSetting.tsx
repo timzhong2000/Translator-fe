@@ -1,3 +1,7 @@
+import { FC, Fragment } from "react";
+import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
+
 import {
   Grid,
   FormControlLabel,
@@ -6,17 +10,14 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import { FC, Fragment } from "react";
 
-import { useTranslation } from "react-i18next";
 import useMediaDeviceList, {
   getDisplayLabel,
 } from "@/utils/hooks/useMediaDeviceList";
 import { useConfig, useStreamModel } from "@/context/hook";
 import { itemIn, itemNotIn } from "@/utils/common/enumTool";
-import { observer } from "mobx-react-lite";
-import { createMediaStreamByConfig } from "@/model/stream/utils";
-import { StreamStatus } from "@/types/streamSource";
+import { createMediaStreamByConfig } from "@/utils/streamSource/createMediaStream";
+import { StreamStatus } from "@/types";
 
 const buttonTitle: { [key in StreamStatus]: string } = {
   [StreamStatus.ACTIVE]: "setting.media.stopRecord",

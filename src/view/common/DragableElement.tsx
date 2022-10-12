@@ -1,5 +1,5 @@
-import { useGesture } from "@use-gesture/react";
 import { CSSProperties, FC, memo, useState } from "react";
+import { useGesture } from "@use-gesture/react";
 import { useSpring, animated } from "@react-spring/web";
 
 const DragableElement: FC<{

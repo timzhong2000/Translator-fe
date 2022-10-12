@@ -1,16 +1,16 @@
-import { CutArea, FilterConfig } from "@/types/globalConfig";
-import ISO963_1 from "@/types/ISO963";
-import { StreamSourceConfig } from "@/types/streamSource";
-import { ExhaustiveCheckError } from "@/utils/common/error";
-import { cloneDeep, debounce, merge } from "lodash-es";
-import { makeAutoObservable } from "mobx";
 import {
-  isPaddleOcrConfig,
-  isTesseractOcrConfig,
+  ISO963_1,
+  ConfigScope,
+  FilterConfig,
+  CutArea,
   OcrConfig,
   OcrEngine,
   OcrLangType,
-} from "../ocr";
+  StreamSourceConfig,
+} from "@/types";
+import { ExhaustiveCheckError } from "@/utils/common/error";
+import { cloneDeep, debounce, merge } from "lodash-es";
+import { makeAutoObservable } from "mobx";
 import {
   defaultFilterConfig,
   defaultCutAreaConfig,
@@ -18,7 +18,6 @@ import {
   defaultTranslatorConfig,
   defaultStreamSourceConfig,
 } from "./defaultConfig";
-import { ConfigScope } from "@/types/config";
 
 function getConfig<T>(tag: ConfigScope, defaultValue: T, loadCache = true) {
   if (loadCache) {
@@ -188,13 +187,13 @@ export class Config {
     const type = this[ConfigScope.OCR].type;
     switch (type) {
       case OcrEngine.PaddleOcrBackend:
-        if (isPaddleOcrConfig(config)) {
+        if (config.type === OcrEngine.PaddleOcrBackend) {
           this.setOcrConfig({ ...this[ConfigScope.OCR], ...config });
           return true;
         }
         break;
       case OcrEngine.TesseractFrontend:
-        if (isTesseractOcrConfig(config)) {
+        if (config.type === OcrEngine.TesseractFrontend) {
           this.setOcrConfig({ ...this[ConfigScope.OCR], ...config });
           return true;
         }

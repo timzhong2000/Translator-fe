@@ -1,4 +1,4 @@
-import { CutArea } from "@/types/globalConfig";
+import { CutArea } from "@/types";
 
 export const cutAreaParser = (cutArea: CutArea) => ({
   startX: Math.min(cutArea.x1, cutArea.x2),

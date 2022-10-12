@@ -1,12 +1,7 @@
 import { createWorker, OEM, PSM, WorkerOptions } from "tesseract.js";
 import { UninitializedError } from "..";
 import { OcrBase, OcrImage } from "../base";
-import {
-  OcrEngine,
-  OcrResult,
-  OcrStage,
-  TesseractOcrConfig,
-} from "@/types/ocr";
+import { OcrEngine, OcrResult, OcrStage, TesseractOcrConfig } from "@/types";
 import { simd } from "wasm-feature-detect";
 import { ImageHelper } from "@timzhong2000/browser-image-helper";
 import { logger, LogType } from "@/utils/logger";

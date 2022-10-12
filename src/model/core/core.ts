@@ -1,3 +1,4 @@
+import { OcrConfig, OcrEngine, TranslatorConfig } from "@/types";
 import { ExhaustiveCheckError } from "@/utils/common/error";
 import { makeAutoObservable, reaction, toJS } from "mobx";
 import { config, Config } from "../config";
@@ -6,18 +7,15 @@ import {
   createTesseractOcr,
   DefaultOcr,
   OcrBase,
-  OcrConfig,
-  OcrEngine,
 } from "../ocr";
 import { PreProcessorModel } from "../preProcessor";
 import { streamModel, StreamModel } from "../stream";
-import { TextractorClient } from "../textractor/TextractorClient";
+import { TextractorClient } from "../textractor/";
 import {
   TranslatorBase,
   TranslatorClient,
-  TranslatorConfig,
+  PauseTranslator,
 } from "../translator";
-import { PauseTranslator } from "../translator/pauseTranslator";
 
 export class TCore {
   config: Config = config;

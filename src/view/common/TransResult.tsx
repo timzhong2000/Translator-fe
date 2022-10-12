@@ -1,8 +1,12 @@
 import { Box, Button } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-
-import DragableElement from "@/view/common/DragableElement";
 import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react-lite";
+// Components
+import DragableElement from "@/view/common/DragableElement";
+import ClipboardButton from "./ClipboardButton";
+import "./transResult.css";
+// Other Moduless
 import {
   useConfig,
   useOcrModel,
@@ -10,13 +14,15 @@ import {
   useStreamModel,
   useTranslatorModel,
 } from "@/context/hook";
-import { OcrResult, OcrStage, TranslateResult } from "@/model";
-import { createOpencvFilter } from "@/utils/preprocessor/opencvFilter";
+import { createOpencvFilter } from "@/utils/preprocessor/opencv/opencvFilter";
 import { TtransError } from "@/utils/error";
-import { CutArea, FilterConfig } from "@/types/globalConfig";
-import ClipboardButton from "./ClipboardButton";
-import "./transResult.css";
-import { observer } from "mobx-react-lite";
+import {
+  CutArea,
+  FilterConfig,
+  OcrResult,
+  OcrStage,
+  TranslateResult,
+} from "@/types";
 
 const useOcrTranslate = (cutArea: CutArea, filterConfig: FilterConfig) => {
   const preProcessorModel = usePreProcessorModel();

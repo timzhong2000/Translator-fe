@@ -1,7 +1,12 @@
-import { FilterConfig, CutArea } from "@/types/globalConfig";
-import { OcrConfig, OcrEngine, TesseractOcrConfig } from "../ocr";
-import { StreamSourceConfig } from "@/types/streamSource";
-import { TranslatorConfig } from "../translator";
+import {
+  CutArea,
+  FilterConfig,
+  OcrConfig,
+  OcrEngine,
+  StreamSourceConfig,
+  TesseractOcrConfig,
+  TranslatorConfig,
+} from "@/types";
 
 export const defaultFilterConfig: FilterConfig = {
   binaryThreshold: 50,

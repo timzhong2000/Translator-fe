@@ -1,9 +1,11 @@
-import { Grid, TextField, MenuItem } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { OcrLangType } from "@/model";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react-lite";
+
+import { Grid, TextField, MenuItem } from "@mui/material";
+
 import { useConfig } from "@/context";
+import { OcrLangType } from "@/types";
 
 const OcrSetting: FC = () => {
   const {

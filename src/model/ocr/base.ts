@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from "mobx";
 import { DisabledError, StageError, UninitializedError } from "./errors";
-import { OcrEngine, OcrResult, OcrStage } from "@/types/ocr";
+import { OcrEngine, OcrResult, OcrStage } from "@/types";
 
 export type OcrImage = ImageBitmapSource;
 export abstract class OcrBase {

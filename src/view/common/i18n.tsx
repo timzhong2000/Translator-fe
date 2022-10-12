@@ -3,7 +3,6 @@ import i18n from "i18next";
 import enUsTrans from "../../../public/locales/en-us.json";
 import zhCnTrans from "../../../public/locales/zh-cn.json";
 import jaJpTrans from "../../../public/locales/ja-jp.json";
-
 import { initReactI18next } from "react-i18next";
 
 i18n

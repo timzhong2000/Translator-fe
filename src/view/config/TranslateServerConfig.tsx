@@ -1,9 +1,8 @@
-import { Grid } from "@mui/material";
-
-import { useTranslation } from "react-i18next";
-import LazyInput from "../common/LazyInput";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react-lite";
+import { Grid } from "@mui/material";
+import LazyInput from "../common/LazyInput";
 import { useConfig } from "@/context";
 
 const TranslateServerConfig: FC = () => {

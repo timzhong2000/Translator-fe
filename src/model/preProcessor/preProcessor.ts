@@ -1,7 +1,6 @@
 import { makeObservable } from "mobx";
-import { Resolution } from "@/types/streamSource";
+import { Resolution, Mat, OpenCV } from "@/types";
 import { CanvasOffScreenError } from "./errors";
-import { Mat, OpenCV } from "@/types/opencv";
 import { OpenCVLoader } from "@/utils/common/loadOpencv";
 
 export class PreProcessorModel {

@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from "mobx";
 import { TranslatorDisabledError } from "./errors";
-import { TranslateResult } from "@/types/translator";
+import { TranslateResult } from "@/types";
 
 export abstract class TranslatorBase {
   /* observables start */

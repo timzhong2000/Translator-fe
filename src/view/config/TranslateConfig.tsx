@@ -1,5 +1,5 @@
 import { Grid, TextField, MenuItem } from "@mui/material";
-import ISO963_1 from "@/types/ISO963";
+import { ISO963_1 } from "@/types";
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
